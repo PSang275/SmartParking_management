@@ -1,0 +1,47 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Đăng ký Tài khoản — SmartParking_management MVC</title>
+  <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
+  <main class="card" style="max-width:520px; width:100%;">
+    <div class="card-header">
+      <h3>📝 Đăng ký Tài khoản Khách hàng Gửi xe</h3>
+      <p>Tạo tài khoản mới đồng bộ vào bảng <code>app_users</code> trên Supabase Cloud</p>
+    </div>
+    <form action="/Account/Login" method="get" class="modern-form">
+      <div class="field">
+        <label for="reg-fullname">Họ và tên *</label>
+        <input type="text" id="reg-fullname" name="full_name" autocomplete="name" required placeholder="Nguyễn Văn A">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="reg-username">Tên đăng nhập *</label>
+          <input type="text" id="reg-username" name="username" autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false" required placeholder="nguyenvana">
+        </div>
+        <div class="field">
+          <label for="reg-phone">Số điện thoại *</label>
+          <input type="tel" id="reg-phone" name="phone" autocomplete="tel" required placeholder="0901234567">
+        </div>
+      </div>
+      <div class="field">
+        <label for="reg-password">Mật khẩu *</label>
+        <input type="password" id="reg-password" name="password" autocomplete="new-password" minlength="6" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Hoàn tất Đăng ký</button>
+    </form>
+    <hr class="divider">
+    <div style="display:flex; justify-content:space-between; font-size:0.875rem;">
+      <a href="/Account/Login" style="color:var(--brand); font-weight:600; text-decoration:none;">Đã có tài khoản? Đăng nhập</a>
+      <a href="/" style="color:var(--text-muted); text-decoration:none;">← Về Trang chủ Bãi xe</a>
+    </div>
+  </main>
+</body>
+</html>

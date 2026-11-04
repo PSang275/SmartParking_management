@@ -1,0 +1,38 @@
+@model List<SmartParking_management.Models.User>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Đăng nhập Hệ thống — SmartParking_management MVC</title>
+  <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
+  <main class="card" style="max-width:480px; width:100%;">
+    <div class="card-header">
+      <h3>🔐 Đăng nhập Hệ thống Bãi xe SmartPark</h3>
+      <p>Xác thực tài khoản Quản trị viên / Nhân viên / Khách hàng trên Supabase Cloud</p>
+    </div>
+    <form action="/" method="get" class="modern-form">
+      <div class="field">
+        <label for="login-username">Tên đăng nhập hoặc Email *</label>
+        <input type="text" id="login-username" name="username" autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false" value="PSang275" required>
+      </div>
+      <div class="field">
+        <label for="login-password">Mật khẩu *</label>
+        <input type="password" id="login-password" name="password" autocomplete="current-password" value="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Đăng nhập vào Dashboard MVC</button>
+    </form>
+    <hr class="divider">
+    <div style="display:flex; justify-content:space-between; font-size:0.875rem;">
+      <a href="/Account/Register" style="color:var(--brand); font-weight:600; text-decoration:none;">Chưa có tài khoản? Đăng ký</a>
+      <a href="/" style="color:var(--text-muted); text-decoration:none;">← Về Trang chủ Bãi xe</a>
+    </div>
+  </main>
+</body>
+</html>
