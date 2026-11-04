@@ -11,9 +11,11 @@ public class AppDbContext
     private readonly IConfiguration _config;
     private readonly DbInitializer _initializer;
 
+    public string DefaultConnection => _config.GetConnectionString("DefaultConnection") ?? "";
+    public string SqliteConnection => _config.GetConnectionString("SqliteConnection") ?? "Data Source=SmartParking.db";
     public string SupabaseUrl => _config["Supabase:Url"] ?? "https://jgvegymigpbgqmoylljf.supabase.co";
     public string SupabaseProjectId => _config["Supabase:ProjectId"] ?? "jgvegymigpbgqmoylljf";
-    public string AnonKey => _config["Supabase:AnonKey"] ?? "";
+    public string AnonKey => _config["Supabase:AnonKey"] ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpndmVneW1pZ3BiZ3Ftb3lsbGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM3ODA3NDcsImV4cCI6MjEwOTM1Njc0N30.mvoavuNlw6V4ONaYht546D1-_tgehSDwh_GvQ7tubQ8";
 
     public AppDbContext(HttpClient httpClient, IConfiguration config, DbInitializer initializer)
     {
