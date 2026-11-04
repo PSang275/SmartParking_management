@@ -23,7 +23,7 @@ public class FeeBreakdown
     public int TotalFee { get; set; }
 
     [JsonPropertyName("engine")]
-    public string Engine { get; set; } = "ASP.NET Core MVC C# FeeEngine (VS 2026)";
+    public string Engine { get; set; } = "Tính tự động theo khung 30 phút";
 
     public static FeeBreakdown Calculate(int hourlyRate, int durationMinutes, bool isOvertime = false)
     {

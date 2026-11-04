@@ -1,7 +1,6 @@
 /**
- * SmartParking_management - Web client (Sprint 1: US01-US15)
- * CSDL: Supabase Cloud (jgvegymigpbgqmoylljf). Tính phí: C++ FeeCalculator (/api/calculate-fee)
- * khi chạy qua server C++; mở file tĩnh thì dùng bản JS tương đương.
+ * SmartPark - Hệ thống Quản lý Bãi đỗ xe Thông minh
+ * Tự động đồng bộ thời gian thực & tính phí tự động
  */
 const SUPABASE_URL = 'https://jgvegymigpbgqmoylljf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpndmVneW1pZ3BiZ3Ftb3lsbGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM3ODA3NDcsImV4cCI6MjEwOTM1Njc0N30.mvoavuNlw6V4ONaYht546D1-_tgehSDwh_GvQ7tubQ8';
@@ -67,7 +66,7 @@ async function sb(endpoint, { method = 'GET', body, prefer = 'return=representat
   return text ? JSON.parse(text) : null;
 }
 
-/* ---------------- Tính phí (ASP.NET Core MVC FeeBreakdown, có bản JS tương đương) ---------------- */
+/* ---------------- Tính phí tự động theo khung 30 phút ---------------- */
 async function calcFee(vehicleType, hourlyRate, minutes, overtime) {
   const actualHours = Math.max(0.1, minutes / 60);
   if (state.cppOnline) {
@@ -82,7 +81,7 @@ async function calcFee(vehicleType, hourlyRate, minutes, overtime) {
           baseFee: d.base_fee ?? d.baseFee,
           overtimeSurcharge: d.overtime_surcharge ?? d.overtimeSurcharge,
           totalFee: d.total_fee ?? d.totalFee,
-          engine: d.engine || 'ASP.NET Core MVC C# FeeEngine'
+          engine: 'Tính tự động theo khung 30 phút'
         };
       }
     } catch (_) { /* dùng bản JS */ }
@@ -90,7 +89,7 @@ async function calcFee(vehicleType, hourlyRate, minutes, overtime) {
   const billableHours = Math.max(1, Math.ceil(actualHours * 2) / 2);
   const baseFee = Math.round((billableHours * hourlyRate) / 1000) * 1000;
   const overtimeSurcharge = overtime ? Math.round((baseFee * 0.2) / 1000) * 1000 : 0;
-  return { actualHours, billableHours, hourlyRate, baseFee, overtimeSurcharge, totalFee: baseFee + overtimeSurcharge, engine: 'Công thức C# MVC (bản JS)' };
+  return { actualHours, billableHours, hourlyRate, baseFee, overtimeSurcharge, totalFee: baseFee + overtimeSurcharge, engine: 'Làm tròn theo khung 30 phút' };
 }
 
 const fmtVND = (n) => new Intl.NumberFormat('vi-VN').format(Math.round(Number(n) || 0)) + ' ₫';
@@ -114,10 +113,10 @@ function qrSvg(text, size = 170) {
   const n = qr.getModuleCount();
   let d = '';
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += `M${c + 4} ${r + 4}h1v1h-1z`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 8} ${n + 8}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="Mã QR ${esc(text)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#0f172a"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 8} ${n + 8}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="Mã QR ${esc(text)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#23115b"/></svg>`;
 }
 
-/* ---------------- Tải dữ liệu ---------------- */
+/* ---------------- Tự động đồng bộ dữ liệu thời gian thực ---------------- */
 async function syncAll(silent = true) {
   try {
     const [zones, slots, vehicles, bookings, sessions] = await Promise.all([
@@ -129,12 +128,11 @@ async function syncAll(silent = true) {
     ]);
     Object.assign(state, { zones, slots, vehicles, bookings, sessions });
     renderAll();
-    $('supabase-dot').className = 'status-dot online';
-    if (!silent) toast('✅ Đã đồng bộ dữ liệu từ Supabase');
+    if ($('supabase-dot')) $('supabase-dot').className = 'status-dot online';
+    if (!silent) toast('✅ Đã đồng bộ dữ liệu mới nhất');
   } catch (err) {
     console.error(err);
-    $('supabase-dot').className = 'status-dot';
-    toast('⚠️ Lỗi kết nối Supabase: ' + err.message.slice(0, 120));
+    if ($('supabase-dot')) $('supabase-dot').className = 'status-dot';
   }
 }
 
@@ -143,7 +141,6 @@ async function probeCpp() {
     const r = await fetch('/api/status');
     if (r.ok && (r.headers.get('content-type') || '').includes('json')) {
       state.cppOnline = true;
-      $('cpp-status-text').textContent = 'ASP.NET Core MVC Active';
     }
   } catch (_) { state.cppOnline = false; }
 }
@@ -287,7 +284,7 @@ async function updateEstimate() {
   if (a && b) { const d = (new Date(b) - new Date(a)) / 60000; if (d > 0) mins = d; }
   const f = await calcFee(s?.vehicle_type || 'CAR', rate, mins, false);
   $('bk-estimated-fee').textContent = fmtVND(f.totalFee);
-  $('bk-estimated-detail').textContent = `${f.billableHours} giờ × ${fmtVND(f.hourlyRate)}/giờ (${f.engine})`;
+  $('bk-estimated-detail').textContent = `${f.billableHours} giờ × ${fmtVND(f.hourlyRate)}/giờ • ${f.engine}`;
 }
 
 function renderBookings() {
@@ -310,7 +307,6 @@ async function submitBooking(e) {
   const start = new Date($('bk-start-time').value), end = new Date($('bk-end-time').value);
   if (!(end > start)) return toast('⚠️ Giờ kết thúc phải sau giờ bắt đầu');
   try {
-    // Giữ chỗ nguyên tử: chỉ đổi sang RESERVED nếu ô vẫn còn AVAILABLE
     const held = await sb(`parking_slots?id=eq.${slot.id}&status=eq.AVAILABLE`, { method: 'PATCH', body: { status: 'RESERVED', current_plate: veh.license_plate, updated_at: new Date().toISOString() } });
     if (!held.length) { toast('⚠️ Ô này vừa có người khác đặt, hãy chọn ô khác'); return syncAll(); }
     const code = `QR-BK-${todayCode()}-${rand(4)}`;
@@ -480,7 +476,7 @@ function renderDashboard() {
     return `<div class="bar-item"><div class="bar-top"><span>${esc(zoneLabel(z))} (${busy}/${zs.length} ô bận)</span><span>Doanh thu: <strong>${fmtVND(rev)}</strong> • Lấp đầy ${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
   }).join('');
   const total = state.slots.length || 1;
-  const items = [['Trống', 'AVAILABLE', '#10b981'], ['Đã đặt trước', 'RESERVED', '#f59e0b'], ['Đang có xe', 'OCCUPIED', '#ef4444'], ['Bảo trì', 'MAINTENANCE', '#64748b']];
+  const items = [['Trống', 'AVAILABLE', '#10b981'], ['Đã đặt trước', 'RESERVED', '#f59e0b'], ['Đang có xe', 'OCCUPIED', '#6c3ce9'], ['Bảo trì', 'MAINTENANCE', '#64748b']];
   $('status-breakdown-box').innerHTML = items.map(([l, k, c]) => {
     const n = state.slots.filter((s) => s.status === k).length, p = Math.round((n / total) * 100);
     return `<div class="bar-item"><div class="bar-top"><span>${l}</span><span>${n} ô (${p}%)</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${c}"></div></div></div>`;
@@ -489,13 +485,13 @@ function renderDashboard() {
 
 /* ---------------- Điều hướng & sự kiện ---------------- */
 const TAB_TITLES = {
-  'map-tab': ['Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực', 'HomeController • Đồng bộ trực tiếp Supabase Cloud PostgreSQL'],
-  'booking-tab': ['Đặt chỗ Đỗ xe Trực tuyến & Cấp mã QR', 'BookingController • Quản lý đặt trước vị trí đỗ và phát hành thẻ vé QR SVG'],
-  'qr-tab': ['Cổng Kiểm soát QR Check-in / Check-out & Tính phí', 'CheckInOutController • Quét mã QR vào/ra bãi và tính phí tự động theo block 0.5h'],
-  'vehicles-tab': ['Đăng ký & Quản lý Hồ sơ Phương tiện', 'VehicleController • Lưu trữ biển số xe ô tô / xe máy trên Supabase Cloud'],
-  'slots-tab': ['Quản lý Vị trí Đỗ xe & Khu vực (Khu A / B / C)', 'ParkingSlotController • Thêm ô đỗ mới, điều chỉnh trạng thái AVAILABLE / MAINTENANCE'],
-  'history-tab': ['Lịch sử Xe Vào / Ra & Hóa đơn Thanh toán', 'InvoiceController • Tra cứu biên lai thanh toán và lịch sử phiên gửi xe'],
-  'dashboard-tab': ['Dashboard Thống kê Doanh thu & Hiệu suất Bãi xe', 'AdminController • Phân tích công suất lấp đầy khu A/B/C và báo cáo doanh thu']
+  'map-tab': ['Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực', 'Theo dõi vị trí đỗ xe trực tiếp, đặt chỗ trước và kiểm soát xe vào/ra bằng mã QR'],
+  'booking-tab': ['Đặt chỗ Đỗ xe Trực tuyến & Cấp mã QR', 'Chọn vị trí đỗ xe đang trống theo khung giờ và nhận thẻ vé mã QR tức thì'],
+  'qr-tab': ['Cổng Kiểm soát QR Check-in / Check-out & Tính phí', 'Quét mã QR xác nhận xe vào/ra bãi và tính cước phí tự động theo thời gian gửi'],
+  'vehicles-tab': ['Đăng ký & Quản lý Hồ sơ Phương tiện', 'Lưu trữ thông tin biển số xe ô tô và xe máy để đặt chỗ nhanh chóng'],
+  'slots-tab': ['Quản lý Vị trí Đỗ xe & Khu vực (Khu A / B / C)', 'Thêm vị trí đỗ mới, xem bảng giá niêm yết và điều chỉnh trạng thái bảo trì'],
+  'history-tab': ['Lịch sử Xe Vào / Ra & Hóa đơn Thanh toán', 'Tra cứu biên lai thanh toán và lịch sử các lượt gửi xe tại bãi'],
+  'dashboard-tab': ['Dashboard Thống kê Doanh thu & Hiệu suất Bãi xe', 'Phân tích công suất lấp đầy khu A/B/C và báo cáo doanh thu thời gian thực']
 };
 
 function switchTab(id, pushUrl = true) {
@@ -525,8 +521,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('vh-owner').value = '';
 
   document.querySelectorAll('.nav-btn').forEach((b) => b.addEventListener('click', () => switchTab(b.dataset.tab)));
-  $('btn-sync-now').onclick = () => syncAll(false);
-  $('btn-quick-checkin').onclick = () => switchTab('qr-tab');
+  if ($('btn-sync-now')) $('btn-sync-now').onclick = () => syncAll(false);
+  if ($('btn-quick-checkin')) $('btn-quick-checkin').onclick = () => switchTab('qr-tab');
   ['filter-zone', 'filter-type', 'filter-status', 'search-slot'].forEach((id) => $(id).addEventListener('input', renderMap));
   ['history-search', 'history-status-filter'].forEach((id) => $(id).addEventListener('input', renderHistory));
   $('bk-vehicle').addEventListener('change', fillBookingSlots);
@@ -559,4 +555,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   await probeCpp();
   await syncAll(true);
   runSim();
+
+  // Tự động đồng bộ dữ liệu thời gian thực mỗi 5 giây và khi quay lại cửa sổ
+  setInterval(() => syncAll(true), 5000);
+  window.addEventListener('focus', () => syncAll(true));
 });

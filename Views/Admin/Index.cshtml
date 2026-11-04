@@ -23,24 +23,24 @@
 
   <div class="card" style="margin-top: 1.25rem;">
     <div class="card-header">
-      <h3>Kiến trúc Hệ thống SmartParking_management (ASP.NET Core MVC + Supabase Cloud)</h3>
-      <p>Mô hình Model - View - Controller (MVC) chuẩn trên Visual Studio 2026 phục vụ đồ án môn Công nghệ Phần mềm</p>
+      <h3>Tiện ích &amp; Chính sách Vận hành Bãi xe SmartPark</h3>
+      <p>Hệ thống quản lý vị trí đỗ xe, đặt chỗ trước và thu phí tự động minh bạch</p>
     </div>
     <div class="arch-cards">
       <div class="arch-item">
-        <span class="badge badge-cpp">Views Layer (Razor .cshtml + wwwroot)</span>
-        <h4>Presentation &amp; Interactive UI</h4>
-        <p>Các View phân tách theo Controller (<code>Home</code>, <code>Booking</code>, <code>ParkingSlot</code>, <code>CheckInOut</code>, <code>Vehicle</code>, <code>Invoice</code>, <code>Admin</code>, <code>Account</code>) kết hợp mã QR SVG và <code>&lt;dialog closedby="any"&gt;</code>.</p>
+        <span class="badge badge-cpp">Đặt chỗ &amp; Vé QR</span>
+        <h4>Giữ chỗ trực tuyến nhanh chóng</h4>
+        <p>Khách hàng chọn trước vị trí đỗ trống tại Khu A, B, C theo khung giờ mong muốn và nhận mã QR định danh ngay trên màn hình.</p>
       </div>
       <div class="arch-item">
-        <span class="badge badge-cpp">Controllers &amp; Models Layer (.cs)</span>
-        <h4>ASP.NET Core MVC Controllers</h4>
-        <p>Xử lý điều hướng, nghiệp vụ đặt chỗ, kiểm soát xe vào/ra và tính phí đỗ xe tự động qua <code>Models/FeeBreakdown.cs</code> (làm tròn block 0.5h, phụ phí quá giờ 20%).</p>
+        <span class="badge badge-cpp">Tính phí Minh bạch</span>
+        <h4>Làm tròn theo khung 30 phút</h4>
+        <p>Cước phí được tính tự động dựa trên đơn giá từng khu vực, làm tròn theo mỗi block 0.5 giờ và hỗ trợ thanh toán Tiền mặt hoặc Chuyển khoản QR.</p>
       </div>
       <div class="arch-item">
-        <span class="badge badge-cpp">Data &amp; Cloud Layer (Data/AppDbContext.cs)</span>
-        <h4>Supabase PostgreSQL (jgvegymigpbgqmoylljf)</h4>
-        <p>Kết nối đồng bộ 6 bảng quan hệ chuẩn 3NF (<code>app_users</code>, <code>vehicles</code>, <code>parking_zones</code>, <code>parking_slots</code>, <code>bookings</code>, <code>parking_sessions</code>) kèm kịch bản kiểm thử <code>TestData/</code>.</p>
+        <span class="badge badge-cpp">Đồng bộ Thời gian thực</span>
+        <h4>Cập nhật sơ đồ bãi xe 24/7</h4>
+        <p>Trạng thái các ô đỗ (Trống, Đã đặt, Đang có xe, Bảo trì) và báo cáo doanh thu được đồng bộ tức thì ngay khi có xe vào hoặc ra bãi.</p>
       </div>
     </div>
   </div>

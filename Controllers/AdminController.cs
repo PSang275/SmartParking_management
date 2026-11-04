@@ -11,7 +11,7 @@ public class AdminController(AppDbContext db) : Controller
         var vm = await db.BuildViewModelAsync(
             activeTab: "dashboard-tab",
             pageTitle: "Dashboard Thống kê Doanh thu & Hiệu suất Bãi xe",
-            pageSubtitle: "AdminController • Phân tích công suất lấp đầy khu A/B/C và báo cáo doanh thu thời gian thực");
+            pageSubtitle: "Phân tích công suất lấp đầy khu A/B/C và báo cáo doanh thu thời gian thực");
         return View("~/Views/Home/Index.cshtml", vm);
     }
 }

@@ -14,7 +14,7 @@ public class BookingController(AppDbContext db) : Controller
         var vm = await db.BuildViewModelAsync(
             activeTab: "booking-tab",
             pageTitle: "Đặt chỗ Đỗ xe Trực tuyến & Cấp mã QR",
-            pageSubtitle: "BookingController • Quản lý đặt trước vị trí đỗ và phát hành thẻ vé QR SVG");
+            pageSubtitle: "Chọn vị trí đỗ xe đang trống theo khung giờ và nhận thẻ vé mã QR tức thì");
         return View("~/Views/Home/Index.cshtml", vm);
     }
 
@@ -24,7 +24,7 @@ public class BookingController(AppDbContext db) : Controller
         var vm = await db.BuildViewModelAsync(
             activeTab: "booking-tab",
             pageTitle: "Danh sách Phiếu Đặt chỗ của Khách hàng",
-            pageSubtitle: "BookingController • Tra cứu trạng thái RESERVED / CHECKED_IN / COMPLETED");
+            pageSubtitle: "Tra cứu trạng thái phiếu đặt chỗ và mã vé QR vào bãi");
         return View("~/Views/Home/Index.cshtml", vm);
     }
 }

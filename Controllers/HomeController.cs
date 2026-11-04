@@ -12,7 +12,7 @@ public class HomeController(AppDbContext db) : Controller
         var vm = await db.BuildViewModelAsync(
             activeTab: "map-tab",
             pageTitle: "Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực",
-            pageSubtitle: "Kiến trúc ASP.NET Core MVC (C#) đồng bộ trực tiếp Supabase Cloud PostgreSQL");
+            pageSubtitle: "Theo dõi vị trí đỗ xe trực tiếp, đặt chỗ trước và kiểm soát xe vào/ra bằng mã QR");
         return View(vm);
     }
 
@@ -20,8 +20,7 @@ public class HomeController(AppDbContext db) : Controller
     public IActionResult ApiStatus() => Json(new
     {
         status = "online",
-        engine = "ASP.NET Core MVC (.NET 10.0 - Visual Studio 2026)",
-        architecture = "Model-View-Controller (MVC)",
+        engine = "SmartPark Auto-Sync Engine",
         supabase_project = db.SupabaseProjectId,
         supabase_url = db.SupabaseUrl
     });

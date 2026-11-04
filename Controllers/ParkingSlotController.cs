@@ -11,7 +11,7 @@ public class ParkingSlotController(AppDbContext db) : Controller
         var vm = await db.BuildViewModelAsync(
             activeTab: "slots-tab",
             pageTitle: "Quản lý Vị trí Đỗ xe & Khu vực (Khu A / B / C)",
-            pageSubtitle: "ParkingSlotController • Thêm ô đỗ mới, điều chỉnh trạng thái AVAILABLE / MAINTENANCE");
+            pageSubtitle: "Thêm vị trí đỗ mới, xem bảng giá niêm yết và điều chỉnh trạng thái bảo trì");
         return View("~/Views/Home/Index.cshtml", vm);
     }
 }

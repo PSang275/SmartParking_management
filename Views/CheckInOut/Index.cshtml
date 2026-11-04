@@ -12,7 +12,7 @@
       </div>
 
       <div class="subcard">
-        <h4>1. Quét mã QR Đặt chỗ trước (Booking Check-in)</h4>
+        <h4>1. Quét mã QR Đặt chỗ trước</h4>
         <div class="qr-input-group">
           <input type="text" id="qr-checkin-input" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Nhập hoặc chọn mã QR-BK-... bên dưới" aria-label="Mã QR đặt chỗ">
           <button type="button" class="btn btn-primary" id="btn-verify-booking-qr">
@@ -25,7 +25,7 @@
       <hr class="divider">
 
       <form id="walkin-checkin-form" class="modern-form" novalidate>
-        <h4>2. Xe vãng lai vào bãi (Walk-in QR Check-in)</h4>
+        <h4>2. Xe vãng lai vào bãi (Cấp vé trực tiếp)</h4>
         <div class="field-row">
           <div class="field">
             <label for="wi-plate">Biển số xe vào *</label>
@@ -44,7 +44,7 @@
         </div>
         <div class="field">
           <label for="wi-slot">Chọn ô đỗ trống cấp cho xe *</label>
-          <span class="hint">Hệ thống tự động chuyển ô sang OCCUPIED</span>
+          <span class="hint">Hệ thống tự động chuyển ô sang Đang đỗ</span>
           <select id="wi-slot" name="slot_id" required></select>
         </div>
         <button type="submit" class="btn btn-success btn-block">
@@ -56,7 +56,7 @@
     <!-- Right: QR Check-out & Fee Calculator -->
     <div class="card">
       <div class="card-header">
-        <h3>Cổng Kiểm soát QR Check-out &amp; Tính phí (C# MVC Engine)</h3>
+        <h3>Cổng Kiểm soát QR Check-out &amp; Tính phí tự động</h3>
         <p>Chọn phiên xe đang đỗ hoặc quét mã QR vé lượt để tính phí &amp; thanh toán</p>
       </div>
 
@@ -71,11 +71,11 @@
         <!-- Active sessions populated dynamically -->
       </div>
 
-      <!-- C# FeeBreakdown Simulator -->
+      <!-- Fee Calculator Simulator -->
       <div class="cpp-simulator-box">
         <div class="sim-header">
-          <span class="badge badge-cpp">Models/FeeBreakdown.cs</span>
-          <h4>Bộ mô phỏng công thức tính phí C# MVC</h4>
+          <span class="badge badge-cpp">Bảng tính nhanh</span>
+          <h4>Ước tính cước phí đỗ xe theo thời gian</h4>
         </div>
         <div class="field-row">
           <div class="field">

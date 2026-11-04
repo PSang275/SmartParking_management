@@ -12,7 +12,7 @@ public class CheckInOutController(AppDbContext db) : Controller
         var vm = await db.BuildViewModelAsync(
             activeTab: "qr-tab",
             pageTitle: "Cổng Kiểm soát QR Check-in / Check-out & Tính phí",
-            pageSubtitle: "CheckInOutController • Quét mã QR vào/ra bãi và tính phí tự động theo block 0.5h");
+            pageSubtitle: "Quét mã QR xác nhận xe vào/ra bãi và tính cước phí tự động theo thời gian gửi");
         return View("~/Views/Home/Index.cshtml", vm);
     }
 

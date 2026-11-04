@@ -2,7 +2,7 @@
 @{
     var activeTab = Model?.ActiveTab ?? "map-tab";
     var pageTitle = Model?.PageTitle ?? "Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực";
-    var pageSubtitle = Model?.PageSubtitle ?? "Kiến trúc ASP.NET Core 10.0 MVC (C#) đồng bộ trực tiếp Supabase Cloud PostgreSQL";
+    var pageSubtitle = Model?.PageSubtitle ?? "Theo dõi vị trí đỗ xe trực tiếp, đặt chỗ trước và kiểm soát xe vào/ra bằng mã QR";
 }
 <!DOCTYPE html>
 <html lang="vi">
@@ -10,7 +10,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>@pageTitle — SmartPark (ASP.NET Core 10.0 MVC &amp; Supabase)</title>
+  <title>@pageTitle — SmartPark</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
@@ -24,11 +24,11 @@
         <div class="brand-logo" aria-hidden="true">🚗</div>
         <div class="brand-text">
           <h1>Smart<span>Park</span></h1>
-          <p>ASP.NET Core 10 MVC</p>
+          <p>Bãi đỗ xe Thông minh</p>
         </div>
       </div>
 
-      <nav class="nav-menu" aria-label="Các phân hệ MVC">
+      <nav class="nav-menu" aria-label="Các phân hệ">
         <button type="button" class="nav-btn @(activeTab == "map-tab" ? "active" : "")" data-tab="map-tab" data-route="/">
           <span class="nav-icon" aria-hidden="true">🗺️</span>
           <span>Sơ đồ &amp; Chỗ trống</span>
@@ -64,29 +64,16 @@
         <div class="status-card">
           <div class="status-row">
             <span class="status-dot online" id="supabase-dot"></span>
-            <span class="status-label">Supabase Cloud DB</span>
+            <span class="status-label">Trực tuyến • Tự động đồng bộ</span>
           </div>
-          <code class="project-ref">@(Model?.SupabaseProjectId ?? "jgvegymigpbgqmoylljf")</code>
-          <div class="status-row status-row-sub">
-            <span class="status-dot cpp" id="cpp-dot"></span>
-            <span class="status-label" id="cpp-status-text">C# MVC FeeEngine Ready</span>
-          </div>
-        </div>
-        <div class="team-card">
-          <p class="team-title">Đồ án Công nghệ Phần mềm</p>
-          <p class="team-sub">Nhóm 3 Thành viên • VS 2026</p>
-          <div class="team-links">
-            <a href="/Account/Login">Đăng nhập</a>
-            <span>•</span>
-            <a href="/Account/Profile">Thành viên</a>
-          </div>
+          <p class="team-sub" style="margin-top: 0.3rem;">Hoạt động 24/7 • Khu A, B, C</p>
         </div>
       </div>
     </aside>
 
     <!-- Main Workspace -->
     <div class="main-area">
-      <!-- Top Bar (Inspired by SmartPark Purple-Gold-White Header) -->
+      <!-- Top Bar (With Login & User Actions in Top-Right Corner) -->
       <header class="topbar">
         <div class="topbar-title">
           <span class="topbar-eyebrow">HỆ THỐNG BÃI ĐỖ XE THÔNG MINH SMARTPARK</span>
@@ -94,9 +81,6 @@
           <p id="page-subheading">@pageSubtitle</p>
         </div>
         <div class="topbar-actions">
-          <button type="button" class="btn btn-outline" id="btn-sync-now" title="Đồng bộ dữ liệu mới nhất từ Supabase">
-            <span aria-hidden="true">🔄</span> Đồng bộ DB
-          </button>
           <button type="button" class="btn btn-gold" id="btn-quick-checkin">
             <span aria-hidden="true">⚡</span> Xe vào nhanh (QR)
           </button>
@@ -104,6 +88,9 @@
             <span>Đặt chỗ ngay</span>
             <span class="cta-arrow" aria-hidden="true">➜</span>
           </button>
+          <a href="/Account/Login" class="btn btn-outline user-top-btn" style="text-decoration: none;">
+            <span aria-hidden="true">👤</span> Đăng nhập
+          </a>
         </div>
       </header>
 
