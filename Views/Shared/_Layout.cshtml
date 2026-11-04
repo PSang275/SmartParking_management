@@ -1,0 +1,137 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@{
+    var activeTab = Model?.ActiveTab ?? "map-tab";
+    var pageTitle = Model?.PageTitle ?? "Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực";
+    var pageSubtitle = Model?.PageSubtitle ?? "Kiến trúc ASP.NET Core MVC (C#) đồng bộ trực tiếp Supabase Cloud PostgreSQL";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- MANDATORY: Declare support for both light and dark themes -->
+  <meta name="color-scheme" content="light dark">
+  <title>@pageTitle — SmartParking_management (ASP.NET Core MVC &amp; Supabase)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body data-initial-tab="@activeTab">
+  <div class="app-shell">
+    <!-- Sidebar Navigation (MVC Controllers + Instant Tab Switching) -->
+    <aside class="sidebar" aria-label="Điều hướng chính">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">P</div>
+        <div class="brand-text">
+          <h1>SmartPark <span>MVC</span></h1>
+          <p>C# .NET MVC • Supabase</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Các phân hệ MVC">
+        <button type="button" class="nav-btn @(activeTab == "map-tab" ? "active" : "")" data-tab="map-tab" data-route="/">
+          <span class="nav-icon" aria-hidden="true">🗺️</span>
+          <span>Sơ đồ &amp; Chỗ trống</span>
+          <span class="nav-badge" id="nav-avail-badge">@(Model?.AvailableSlots ?? 0)</span>
+        </button>
+        <button type="button" class="nav-btn @(activeTab == "booking-tab" ? "active" : "")" data-tab="booking-tab" data-route="/Booking/Book">
+          <span class="nav-icon" aria-hidden="true">📅</span>
+          <span>Đặt chỗ trước</span>
+        </button>
+        <button type="button" class="nav-btn @(activeTab == "qr-tab" ? "active" : "")" data-tab="qr-tab" data-route="/CheckInOut">
+          <span class="nav-icon" aria-hidden="true">📷</span>
+          <span>QR Check-in / Out</span>
+        </button>
+        <button type="button" class="nav-btn @(activeTab == "vehicles-tab" ? "active" : "")" data-tab="vehicles-tab" data-route="/Vehicle">
+          <span class="nav-icon" aria-hidden="true">🚗</span>
+          <span>Đăng ký Phương tiện</span>
+        </button>
+        <button type="button" class="nav-btn @(activeTab == "slots-tab" ? "active" : "")" data-tab="slots-tab" data-route="/ParkingSlot">
+          <span class="nav-icon" aria-hidden="true">🅿️</span>
+          <span>Quản lý Vị trí đỗ</span>
+        </button>
+        <button type="button" class="nav-btn @(activeTab == "history-tab" ? "active" : "")" data-tab="history-tab" data-route="/Invoice">
+          <span class="nav-icon" aria-hidden="true">📜</span>
+          <span>Lịch sử &amp; Hóa đơn</span>
+        </button>
+        <button type="button" class="nav-btn @(activeTab == "dashboard-tab" ? "active" : "")" data-tab="dashboard-tab" data-route="/Admin">
+          <span class="nav-icon" aria-hidden="true">📊</span>
+          <span>Dashboard Thống kê</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="status-card">
+          <div class="status-row">
+            <span class="status-dot online" id="supabase-dot"></span>
+            <span class="status-label">Supabase Cloud DB</span>
+          </div>
+          <code class="project-ref">@(Model?.SupabaseProjectId ?? "jgvegymigpbgqmoylljf")</code>
+          <div class="status-row" style="margin-top: 0.45rem;">
+            <span class="status-dot cpp" id="cpp-dot"></span>
+            <span class="status-label" id="cpp-status-text">C# MVC FeeEngine Ready</span>
+          </div>
+        </div>
+        <div class="team-card">
+          <p class="team-title">Đồ án Công nghệ Phần mềm</p>
+          <p class="team-sub">Nhóm 3 Thành viên • VS 2026</p>
+          <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; justify-content: center; font-size: 0.78rem;">
+            <a href="/Account/Login" style="color: var(--brand); text-decoration: none; font-weight: 600;">Tài khoản</a>
+            <span>•</span>
+            <a href="/Account/Profile" style="color: var(--brand); text-decoration: none; font-weight: 600;">Thành viên</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="main-area">
+      <!-- Top Header -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h2 id="page-heading">@pageTitle</h2>
+          <p id="page-subheading">@pageSubtitle</p>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="btn btn-outline" id="btn-sync-now" title="Đồng bộ dữ liệu mới nhất từ Supabase">
+            <span aria-hidden="true">🔄</span> Đồng bộ DB
+          </button>
+          <button type="button" class="btn btn-primary" id="btn-quick-checkin">
+            <span aria-hidden="true">⚡</span> Xe vào nhanh (QR)
+          </button>
+        </div>
+      </header>
+
+      @RenderBody()
+    </div>
+  </div>
+
+  <!-- MODAL DIALOG: QR TICKET / INVOICE / SLOT INSPECTOR -->
+  <!-- MANDATORY: Use native <dialog closedby="any"> without redundant role="dialog" or aria-modal -->
+  <dialog id="qr-modal" closedby="any" aria-labelledby="qr-modal-title">
+    <div class="modal-inner">
+      <header class="modal-header">
+        <h3 id="qr-modal-title">Thẻ Vé QR &amp; Chi tiết Giao dịch</h3>
+        <form method="dialog">
+          <button type="submit" class="btn-icon" aria-label="Đóng hộp thoại">✕</button>
+        </form>
+      </header>
+      <div id="qr-modal-body" class="modal-body">
+        <!-- Dynamically populated with SVG QR code and invoice details -->
+      </div>
+      <footer class="modal-footer" id="qr-modal-footer">
+        <form method="dialog">
+          <button type="submit" class="btn btn-outline" value="close" autofocus>Đóng</button>
+        </form>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="~/js/qrcode.js"></script>
+  <script src="~/js/app.js"></script>
+</body>
+</html>
