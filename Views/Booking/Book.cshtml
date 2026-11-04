@@ -1,0 +1,82 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@{
+    var isActive = Model.ActiveTab == "booking-tab";
+}
+<section id="booking-tab" class="tab-panel @(isActive ? "active" : "")" @(isActive ? "" : "hidden")>
+  <div class="split-layout">
+    <div class="card">
+      <div class="card-header">
+        <h3>Đặt chỗ đỗ xe trực tuyến &amp; Cấp mã QR</h3>
+        <p>Chọn ô đỗ đang trống, phương tiện và khung giờ dự kiến đến bãi</p>
+      </div>
+      <form id="booking-form" class="modern-form" novalidate>
+        <div class="field">
+          <label for="bk-customer-name">Họ tên khách hàng *</label>
+          <span id="bk-name-hint" class="hint">Nhập họ tên người đặt chỗ (tối thiểu 2 ký tự)</span>
+          <input type="text" id="bk-customer-name" name="customer_name" autocomplete="name" required minlength="2" aria-describedby="bk-name-hint" aria-errormessage="bk-name-err">
+          <div id="bk-name-err" class="error-msg"><span aria-hidden="true">❌</span> Vui lòng nhập họ tên hợp lệ.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="bk-vehicle">Chọn phương tiện đã đăng ký *</label>
+            <span id="bk-vehicle-hint" class="hint">Hoặc đăng ký xe mới ở tab Phương tiện</span>
+            <select id="bk-vehicle" name="vehicle_id" required aria-describedby="bk-vehicle-hint"></select>
+          </div>
+          <div class="field">
+            <label for="bk-slot">Chọn vị trí ô đỗ trống *</label>
+            <span id="bk-slot-hint" class="hint">Chỉ hiển thị các ô đang AVAILABLE</span>
+            <select id="bk-slot" name="slot_id" required aria-describedby="bk-slot-hint"></select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="bk-start-time">Thời gian bắt đầu *</label>
+            <span id="bk-start-hint" class="hint">Giờ dự kiến đưa xe vào bãi</span>
+            <input type="datetime-local" id="bk-start-time" name="start_time" required aria-describedby="bk-start-hint">
+          </div>
+          <div class="field">
+            <label for="bk-end-time">Thời gian kết thúc *</label>
+            <span id="bk-end-hint" class="hint">Giờ dự kiến lấy xe rời bãi</span>
+            <input type="datetime-local" id="bk-end-time" name="end_time" required aria-describedby="bk-end-hint">
+          </div>
+        </div>
+
+        <div class="fee-preview-box" id="bk-fee-preview">
+          <div>
+            <span class="preview-label">Ước tính phí đỗ xe (C# MVC FeeEngine):</span>
+            <strong id="bk-estimated-fee">30.000 ₫</strong>
+          </div>
+          <small id="bk-estimated-detail">Đơn giá khu vực • Tối thiểu 1.0 giờ</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          <span aria-hidden="true">🎫</span> Xác nhận Đặt chỗ &amp; Xuất vé QR
+        </button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Danh sách Đặt chỗ trước (Bookings)</h3>
+        <p>Nhấn "Xem QR" để mở thẻ vé hoặc "Check-in ngay" khi xe tới cổng</p>
+      </div>
+      <div tabindex="0" role="region" aria-labelledby="bookings-table-caption" class="table-wrapper">
+        <table id="bookings-table">
+          <caption id="bookings-table-caption" class="sr-only">Danh sách các phiếu đặt chỗ trước</caption>
+          <thead>
+            <tr>
+              <th>Mã QR Đặt chỗ</th>
+              <th>Biển số &amp; Ô đỗ</th>
+              <th>Khung giờ đặt</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
