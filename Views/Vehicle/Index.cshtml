@@ -1,0 +1,73 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@{
+    var isActive = Model.ActiveTab == "vehicles-tab";
+}
+<section id="vehicles-tab" class="tab-panel @(isActive ? "active" : "")" @(isActive ? "" : "hidden")>
+  <div class="split-layout">
+    <div class="card">
+      <div class="card-header">
+        <h3>Đăng ký Phương tiện mới</h3>
+        <p>Lưu biển số xe vào Supabase để đặt chỗ nhanh và đối soát tự động</p>
+      </div>
+      <form id="vehicle-form" class="modern-form" novalidate>
+        <div class="field">
+          <label for="vh-plate">Biển số xe định danh *</label>
+          <span id="vh-plate-hint" class="hint">Định dạng chuẩn Việt Nam (VD: 51K-123.45, 59X3-678.90)</span>
+          <input type="text" id="vh-plate" name="license_plate" autocorrect="off" autocapitalize="off" spellcheck="false" required minlength="5" pattern="[A-Za-z0-9\-\.\s]{5,15}" placeholder="51K-999.88" aria-describedby="vh-plate-hint" aria-errormessage="vh-plate-err">
+          <div id="vh-plate-err" class="error-msg"><span aria-hidden="true">❌</span> Vui lòng nhập biển số hợp lệ (5–15 ký tự).</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="vh-type">Loại phương tiện *</label>
+            <select id="vh-type" name="vehicle_type" required>
+              <option value="CAR">Ô tô (CAR)</option>
+              <option value="MOTORBIKE">Xe máy (MOTORBIKE)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="vh-brand">Hãng / Dòng xe *</label>
+            <input type="text" id="vh-brand" name="brand" required placeholder="VD: VinFast VF8, Honda SH">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="vh-color">Màu sơn</label>
+            <input type="text" id="vh-color" name="color" placeholder="VD: Trắng, Đen, Đỏ">
+          </div>
+          <div class="field">
+            <label for="vh-owner">Chủ sở hữu *</label>
+            <input type="text" id="vh-owner" name="owner_name" autocomplete="name" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          <span aria-hidden="true">➕</span> Lưu Phương tiện vào Supabase
+        </button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Danh sách Phương tiện đã đăng ký</h3>
+        <p>Quản lý hồ sơ phương tiện của các thành viên và khách hàng</p>
+      </div>
+      <div tabindex="0" role="region" aria-labelledby="vehicles-table-caption" class="table-wrapper">
+        <table id="vehicles-table">
+          <caption id="vehicles-table-caption" class="sr-only">Bảng danh sách phương tiện đã đăng ký</caption>
+          <thead>
+            <tr>
+              <th>Biển số xe</th>
+              <th>Loại xe</th>
+              <th>Hãng &amp; Màu</th>
+              <th>Chủ xe</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="vehicles-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
