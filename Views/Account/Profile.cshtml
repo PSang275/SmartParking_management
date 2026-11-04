@@ -1,0 +1,51 @@
+@model List<SmartParking_management.Models.User>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Hồ sơ Thành viên Nhóm — SmartParking_management MVC</title>
+  <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
+  <main class="card" style="max-width:760px; width:100%;">
+    <div class="card-header">
+      <h3>👥 Danh sách Tài khoản &amp; Phân quyền Hệ thống (`app_users`)</h3>
+      <p>Đồng bộ từ Supabase Cloud (`jgvegymigpbgqmoylljf`) • Nhóm 3 Thành viên</p>
+    </div>
+    <div tabindex="0" role="region" aria-labelledby="users-table-caption" class="table-wrapper">
+      <table>
+        <caption id="users-table-caption" class="sr-only">Danh sách tài khoản hệ thống</caption>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Họ và Tên</th>
+            <th>Số điện thoại</th>
+            <th>Vai trò (Role)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var u in Model)
+          {
+            <tr>
+              <th>#@u.Id</th>
+              <td><code>@u.Username</code></td>
+              <td><strong>@u.FullName</strong></td>
+              <td>@(u.Phone ?? "0901234567")</td>
+              <td><span class="badge badge-cpp">@u.Role</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:1.25rem; text-align:right;">
+      <a href="/" class="btn btn-primary" style="text-decoration:none;">← Quay lại Bảng điều khiển Bãi xe</a>
+    </div>
+  </main>
+</body>
+</html>
