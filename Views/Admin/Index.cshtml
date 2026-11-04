@@ -1,0 +1,47 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@{
+    var isActive = Model.ActiveTab == "dashboard-tab";
+}
+<section id="dashboard-tab" class="tab-panel @(isActive ? "active" : "")" @(isActive ? "" : "hidden")>
+  <div class="dashboard-grid">
+    <div class="card">
+      <div class="card-header">
+        <h3>Doanh thu &amp; Công suất theo Khu vực (A / B / C)</h3>
+        <p>Tổng hợp trực tiếp từ dữ liệu phiên gửi xe và tỷ lệ lấp đầy hiện tại</p>
+      </div>
+      <div id="zone-analytics-bars" class="analytics-bars"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Phân bổ Trạng thái Ô đỗ &amp; Phương tiện</h3>
+        <p>Tỷ lệ khai thác bãi xe thời gian thực</p>
+      </div>
+      <div id="status-breakdown-box" class="breakdown-list"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 1.25rem;">
+    <div class="card-header">
+      <h3>Kiến trúc Hệ thống SmartParking_management (ASP.NET Core MVC + Supabase Cloud)</h3>
+      <p>Mô hình Model - View - Controller (MVC) chuẩn trên Visual Studio 2026 phục vụ đồ án môn Công nghệ Phần mềm</p>
+    </div>
+    <div class="arch-cards">
+      <div class="arch-item">
+        <span class="badge badge-cpp">Views Layer (Razor .cshtml + wwwroot)</span>
+        <h4>Presentation &amp; Interactive UI</h4>
+        <p>Các View phân tách theo Controller (<code>Home</code>, <code>Booking</code>, <code>ParkingSlot</code>, <code>CheckInOut</code>, <code>Vehicle</code>, <code>Invoice</code>, <code>Admin</code>, <code>Account</code>) kết hợp mã QR SVG và <code>&lt;dialog closedby="any"&gt;</code>.</p>
+      </div>
+      <div class="arch-item">
+        <span class="badge badge-cpp">Controllers &amp; Models Layer (.cs)</span>
+        <h4>ASP.NET Core MVC Controllers</h4>
+        <p>Xử lý điều hướng, nghiệp vụ đặt chỗ, kiểm soát xe vào/ra và tính phí đỗ xe tự động qua <code>Models/FeeBreakdown.cs</code> (làm tròn block 0.5h, phụ phí quá giờ 20%).</p>
+      </div>
+      <div class="arch-item">
+        <span class="badge badge-cpp">Data &amp; Cloud Layer (Data/AppDbContext.cs)</span>
+        <h4>Supabase PostgreSQL (jgvegymigpbgqmoylljf)</h4>
+        <p>Kết nối đồng bộ 6 bảng quan hệ chuẩn 3NF (<code>app_users</code>, <code>vehicles</code>, <code>parking_zones</code>, <code>parking_slots</code>, <code>bookings</code>, <code>parking_sessions</code>) kèm kịch bản kiểm thử <code>TestData/</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
