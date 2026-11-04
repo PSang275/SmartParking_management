@@ -1,0 +1,61 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+
+<!-- Global KPI Summary Strip -->
+<section class="kpi-strip" aria-label="Chỉ số nhanh bãi xe">
+  <article class="kpi-card">
+    <div class="kpi-header">
+      <span class="kpi-label">Tổng số ô đỗ</span>
+      <span class="kpi-icon" aria-hidden="true">🅿️</span>
+    </div>
+    <div class="kpi-value" id="kpi-total-slots">@Model.TotalSlots</div>
+    <div class="kpi-foot" id="kpi-zones-summary">@Model.Zones.Count khu vực (Khu A, B, C)</div>
+  </article>
+
+  <article class="kpi-card kpi-available">
+    <div class="kpi-header">
+      <span class="kpi-label">Chỗ trống sẵn sàng</span>
+      <span class="kpi-icon" aria-hidden="true">✅</span>
+    </div>
+    <div class="kpi-value" id="kpi-avail-slots">@Model.AvailableSlots</div>
+    <div class="kpi-foot" id="kpi-avail-detail">Đồng bộ thời gian thực</div>
+  </article>
+
+  <article class="kpi-card kpi-occupied">
+    <div class="kpi-header">
+      <span class="kpi-label">Đang đỗ / Đặt trước</span>
+      <span class="kpi-icon" aria-hidden="true">🚘</span>
+    </div>
+    <div class="kpi-value" id="kpi-busy-slots">@Model.BusySlots</div>
+    <div class="kpi-foot" id="kpi-busy-detail">Kiểm soát tự động qua QR</div>
+  </article>
+
+  <article class="kpi-card kpi-revenue">
+    <div class="kpi-header">
+      <span class="kpi-label">Tổng doanh thu (VNĐ)</span>
+      <span class="kpi-icon" aria-hidden="true">💰</span>
+    </div>
+    <div class="kpi-value" id="kpi-revenue-total">@Model.TotalRevenue.ToString("N0") ₫</div>
+    <div class="kpi-foot" id="kpi-sessions-count">@Model.Sessions.Count(s => s.Status == "COMPLETED") lượt xe hoàn tất</div>
+  </article>
+</section>
+
+<!-- TAB 1: LIVE PARKING MAP (Home/Index) -->
+@await Html.PartialAsync("~/Views/Home/_LiveMapPartial.cshtml", Model)
+
+<!-- TAB 2: ADVANCE BOOKING (Booking/Book) -->
+@await Html.PartialAsync("~/Views/Booking/Book.cshtml", Model)
+
+<!-- TAB 3: QR CHECK-IN / CHECK-OUT & FEE ENGINE (CheckInOut/Index) -->
+@await Html.PartialAsync("~/Views/CheckInOut/Index.cshtml", Model)
+
+<!-- TAB 4: VEHICLE REGISTRATION (Vehicle/Index) -->
+@await Html.PartialAsync("~/Views/Vehicle/Index.cshtml", Model)
+
+<!-- TAB 5: PARKING SLOT & ZONE MANAGEMENT (ParkingSlot/Index) -->
+@await Html.PartialAsync("~/Views/ParkingSlot/Index.cshtml", Model)
+
+<!-- TAB 6: HISTORY & INVOICES (Invoice/Index) -->
+@await Html.PartialAsync("~/Views/Invoice/Index.cshtml", Model)
+
+<!-- TAB 7: ANALYTICS & ADMIN DASHBOARD (Admin/Index) -->
+@await Html.PartialAsync("~/Views/Admin/Index.cshtml", Model)
