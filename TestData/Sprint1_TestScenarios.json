@@ -1,0 +1,36 @@
+{
+  "project": "SmartParking_management",
+  "architecture": "ASP.NET Core MVC (Model-View-Controller)",
+  "database": "Supabase Cloud PostgreSQL (jgvegymigpbgqmoylljf)",
+  "sprint1_owner": "Nguyễn Phước Sang (@PSang275 - Leader / Developer)",
+  "sprint2_3_owners": [
+    "Võ Việt Thắng (@vovietthang11-ops - Product Owner / Developer)",
+    "Đoàn Tiến Đạt (@Tiendat264 - Scrum Master / Developer)"
+  ],
+  "test_scenarios": [
+    {
+      "id": "TC-US01",
+      "story": "US01 - Xem tổng quan bãi xe & bảng giá",
+      "controller": "HomeController.Index",
+      "expected": "Hiển thị đầy đủ 3 khu vực (Khu A, Khu B, Khu C), KPI chỗ trống và bảng giá niêm yết."
+    },
+    {
+      "id": "TC-US06",
+      "story": "US06 - Đặt chỗ đỗ xe online & cấp mã QR",
+      "controller": "BookingController.Book",
+      "expected": "Tạo phiếu đặt chỗ trạng thái RESERVED trên Supabase, sinh mã QR-BK-... định dạng SVG."
+    },
+    {
+      "id": "TC-US10",
+      "story": "US10 - Quét mã QR xác nhận xe vào bãi (Check-in)",
+      "controller": "CheckInOutController.Index",
+      "expected": "Chuyển ô đỗ sang OCCUPIED và tạo bản ghi phiên gửi xe ACTIVE trong bảng parking_sessions."
+    },
+    {
+      "id": "TC-US12",
+      "story": "US12 - Tính phí đỗ xe tự động & xuất hóa đơn (Check-out)",
+      "controller": "CheckInOutController.CalculateFee",
+      "expected": "Tính phí chính xác theo block 0.5h (tối thiểu 1.0h), giải phóng ô đỗ về AVAILABLE."
+    }
+  ]
+}
