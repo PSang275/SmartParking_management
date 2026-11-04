@@ -8,4 +8,9 @@
     <AssemblyName>SmartParking_management</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
