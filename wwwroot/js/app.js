@@ -1,6 +1,6 @@
 /**
  * SmartPark - Hệ thống Quản lý Bãi đỗ xe Thông minh
- * Meta Astryx Design System (@astryxdesign/core + @astryxdesign/theme-neutral + Lucide Icons)
+ * Baoyu Design + Claude Dashboard + Dataviz Craft + Meta Astryx Core
  * Tự động đồng bộ thời gian thực & tính phí tự động
  */
 const SUPABASE_URL = 'https://jgvegymigpbgqmoylljf.supabase.co';
@@ -14,16 +14,16 @@ const typeLabel = (t) => (t === 'CAR' ? 'Ô tô' : 'Xe máy');
 const zoneLabel = (z) => 'Khu ' + String(z?.zone_code || '').replace('ZONE-', '');
 const BOOKING_STATUS = { RESERVED: 'Đã đặt', CHECKED_IN: 'Đã check-in', COMPLETED: 'Hoàn tất', CANCELLED: 'Đã hủy' };
 
-/* ---------------- Official Astryx Lucide Vector Icons ---------------- */
+/* ---------------- Inline Stroke SVG Icons (No Emojis - Baoyu Design Rule) ---------------- */
 const ICONS = {
-  car: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>',
-  calendar: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
-  wrench: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>',
-  check: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>',
-  qr: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1"></rect><rect x="16" y="3" width="5" height="5" rx="1"></rect><rect x="3" y="16" width="5" height="5" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M12 7v3a2 2 0 0 1-2 2H7"></path></svg>',
-  trash: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>',
-  receipt: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
-  card: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>'
+  car: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>',
+  calendar: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+  wrench: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>',
+  check: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+  qr: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1"></rect><rect x="16" y="3" width="5" height="5" rx="1"></rect><rect x="3" y="16" width="5" height="5" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M12 7v3a2 2 0 0 1-2 2H7"></path></svg>',
+  trash: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>',
+  receipt: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+  card: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>'
 };
 
 /* ---------------- Modern web fallbacks (dialog light-dismiss, :user-invalid) ---------------- */
@@ -54,6 +54,88 @@ function initModernWebFallbacks() {
     };
     document.addEventListener('input', (e) => { if (e.target.checkValidity) { const s = dirty.get(e.target) || {}; s.touched = true; dirty.set(e.target, s); if (s.blurred) update(e.target); } });
     document.addEventListener('blur', (e) => { if (e.target.checkValidity) { const s = dirty.get(e.target) || {}; s.blurred = true; dirty.set(e.target, s); if (s.touched) update(e.target); } }, true);
+  }
+}
+
+/* ---------------- Baoyu Design In-Page Tweaks & Dataviz Tooltip ---------------- */
+function initBaoyuTweaks() {
+  const btn = $('btn-toggle-tweaks');
+  const closeBtn = $('btn-close-tweaks');
+  const panel = $('baoyu-tweaks-panel');
+  if (btn && panel) {
+    btn.addEventListener('click', () => {
+      const open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  }
+  if (closeBtn && panel && btn) {
+    closeBtn.addEventListener('click', () => {
+      panel.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  const applyTheme = (t) => {
+    document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('[data-tweak-theme]').forEach((x) => x.classList.toggle('active', x.dataset.tweakTheme === t));
+    try { localStorage.setItem('sp_theme', t); } catch (_) {}
+  };
+
+  const applyAccent = (a) => {
+    document.documentElement.setAttribute('data-accent', a);
+    document.querySelectorAll('[data-tweak-accent]').forEach((x) => x.classList.toggle('active', x.dataset.tweakAccent === a));
+    try { localStorage.setItem('sp_accent', a); } catch (_) {}
+  };
+
+  try {
+    localStorage.removeItem('sp_density');
+    document.documentElement.removeAttribute('data-density');
+    const savedTheme = localStorage.getItem('sp_theme');
+    const savedAccent = localStorage.getItem('sp_accent');
+    if (savedTheme) applyTheme(savedTheme);
+    if (savedAccent) applyAccent(savedAccent);
+  } catch (_) {}
+
+  document.querySelectorAll('[data-tweak-theme]').forEach((b) => {
+    b.addEventListener('click', () => applyTheme(b.dataset.tweakTheme));
+  });
+
+  document.querySelectorAll('[data-tweak-accent]').forEach((b) => {
+    b.addEventListener('click', () => applyAccent(b.dataset.tweakAccent));
+  });
+
+  // Quick status pills in Live Map
+  document.querySelectorAll('[data-quick-status]').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      const st = pill.dataset.quickStatus;
+      const sel = $('filter-status');
+      if (sel) sel.value = st;
+      document.querySelectorAll('[data-quick-status]').forEach((p) => p.classList.toggle('active', p === pill));
+      renderMap();
+    });
+  });
+}
+
+function bindVizTooltips(container) {
+  const tip = $('dataviz-tooltip');
+  if (!tip || !container) return;
+  container.querySelectorAll('[data-viz-tip]').forEach((el) => {
+    el.addEventListener('pointerenter', (e) => {
+      tip.innerHTML = el.dataset.vizTip;
+      tip.hidden = false;
+      positionTip(e);
+    });
+    el.addEventListener('pointermove', positionTip);
+    el.addEventListener('pointerleave', () => {
+      tip.hidden = true;
+    });
+  });
+  function positionTip(e) {
+    const pad = 14;
+    const x = Math.min(window.innerWidth - 260, e.clientX + pad);
+    const y = Math.max(12, e.clientY - 36);
+    tip.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   }
 }
 
@@ -113,7 +195,7 @@ const rand = (n) => String(Math.floor(Math.random() * 10 ** n)).padStart(n, '0')
 function toast(msg) {
   const el = document.createElement('div');
   el.className = 'toast';
-  el.textContent = msg;
+  el.innerHTML = `<span class="toast-dot" aria-hidden="true"></span><span>${esc(msg)}</span>`;
   $('toast-container').appendChild(el);
   setTimeout(() => el.remove(), 4000);
 }
@@ -126,7 +208,7 @@ function qrSvg(text, size = 170) {
   const n = qr.getModuleCount();
   let d = '';
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += `M${c + 4} ${r + 4}h1v1h-1z`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 8} ${n + 8}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="Mã QR ${esc(text)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#0a2540"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 8} ${n + 8}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="Mã QR ${esc(text)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#0b0f19"/></svg>`;
 }
 
 /* ---------------- Tự động đồng bộ dữ liệu thời gian thực ---------------- */
@@ -173,21 +255,97 @@ function renderAll() {
   renderDashboard();
 }
 
-/* ---------------- KPI + Sơ đồ (US02-04) ---------------- */
+/* ---------------- KPI + Live Telemetry (Claude Dashboard & Dataviz) ---------------- */
 function renderKPIs() {
+  const total = Math.max(1, state.slots.length);
   const avail = state.slots.filter((s) => s.status === 'AVAILABLE');
   const occ = state.slots.filter((s) => s.status === 'OCCUPIED').length;
   const res = state.slots.filter((s) => s.status === 'RESERVED').length;
+  const maint = state.slots.filter((s) => s.status === 'MAINTENANCE').length;
+  const busy = occ + res;
+  const availPct = Math.round((avail.length / total) * 100);
+  const busyPct = Math.round((busy / total) * 100);
+  const occPct = Math.round((occ / total) * 100);
+  const resPct = Math.round((res / total) * 100);
+  const maintPct = Math.max(0, 100 - availPct - occPct - resPct);
   const done = state.sessions.filter((s) => s.status === 'COMPLETED');
+
   $('kpi-total-slots').textContent = state.slots.length;
-  $('kpi-zones-summary').textContent = `${state.zones.length} khu vực`;
+  $('kpi-zones-summary').textContent = `${state.zones.length} khu vực vận hành (A, B, C)`;
   $('kpi-avail-slots').textContent = avail.length;
+  if ($('kpi-avail-pct')) $('kpi-avail-pct').textContent = `${availPct}% trống`;
+  if ($('kpi-avail-bar')) $('kpi-avail-bar').style.width = `${availPct}%`;
   $('kpi-avail-detail').textContent = `Ô tô: ${avail.filter((s) => s.vehicle_type === 'CAR').length} • Xe máy: ${avail.filter((s) => s.vehicle_type === 'MOTORBIKE').length}`;
-  $('kpi-busy-slots').textContent = occ + res;
+
+  $('kpi-busy-slots').textContent = busy;
+  if ($('kpi-busy-pct')) $('kpi-busy-pct').textContent = `${busyPct}% khai thác`;
+  if ($('kpi-busy-bar')) $('kpi-busy-bar').style.width = `${busyPct}%`;
   $('kpi-busy-detail').textContent = `Đang đỗ: ${occ} • Đặt trước: ${res}`;
+
   $('kpi-revenue-total').textContent = fmtVND(done.reduce((a, s) => a + (s.fee_amount || 0), 0));
   $('kpi-sessions-count').textContent = `${done.length} lượt đã thanh toán`;
   $('nav-avail-badge').textContent = avail.length;
+
+  // Live Takeaway & Quick Pills
+  if ($('live-takeaway-bar')) {
+    $('live-takeaway-bar').innerHTML = `Hiện có <strong>${avail.length}/${state.slots.length}</strong> vị trí sẵn sàng đón xe (<strong>${availPct}%</strong> công suất trống)`;
+  }
+  if ($('pill-count-all')) $('pill-count-all').textContent = state.slots.length;
+  if ($('pill-count-avail')) $('pill-count-avail').textContent = avail.length;
+  if ($('pill-count-occ')) $('pill-count-occ').textContent = occ;
+  if ($('pill-count-res')) $('pill-count-res').textContent = res;
+  if ($('pill-count-maint')) $('pill-count-maint').textContent = maint;
+
+  // Live Telemetry Card (Left Column)
+  if ($('live-avail-pct')) $('live-avail-pct').textContent = `${availPct}%`;
+  if ($('live-avail-count')) $('live-avail-count').textContent = avail.length;
+  if ($('live-total-caption')) $('live-total-caption').textContent = `Trên tổng ${state.slots.length} vị trí đỗ`;
+  if ($('live-donut-arc')) $('live-donut-arc').setAttribute('stroke-dasharray', `${(availPct * 2.513).toFixed(1)} 251.3`);
+  if ($('live-occ-summary')) $('live-occ-summary').textContent = `${busy} bận / ${state.slots.length} ô`;
+
+  if ($('live-composition-bar')) {
+    $('live-composition-bar').innerHTML = [
+      avail.length ? `<span class="stack-seg seg-avail" style="width:${Math.max(6, availPct)}%" data-viz-tip="<strong>Trống sẵn sàng:</strong> ${avail.length} ô (${availPct}%)"></span>` : '',
+      occ ? `<span class="stack-seg seg-occ" style="width:${Math.max(6, occPct)}%" data-viz-tip="<strong>Đang có xe:</strong> ${occ} ô (${occPct}%)"></span>` : '',
+      res ? `<span class="stack-seg seg-res" style="width:${Math.max(6, resPct)}%" data-viz-tip="<strong>Đã đặt trước:</strong> ${res} ô (${resPct}%)"></span>` : '',
+      maint ? `<span class="stack-seg seg-maint" style="width:${Math.max(6, maintPct)}%" data-viz-tip="<strong>Đang bảo trì:</strong> ${maint} ô (${maintPct}%)"></span>` : ''
+    ].join('');
+    bindVizTooltips($('live-composition-bar'));
+  }
+
+  if ($('live-zone-bars-list') && state.zones.length) {
+    $('live-zone-bars-list').innerHTML = state.zones.map((z) => {
+      const zs = state.slots.filter((s) => s.zone_id === z.id);
+      const zTotal = Math.max(1, zs.length);
+      const zAvail = zs.filter((s) => s.status === 'AVAILABLE').length;
+      const zOcc = zs.filter((s) => s.status === 'OCCUPIED').length;
+      const zRes = zs.filter((s) => s.status === 'RESERVED').length;
+      const zMaint = zs.filter((s) => s.status === 'MAINTENANCE').length;
+      const pAvail = Math.round((zAvail / zTotal) * 100);
+      const pOcc = Math.round((zOcc / zTotal) * 100);
+      const pRes = Math.round((zRes / zTotal) * 100);
+      const pMaint = Math.max(0, 100 - pAvail - pOcc - pRes);
+      const tip = `<strong>${esc(zoneLabel(z))} — ${esc(z.zone_name)}</strong><br>Trống: ${zAvail} • Có xe: ${zOcc} • Đặt trước: ${zRes}`;
+      return `<div class="mini-zone-row" data-viz-tip="${tip}">
+        <div class="mini-zone-text">
+          <strong>${esc(z.zone_code)}</strong>
+          <span>${zAvail > 0 ? `${zAvail}/${zs.length} trống` : 'Hết chỗ'}</span>
+        </div>
+        <div class="mini-zone-bar">
+          ${zAvail ? `<span class="stack-seg seg-avail" style="width:${pAvail}%"></span>` : ''}
+          ${zOcc ? `<span class="stack-seg seg-occ" style="width:${pOcc}%"></span>` : ''}
+          ${zRes ? `<span class="stack-seg seg-res" style="width:${pRes}%"></span>` : ''}
+          ${zMaint ? `<span class="stack-seg seg-maint" style="width:${pMaint}%"></span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    bindVizTooltips($('live-zone-bars-list'));
+  }
+
+  if ($('lg-avail')) $('lg-avail').textContent = avail.length;
+  if ($('lg-occ')) $('lg-occ').textContent = occ;
+  if ($('lg-res')) $('lg-res').textContent = res;
+  if ($('lg-maint')) $('lg-maint').textContent = maint;
 }
 
 function fillSelects() {
@@ -230,27 +388,70 @@ function renderMap() {
   const zf = $('filter-zone').value, tf = $('filter-type').value, sf = $('filter-status').value;
   const q = $('search-slot').value.trim().toUpperCase();
   const label = { AVAILABLE: 'Trống', RESERVED: 'Đã đặt', OCCUPIED: 'Có xe', MAINTENANCE: 'Bảo trì' };
+
+  // Sync quick status pills with dropdown
+  document.querySelectorAll('[data-quick-status]').forEach((p) => {
+    p.classList.toggle('active', p.dataset.quickStatus === sf);
+  });
+
   let html = '';
   for (const z of state.zones) {
     if (zf !== 'ALL' && z.id !== Number(zf)) continue;
-    const slots = state.slots.filter((s) => s.zone_id === z.id && (tf === 'ALL' || s.vehicle_type === tf) && (sf === 'ALL' || s.status === sf) && (!q || s.slot_code.toUpperCase().includes(q)));
+    const slots = state.slots.filter((s) => {
+      if (s.zone_id !== z.id) return false;
+      if (tf !== 'ALL' && s.vehicle_type !== tf) return false;
+      if (sf !== 'ALL' && s.status !== sf) return false;
+      if (q) {
+        const bk = state.bookings.find((b) => b.slot_id === s.id && b.status === 'RESERVED');
+        const haystack = `${s.slot_code} ${s.current_plate || ''} ${bk?.license_plate || ''}`.toUpperCase();
+        if (!haystack.includes(q)) return false;
+      }
+      return true;
+    });
     if (!slots.length) continue;
     const free = slots.filter((s) => s.status === 'AVAILABLE').length;
-    html += `<section class="zone-section"><div class="zone-header"><div class="zone-title"><span class="zone-badge">${esc(zoneLabel(z).toUpperCase())}</span><div><h3>${esc(z.zone_name)}</h3><small style="color:var(--text-muted)">${typeLabel(z.vehicle_type)} • <strong>${fmtVND(z.hourly_rate)}/giờ</strong> • Qua đêm ${fmtVND(z.overnight_rate)}</small></div></div><span class="badge" style="background:var(--avail-bg);color:var(--avail-text);border:1px solid var(--avail-border)">Trống ${free}/${slots.length} ô</span></div><div class="slots-grid">`;
+    const occCount = slots.filter((s) => s.status === 'OCCUPIED').length;
+    const resCount = slots.filter((s) => s.status === 'RESERVED').length;
+    html += `<section class="zone-section">
+      <div class="zone-header">
+        <div class="zone-title">
+          <span class="zone-badge">${esc(zoneLabel(z).toUpperCase())}</span>
+          <div>
+            <h3>${esc(z.zone_name)}</h3>
+            <small class="zone-meta-sub">${typeLabel(z.vehicle_type)} • Đơn giá <strong>${fmtVND(z.hourly_rate)}/giờ</strong> • Qua đêm <strong>${fmtVND(z.overnight_rate)}</strong></small>
+          </div>
+        </div>
+        <div class="zone-header-right">
+          <span class="zone-stat-chip"><i class="dot dot-occupied"></i>${occCount} đang đỗ</span>
+          <span class="zone-stat-chip"><i class="dot dot-reserved"></i>${resCount} đặt trước</span>
+          <span class="zone-avail-pill"><i class="dot dot-available"></i>Trống ${free}/${slots.length} ô</span>
+        </div>
+      </div>
+      <div class="slots-grid">`;
     for (const s of slots) {
       const bk = state.bookings.find((b) => b.slot_id === s.id && b.status === 'RESERVED');
       const info = s.status === 'OCCUPIED'
-        ? `${ICONS.car}<span>${esc(s.current_plate || '')}</span>`
+        ? `${ICONS.car}<span class="plate-mono">${esc(s.current_plate || '')}</span>`
         : s.status === 'RESERVED'
-          ? `${ICONS.calendar}<span>${esc(bk?.license_plate || '')}</span>`
+          ? `${ICONS.calendar}<span class="plate-mono">${esc(bk?.license_plate || s.current_plate || '')}</span>`
           : s.status === 'MAINTENANCE'
             ? `${ICONS.wrench}<span>Đang bảo trì</span>`
-            : `${ICONS.check}<span>Sẵn sàng</span>`;
-      html += `<button type="button" class="slot-tile status-${s.status}" data-slot="${s.id}"><div class="slot-top"><span class="slot-code">${esc(s.slot_code)}</span><span class="slot-status-pill">${label[s.status]}</span></div><div class="slot-plate">${info}</div><div class="slot-meta"><span>${typeLabel(s.vehicle_type)}</span><span>${fmtVND(z.hourly_rate)}/giờ</span></div></button>`;
+            : `${ICONS.check}<span>Sẵn sàng đón xe</span>`;
+      html += `<button type="button" class="slot-tile status-${s.status}" data-slot="${s.id}">
+        <div class="slot-top">
+          <span class="slot-code">${esc(s.slot_code)}</span>
+          <span class="slot-status-pill"><i class="status-pill-dot" aria-hidden="true"></i>${label[s.status]}</span>
+        </div>
+        <div class="slot-plate">${info}</div>
+        <div class="slot-meta">
+          <span>${typeLabel(s.vehicle_type)}</span>
+          <span class="slot-rate-num">${fmtVND(z.hourly_rate)}/giờ</span>
+        </div>
+      </button>`;
     }
     html += '</div></section>';
   }
-  $('zones-map-container').innerHTML = html || '<div class="card"><p>Không có ô đỗ nào khớp bộ lọc.</p></div>';
+  $('zones-map-container').innerHTML = html || '<div class="card"><p style="color:var(--text-muted)">Không có vị trí đỗ nào khớp với bộ lọc hiện tại.</p></div>';
   $('zones-map-container').querySelectorAll('[data-slot]').forEach((b) => (b.onclick = () => openSlotModal(Number(b.dataset.slot))));
 }
 
@@ -308,7 +509,7 @@ async function updateEstimate() {
 
 function renderBookings() {
   const tb = $('bookings-tbody');
-  tb.innerHTML = state.bookings.map((b) => `<tr><th>${esc(b.booking_code)}</th><td><strong>${esc(b.license_plate)}</strong> • Ô <span class="badge badge-cpp">${esc(b.slot_code)}</span><br><small>${esc(b.customer_name)}</small></td><td>${fmtDT(b.start_time)}<br><small>→ ${fmtDT(b.end_time)}</small></td><td><span class="badge" style="background:var(--reserved-bg);color:var(--reserved-text)">${BOOKING_STATUS[b.status] || b.status}</span></td><td><div style="display:flex;gap:.4rem;flex-wrap:wrap"><button type="button" class="btn btn-outline btn-sm" data-bk-qr="${b.id}">${ICONS.qr}<span>Mã QR</span></button>${b.status === 'RESERVED' ? `<button type="button" class="btn btn-success btn-sm" data-bk-in="${b.id}">${ICONS.check}<span>Check-in</span></button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="5">Chưa có đặt chỗ nào.</td></tr>';
+  tb.innerHTML = state.bookings.map((b) => `<tr><th>${esc(b.booking_code)}</th><td><strong>${esc(b.license_plate)}</strong> • Ô <span class="badge badge-cpp">${esc(b.slot_code)}</span><br><small>${esc(b.customer_name)}</small></td><td>${fmtDT(b.start_time)}<br><small>→ ${fmtDT(b.end_time)}</small></td><td><span class="badge" style="background:var(--reserved-bg);color:var(--reserved-text);border:1px solid var(--reserved-border)">${BOOKING_STATUS[b.status] || b.status}</span></td><td><div style="display:flex;gap:.4rem;flex-wrap:wrap"><button type="button" class="btn btn-outline btn-sm" data-bk-qr="${b.id}">${ICONS.qr}<span>Mã QR</span></button>${b.status === 'RESERVED' ? `<button type="button" class="btn btn-success btn-sm" data-bk-in="${b.id}">${ICONS.check}<span>Check-in</span></button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="5">Chưa có đặt chỗ nào.</td></tr>';
   tb.querySelectorAll('[data-bk-qr]').forEach((x) => (x.onclick = () => {
     const b = state.bookings.find((k) => k.id === Number(x.dataset.bkQr));
     openModal('Vé đặt chỗ ' + b.license_plate, qrTicket(b.booking_code, `<p>Ô <strong>${esc(b.slot_code)}</strong> • ${esc(b.customer_name)}</p>`), '');
@@ -397,7 +598,7 @@ async function openCheckout(sessionId) {
   const bk = ses.booking_id ? state.bookings.find((b) => b.id === ses.booking_id) : null;
   const overtime = !!(bk && now > new Date(bk.end_time));
   const f = await calcFee(ses.vehicle_type, zone?.hourly_rate || 20000, mins, overtime);
-  openModal(`Check-out ${ses.license_plate}`, `<div class="qr-ticket-box"><div class="invoice-grid"><div><small>Biển số</small><br><strong>${esc(ses.license_plate)}</strong></div><div><small>Ô đỗ</small><br><strong>${esc(ses.slot_code)} (${esc(zoneLabel(zone))})</strong></div><div><small>Giờ vào</small><br><strong>${fmtDT(ses.check_in_time)}</strong></div><div><small>Giờ ra</small><br><strong>${fmtDT(now)}</strong></div><div><small>Thực tế</small><br><strong>${mins} phút → tính ${f.billableHours} giờ</strong></div><div><small>Đơn giá</small><br><strong>${fmtVND(f.hourlyRate)}/giờ</strong></div><div><small>Phí cơ bản</small><br><strong>${fmtVND(f.baseFee)}</strong></div><div><small>Phụ phí quá giờ</small><br><strong>${fmtVND(f.overtimeSurcharge)}</strong></div></div><div style="font-size:1.3rem;font-weight:800;color:var(--brand-color)">Tổng thanh toán: ${fmtVND(f.totalFee)}</div><small>${esc(f.engine)}</small><div class="field" style="width:100%"><label for="pay-method">Hình thức thanh toán</label><select id="pay-method"><option value="CASH">Tiền mặt</option><option value="QR_TRANSFER">Chuyển khoản QR</option></select></div></div>`,
+  openModal(`Check-out ${ses.license_plate}`, `<div class="qr-ticket-box"><div class="invoice-grid"><div><small>Biển số</small><br><strong>${esc(ses.license_plate)}</strong></div><div><small>Ô đỗ</small><br><strong>${esc(ses.slot_code)} (${esc(zoneLabel(zone))})</strong></div><div><small>Giờ vào</small><br><strong>${fmtDT(ses.check_in_time)}</strong></div><div><small>Giờ ra</small><br><strong>${fmtDT(now)}</strong></div><div><small>Thực tế</small><br><strong>${mins} phút → tính ${f.billableHours} giờ</strong></div><div><small>Đơn giá</small><br><strong>${fmtVND(f.hourlyRate)}/giờ</strong></div><div><small>Phí cơ bản</small><br><strong>${fmtVND(f.baseFee)}</strong></div><div><small>Phụ phí quá giờ</small><br><strong>${fmtVND(f.overtimeSurcharge)}</strong></div></div><div style="font-size:1.3rem;font-weight:800;color:var(--text-main)">Tổng thanh toán: ${fmtVND(f.totalFee)}</div><small>${esc(f.engine)}</small><div class="field" style="width:100%"><label for="pay-method">Hình thức thanh toán</label><select id="pay-method"><option value="CASH">Tiền mặt</option><option value="QR_TRANSFER">Chuyển khoản QR</option></select></div></div>`,
     `<button type="button" class="btn btn-success" id="m-pay">${ICONS.card}<span>Xác nhận thu phí &amp; trả ô</span></button>`);
   $('m-pay').onclick = async () => {
     const method = $('pay-method').value;
@@ -439,12 +640,12 @@ async function submitVehicle(e) {
 
 /* ---------------- Quản lý ô đỗ (US14) ---------------- */
 function renderSlotsTab() {
-  $('zones-pricing-cards').innerHTML = state.zones.map((z) => `<div class="bar-item"><div class="bar-top"><span>${esc(zoneLabel(z))} — ${esc(z.zone_name)}</span><span style="color:var(--brand-color)">${fmtVND(z.hourly_rate)}/giờ</span></div><small style="color:var(--text-muted)">${typeLabel(z.vehicle_type)} • Qua đêm ${fmtVND(z.overnight_rate)} • ${esc(z.description || '')}</small></div>`).join('');
+  $('zones-pricing-cards').innerHTML = state.zones.map((z) => `<div class="bar-item"><div class="bar-top"><span><i class="kpi-swatch swatch-series-1" aria-hidden="true"></i>${esc(zoneLabel(z))} — ${esc(z.zone_name)}</span><span class="tabular-num">${fmtVND(z.hourly_rate)}/giờ</span></div><small style="color:var(--text-muted)">${typeLabel(z.vehicle_type)} • Qua đêm ${fmtVND(z.overnight_rate)} • ${esc(z.description || '')}</small></div>`).join('');
   const tb = $('slots-tbody');
   tb.innerHTML = state.slots.map((s) => {
     const z = zoneOf(s);
     const toggle = s.status === 'AVAILABLE' ? ['MAINTENANCE', `${ICONS.wrench}<span>Bảo trì</span>`] : s.status === 'MAINTENANCE' ? ['AVAILABLE', `${ICONS.check}<span>Mở lại</span>`] : null;
-    return `<tr><th>${esc(s.slot_code)}</th><td>${esc(zoneLabel(z))}</td><td>${typeLabel(s.vehicle_type)} • ${fmtVND(z?.hourly_rate)}/giờ</td><td><span class="slot-status-pill" style="background:var(--bg-elevated);border:1px solid var(--border-color)">${s.status}</span></td><td>${toggle ? `<button type="button" class="btn btn-outline btn-sm" data-tg="${s.id}" data-to="${toggle[0]}" data-from="${s.status}">${toggle[1]}</button>` : '<small style="color:var(--text-muted)">Đang bận</small>'}</td></tr>`;
+    return `<tr><th>${esc(s.slot_code)}</th><td>${esc(zoneLabel(z))}</td><td>${typeLabel(s.vehicle_type)} • ${fmtVND(z?.hourly_rate)}/giờ</td><td><span class="slot-status-pill" style="background:var(--bg-elevated);border:1px solid var(--border-color);color:var(--text-main)">${s.status}</span></td><td>${toggle ? `<button type="button" class="btn btn-outline btn-sm" data-tg="${s.id}" data-to="${toggle[0]}" data-from="${s.status}">${toggle[1]}</button>` : '<small style="color:var(--text-muted)">Đang bận</small>'}</td></tr>`;
   }).join('');
   tb.querySelectorAll('[data-tg]').forEach((b) => (b.onclick = () => setSlotStatus(Number(b.dataset.tg), b.dataset.to, b.dataset.from)));
 }
@@ -471,13 +672,13 @@ async function submitSlot(e) {
   } catch (err) { toast(err.code === '23505' ? 'Mã ô đã tồn tại' : 'Lỗi thêm ô: ' + err.message.slice(0, 100)); }
 }
 
-/* ---------------- Lịch sử (US13) & Dashboard (US15) ---------------- */
+/* ---------------- Lịch sử (US13) & Dashboard (US15 - Dataviz Rules) ---------------- */
 function renderHistory() {
   const q = $('history-search').value.trim().toUpperCase();
   const sf = $('history-status-filter').value;
   const list = state.sessions.filter((s) => (sf === 'ALL' || s.status === sf) && (!q || `${s.qr_token} ${s.license_plate} ${s.slot_code}`.toUpperCase().includes(q)));
   const tb = $('history-tbody');
-  tb.innerHTML = list.map((s) => `<tr><th>${esc(s.qr_token)}</th><td><strong>${esc(s.license_plate)}</strong> • Ô ${esc(s.slot_code)}</td><td>Vào: ${fmtDT(s.check_in_time)}<br><small>Ra: ${fmtDT(s.check_out_time)}</small></td><td>${s.status === 'COMPLETED' ? Number(s.duration_hours) + ' giờ' : 'Đang gửi'}</td><td><strong>${s.status === 'COMPLETED' ? fmtVND(s.fee_amount) : '—'}</strong></td><td><span class="badge badge-cpp">${s.status === 'ACTIVE' ? 'Đang đỗ' : 'Đã thanh toán'}</span></td><td>${s.status === 'ACTIVE' ? `<button type="button" class="btn btn-warning btn-sm" data-ho="${s.id}">Check-out</button>` : `<button type="button" class="btn btn-outline btn-sm" data-hq="${s.id}">${ICONS.receipt}<span>Biên lai</span></button>`}</td></tr>`).join('') || '<tr><td colspan="7">Không có dữ liệu.</td></tr>';
+  tb.innerHTML = list.map((s) => `<tr><th>${esc(s.qr_token)}</th><td><strong>${esc(s.license_plate)}</strong> • Ô ${esc(s.slot_code)}</td><td>Vào: ${fmtDT(s.check_in_time)}<br><small>Ra: ${fmtDT(s.check_out_time)}</small></td><td>${s.status === 'COMPLETED' ? Number(s.duration_hours) + ' giờ' : 'Đang gửi'}</td><td><strong class="tabular-num">${s.status === 'COMPLETED' ? fmtVND(s.fee_amount) : '—'}</strong></td><td><span class="badge badge-cpp">${s.status === 'ACTIVE' ? 'Đang đỗ' : 'Đã thanh toán'}</span></td><td>${s.status === 'ACTIVE' ? `<button type="button" class="btn btn-warning btn-sm" data-ho="${s.id}">Check-out</button>` : `<button type="button" class="btn btn-outline btn-sm" data-hq="${s.id}">${ICONS.receipt}<span>Biên lai</span></button>`}</td></tr>`).join('') || '<tr><td colspan="7">Không có dữ liệu.</td></tr>';
   tb.querySelectorAll('[data-ho]').forEach((b) => (b.onclick = () => openCheckout(Number(b.dataset.ho))));
   tb.querySelectorAll('[data-hq]').forEach((b) => (b.onclick = () => {
     const s = state.sessions.find((x) => x.id === Number(b.dataset.hq));
@@ -487,19 +688,57 @@ function renderHistory() {
 
 function renderDashboard() {
   const done = state.sessions.filter((s) => s.status === 'COMPLETED');
-  $('zone-analytics-bars').innerHTML = state.zones.map((z) => {
+  const seriesSwatches = ['swatch-series-1', 'swatch-series-3', 'swatch-series-2'];
+
+  $('zone-analytics-bars').innerHTML = state.zones.map((z, idx) => {
     const zs = state.slots.filter((s) => s.zone_id === z.id);
-    const busy = zs.filter((s) => s.status === 'OCCUPIED' || s.status === 'RESERVED').length;
-    const pct = zs.length ? Math.round((busy / zs.length) * 100) : 0;
+    const zTotal = Math.max(1, zs.length);
+    const occ = zs.filter((s) => s.status === 'OCCUPIED').length;
+    const res = zs.filter((s) => s.status === 'RESERVED').length;
+    const avail = zs.filter((s) => s.status === 'AVAILABLE').length;
+    const busy = occ + res;
+    const pct = zs.length ? Math.round((busy / zTotal) * 100) : 0;
+    const occW = Math.round((occ / zTotal) * 100);
+    const resW = Math.round((res / zTotal) * 100);
     const rev = done.filter((s) => slotById(s.slot_id)?.zone_id === z.id).reduce((a, s) => a + (s.fee_amount || 0), 0);
-    return `<div class="bar-item"><div class="bar-top"><span>${esc(zoneLabel(z))} (${busy}/${zs.length} ô bận)</span><span>Doanh thu: <strong>${fmtVND(rev)}</strong> • Lấp đầy ${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
+    const swatch = seriesSwatches[idx % seriesSwatches.length];
+    const tip = `<strong>${esc(zoneLabel(z))} — ${esc(z.zone_name)}</strong><br>Đang đỗ: ${occ} ô • Đặt trước: ${res} ô • Trống: ${avail} ô<br>Doanh thu tích lũy: <strong>${fmtVND(rev)}</strong>`;
+
+    return `<div class="bar-item" data-viz-tip="${tip}">
+      <div class="bar-top">
+        <span class="bar-series-label"><i class="kpi-swatch ${swatch}" aria-hidden="true"></i><span>${esc(zoneLabel(z))} — ${esc(z.zone_name)}</span></span>
+        <span class="bar-metrics tabular-num">Doanh thu: <strong>${fmtVND(rev)}</strong> • Khai thác <strong>${busy}/${zs.length} ô (${pct}%)</strong></span>
+      </div>
+      <div class="bar-track stacked-bar-2px">
+        ${occ ? `<div class="stack-seg seg-occ" style="width:${occW}%"></div>` : ''}
+        ${res ? `<div class="stack-seg seg-res" style="width:${resW}%"></div>` : ''}
+      </div>
+    </div>`;
   }).join('');
+  bindVizTooltips($('zone-analytics-bars'));
+
   const total = state.slots.length || 1;
-  const items = [['Trống', 'AVAILABLE', '#10b981'], ['Đã đặt trước', 'RESERVED', '#f59e0b'], ['Đang có xe', 'OCCUPIED', '#0064e0'], ['Bảo trì', 'MAINTENANCE', '#64748b']];
-  $('status-breakdown-box').innerHTML = items.map(([l, k, c]) => {
-    const n = state.slots.filter((s) => s.status === k).length, p = Math.round((n / total) * 100);
-    return `<div class="bar-item"><div class="bar-top"><span>${l}</span><span>${n} ô (${p}%)</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${c}"></div></div></div>`;
+  const items = [
+    ['Chỗ trống sẵn sàng (AVAILABLE)', 'AVAILABLE', 'seg-avail', 'swatch-series-3'],
+    ['Đang có xe đỗ (OCCUPIED)', 'OCCUPIED', 'seg-occ', 'swatch-series-1'],
+    ['Đã đặt trước (RESERVED)', 'RESERVED', 'seg-res', 'swatch-series-2'],
+    ['Đang bảo trì (MAINTENANCE)', 'MAINTENANCE', 'seg-maint', 'swatch-series-muted']
+  ];
+  $('status-breakdown-box').innerHTML = items.map(([l, k, segClass, swatchClass]) => {
+    const n = state.slots.filter((s) => s.status === k).length;
+    const p = Math.round((n / total) * 100);
+    const tip = `<strong>${esc(l)}</strong><br>Số lượng: <strong>${n} / ${state.slots.length} vị trí</strong> (${p}% toàn bãi)`;
+    return `<div class="bar-item" data-viz-tip="${tip}">
+      <div class="bar-top">
+        <span class="bar-series-label"><i class="kpi-swatch ${swatchClass}" aria-hidden="true"></i><span>${l}</span></span>
+        <span class="bar-metrics tabular-num"><strong>${n} ô</strong> (${p}%)</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill ${segClass}" style="width:${p}%"></div>
+      </div>
+    </div>`;
   }).join('');
+  bindVizTooltips($('status-breakdown-box'));
 }
 
 /* ---------------- Điều hướng & sự kiện ---------------- */
@@ -530,6 +769,7 @@ function switchTab(id, pushUrl = true) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   initModernWebFallbacks();
+  initBaoyuTweaks();
   const initialTab = document.body.dataset.initialTab || 'map-tab';
   switchTab(initialTab, false);
   const localIso = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
