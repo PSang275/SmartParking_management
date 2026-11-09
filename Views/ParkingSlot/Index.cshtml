@@ -19,7 +19,7 @@
             <label for="sl-code">Mã ô đỗ (Slot Code) *</label>
             <span id="sl-code-hint" class="hint">VD: A-06, B-06, C-07</span>
             <input type="text" id="sl-code" name="slot_code" autocorrect="off" autocapitalize="off" spellcheck="false" required minlength="3" placeholder="A-06" aria-describedby="sl-code-hint" aria-errormessage="sl-code-err">
-            <div id="sl-code-err" class="error-msg"><span aria-hidden="true">❌</span> Nhập mã ô đỗ hợp lệ.</div>
+            <div id="sl-code-err" class="error-msg">Nhập mã ô đỗ hợp lệ.</div>
           </div>
         </div>
 
@@ -41,7 +41,11 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">
-          <span aria-hidden="true">🅿️</span> Thêm Ô đỗ vào Bãi xe
+          <svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+            <path d="M9 17V7h4a3 3 0 0 1 0 6H9"></path>
+          </svg>
+          <span>Thêm Ô đỗ vào Bãi xe</span>
         </button>
       </form>
 

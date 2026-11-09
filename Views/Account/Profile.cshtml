@@ -3,19 +3,31 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="light" data-astryx-theme="neutral">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>Hồ sơ Thành viên Nhóm — SmartPark MVC</title>
+  <title>Danh sách Tài khoản — SmartPark</title>
+  <link rel="stylesheet" href="/lib/astryx/fonts.css" asp-append-version="true">
+  <link rel="stylesheet" href="/lib/astryx/astryx.css" asp-append-version="true">
+  <link rel="stylesheet" href="/lib/astryx/theme-neutral.css" asp-append-version="true">
   <link rel="stylesheet" href="/css/styles.css" asp-append-version="true">
 </head>
-<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
+<body class="astryx-root" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
   <main class="card" style="max-width:760px; width:100%;">
     <div class="card-header">
-      <h3>👥 Danh sách Tài khoản &amp; Phân quyền Hệ thống (`app_users`)</h3>
-      <p>Đồng bộ từ Supabase Cloud (`jgvegymigpbgqmoylljf`) • Nhóm 3 Thành viên</p>
+      <span class="topbar-eyebrow">QUẢN LÝ PHÂN QUYỀN</span>
+      <h3 style="display:flex; align-items:center; gap:0.5rem; margin-top:0.35rem;">
+        <svg class="ax-icon" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span>Danh sách Tài khoản &amp; Vai trò Hệ thống</span>
+      </h3>
+      <p>Quản lý quyền truy cập Quản trị viên, Nhân viên trực bãi và Khách hàng</p>
     </div>
     <div tabindex="0" role="region" aria-labelledby="users-table-caption" class="table-wrapper">
       <table>
@@ -23,7 +35,7 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Username</th>
+            <th>Tên đăng nhập</th>
             <th>Họ và Tên</th>
             <th>Số điện thoại</th>
             <th>Vai trò (Role)</th>

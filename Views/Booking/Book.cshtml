@@ -14,7 +14,7 @@
           <label for="bk-customer-name">Họ tên khách hàng *</label>
           <span id="bk-name-hint" class="hint">Nhập họ tên người đặt chỗ (tối thiểu 2 ký tự)</span>
           <input type="text" id="bk-customer-name" name="customer_name" autocomplete="name" required minlength="2" aria-describedby="bk-name-hint" aria-errormessage="bk-name-err">
-          <div id="bk-name-err" class="error-msg"><span aria-hidden="true">❌</span> Vui lòng nhập họ tên hợp lệ.</div>
+          <div id="bk-name-err" class="error-msg">Vui lòng nhập họ tên hợp lệ.</div>
         </div>
 
         <div class="field-row">
@@ -52,7 +52,14 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">
-          <span aria-hidden="true">🎫</span> Xác nhận Đặt chỗ &amp; Xuất vé QR
+          <svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="m9 16 2 2 4-4"></path>
+          </svg>
+          <span>Xác nhận Đặt chỗ &amp; Xuất vé QR</span>
         </button>
       </form>
     </div>
@@ -60,7 +67,7 @@
     <div class="card">
       <div class="card-header">
         <h3>Danh sách Đặt chỗ trước</h3>
-        <p>Nhấn "QR" để mở thẻ vé hoặc "Check-in" khi xe tới cổng</p>
+        <p>Nhấn "Mã QR" để mở thẻ vé hoặc "Check-in" khi xe tới cổng</p>
       </div>
       <div tabindex="0" role="region" aria-labelledby="bookings-table-caption" class="table-wrapper">
         <table id="bookings-table">

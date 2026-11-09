@@ -2,19 +2,31 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="light" data-astryx-theme="neutral">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>Đăng ký Tài khoản — SmartPark MVC</title>
+  <title>Đăng ký Tài khoản — SmartPark</title>
+  <link rel="stylesheet" href="/lib/astryx/fonts.css" asp-append-version="true">
+  <link rel="stylesheet" href="/lib/astryx/astryx.css" asp-append-version="true">
+  <link rel="stylesheet" href="/lib/astryx/theme-neutral.css" asp-append-version="true">
   <link rel="stylesheet" href="/css/styles.css" asp-append-version="true">
 </head>
-<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
+<body class="astryx-root" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
   <main class="card" style="max-width:520px; width:100%;">
     <div class="card-header">
-      <h3>📝 Đăng ký Tài khoản Khách hàng Gửi xe</h3>
-      <p>Tạo tài khoản mới đồng bộ vào bảng <code>app_users</code> trên Supabase Cloud</p>
+      <span class="topbar-eyebrow">SMARTPARK MEMBER</span>
+      <h3 style="display:flex; align-items:center; gap:0.5rem; margin-top:0.35rem;">
+        <svg class="ax-icon" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8.5" cy="7" r="4"></circle>
+          <line x1="20" y1="8" x2="20" y2="14"></line>
+          <line x1="23" y1="11" x2="17" y2="11"></line>
+        </svg>
+        <span>Đăng ký Tài khoản Khách hàng</span>
+      </h3>
+      <p>Tạo tài khoản để đặt chỗ đỗ xe trực tuyến và quản lý phương tiện nhanh chóng</p>
     </div>
     <form action="/Account/Login" method="get" class="modern-form">
       <div class="field">

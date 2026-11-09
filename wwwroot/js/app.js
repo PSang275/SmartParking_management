@@ -1,5 +1,6 @@
 /**
  * SmartPark - Hệ thống Quản lý Bãi đỗ xe Thông minh
+ * Meta Astryx Design System (@astryxdesign/core + @astryxdesign/theme-neutral + Lucide Icons)
  * Tự động đồng bộ thời gian thực & tính phí tự động
  */
 const SUPABASE_URL = 'https://jgvegymigpbgqmoylljf.supabase.co';
@@ -12,6 +13,18 @@ const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const typeLabel = (t) => (t === 'CAR' ? 'Ô tô' : 'Xe máy');
 const zoneLabel = (z) => 'Khu ' + String(z?.zone_code || '').replace('ZONE-', '');
 const BOOKING_STATUS = { RESERVED: 'Đã đặt', CHECKED_IN: 'Đã check-in', COMPLETED: 'Hoàn tất', CANCELLED: 'Đã hủy' };
+
+/* ---------------- Official Astryx Lucide Vector Icons ---------------- */
+const ICONS = {
+  car: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>',
+  calendar: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+  wrench: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>',
+  check: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+  qr: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1"></rect><rect x="16" y="3" width="5" height="5" rx="1"></rect><rect x="3" y="16" width="5" height="5" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M12 7v3a2 2 0 0 1-2 2H7"></path></svg>',
+  trash: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>',
+  receipt: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+  card: '<svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>'
+};
 
 /* ---------------- Modern web fallbacks (dialog light-dismiss, :user-invalid) ---------------- */
 function initModernWebFallbacks() {
@@ -113,7 +126,7 @@ function qrSvg(text, size = 170) {
   const n = qr.getModuleCount();
   let d = '';
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += `M${c + 4} ${r + 4}h1v1h-1z`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 8} ${n + 8}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="Mã QR ${esc(text)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#23115b"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 8} ${n + 8}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="Mã QR ${esc(text)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#0a2540"/></svg>`;
 }
 
 /* ---------------- Tự động đồng bộ dữ liệu thời gian thực ---------------- */
@@ -129,7 +142,7 @@ async function syncAll(silent = true) {
     Object.assign(state, { zones, slots, vehicles, bookings, sessions });
     renderAll();
     if ($('supabase-dot')) $('supabase-dot').className = 'status-dot online';
-    if (!silent) toast('✅ Đã đồng bộ dữ liệu mới nhất');
+    if (!silent) toast('Đã đồng bộ dữ liệu mới nhất');
   } catch (err) {
     console.error(err);
     if ($('supabase-dot')) $('supabase-dot').className = 'status-dot';
@@ -226,7 +239,13 @@ function renderMap() {
     html += `<section class="zone-section"><div class="zone-header"><div class="zone-title"><span class="zone-badge">${esc(zoneLabel(z).toUpperCase())}</span><div><h3>${esc(z.zone_name)}</h3><small style="color:var(--text-muted)">${typeLabel(z.vehicle_type)} • <strong>${fmtVND(z.hourly_rate)}/giờ</strong> • Qua đêm ${fmtVND(z.overnight_rate)}</small></div></div><span class="badge" style="background:var(--avail-bg);color:var(--avail-text);border:1px solid var(--avail-border)">Trống ${free}/${slots.length} ô</span></div><div class="slots-grid">`;
     for (const s of slots) {
       const bk = state.bookings.find((b) => b.slot_id === s.id && b.status === 'RESERVED');
-      const info = s.status === 'OCCUPIED' ? `🚘 ${esc(s.current_plate || '')}` : s.status === 'RESERVED' ? `📅 ${esc(bk?.license_plate || '')}` : s.status === 'MAINTENANCE' ? '🛠️ Đang bảo trì' : '✨ Sẵn sàng';
+      const info = s.status === 'OCCUPIED'
+        ? `${ICONS.car}<span>${esc(s.current_plate || '')}</span>`
+        : s.status === 'RESERVED'
+          ? `${ICONS.calendar}<span>${esc(bk?.license_plate || '')}</span>`
+          : s.status === 'MAINTENANCE'
+            ? `${ICONS.wrench}<span>Đang bảo trì</span>`
+            : `${ICONS.check}<span>Sẵn sàng</span>`;
       html += `<button type="button" class="slot-tile status-${s.status}" data-slot="${s.id}"><div class="slot-top"><span class="slot-code">${esc(s.slot_code)}</span><span class="slot-status-pill">${label[s.status]}</span></div><div class="slot-plate">${info}</div><div class="slot-meta"><span>${typeLabel(s.vehicle_type)}</span><span>${fmtVND(z.hourly_rate)}/giờ</span></div></button>`;
     }
     html += '</div></section>';
@@ -259,18 +278,18 @@ function openSlotModal(id) {
     const bk = state.bookings.find((b) => b.slot_id === s.id && b.status === 'RESERVED');
     if (bk) {
       openModal(`Ô ${s.slot_code} - đã đặt trước`, qrTicket(bk.booking_code, `<p>${esc(bk.customer_name)} • <strong>${esc(bk.license_plate)}</strong></p><div class="invoice-grid"><div><small>Từ</small><br><strong>${fmtDT(bk.start_time)}</strong></div><div><small>Đến</small><br><strong>${fmtDT(bk.end_time)}</strong></div></div>`),
-        '<button type="button" class="btn btn-success" id="m-checkin">📷 Cho xe vào (Check-in)</button>');
+        `<button type="button" class="btn btn-success" id="m-checkin">${ICONS.qr}<span>Cho xe vào (Check-in)</span></button>`);
       $('m-checkin').onclick = () => { $('qr-modal').close(); checkinBooking(bk); };
       return;
     }
   }
   const body = `<div class="qr-ticket-box"><h4>Ô ${esc(s.slot_code)} — ${esc(z?.zone_name)}</h4><div class="invoice-grid"><div><small>Trạng thái</small><br><strong>${s.status}</strong></div><div><small>Loại xe</small><br><strong>${typeLabel(s.vehicle_type)}</strong></div><div><small>Đơn giá</small><br><strong>${fmtVND(z?.hourly_rate)}/giờ</strong></div><div><small>Qua đêm</small><br><strong>${fmtVND(z?.overnight_rate)}</strong></div></div></div>`;
   if (s.status === 'AVAILABLE') {
-    openModal(`Chi tiết ô ${s.slot_code}`, body, '<button type="button" class="btn btn-primary" id="m-book">📅 Đặt trước ô này</button><button type="button" class="btn btn-outline" id="m-maint">🛠️ Chuyển bảo trì</button>');
+    openModal(`Chi tiết ô ${s.slot_code}`, body, `<button type="button" class="btn btn-primary" id="m-book">${ICONS.calendar}<span>Đặt trước ô này</span></button><button type="button" class="btn btn-outline" id="m-maint">${ICONS.wrench}<span>Chuyển bảo trì</span></button>`);
     $('m-book').onclick = () => { $('qr-modal').close(); switchTab('booking-tab'); $('bk-slot').value = String(s.id); updateEstimate(); };
     $('m-maint').onclick = () => { $('qr-modal').close(); setSlotStatus(s.id, 'MAINTENANCE', 'AVAILABLE'); };
   } else {
-    openModal(`Chi tiết ô ${s.slot_code}`, body, '<button type="button" class="btn btn-success" id="m-open">✅ Mở lại ô đỗ</button>');
+    openModal(`Chi tiết ô ${s.slot_code}`, body, `<button type="button" class="btn btn-success" id="m-open">${ICONS.check}<span>Mở lại ô đỗ</span></button>`);
     $('m-open').onclick = () => { $('qr-modal').close(); setSlotStatus(s.id, 'AVAILABLE', 'MAINTENANCE'); };
   }
 }
@@ -289,7 +308,7 @@ async function updateEstimate() {
 
 function renderBookings() {
   const tb = $('bookings-tbody');
-  tb.innerHTML = state.bookings.map((b) => `<tr><th>${esc(b.booking_code)}</th><td><strong>${esc(b.license_plate)}</strong> • Ô <span class="badge badge-cpp">${esc(b.slot_code)}</span><br><small>${esc(b.customer_name)}</small></td><td>${fmtDT(b.start_time)}<br><small>→ ${fmtDT(b.end_time)}</small></td><td><span class="badge" style="background:var(--reserved-bg);color:var(--reserved-text)">${BOOKING_STATUS[b.status] || b.status}</span></td><td><div style="display:flex;gap:.4rem;flex-wrap:wrap"><button type="button" class="btn btn-outline btn-sm" data-bk-qr="${b.id}">🎫 QR</button>${b.status === 'RESERVED' ? `<button type="button" class="btn btn-success btn-sm" data-bk-in="${b.id}">📷 Check-in</button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="5">Chưa có đặt chỗ nào.</td></tr>';
+  tb.innerHTML = state.bookings.map((b) => `<tr><th>${esc(b.booking_code)}</th><td><strong>${esc(b.license_plate)}</strong> • Ô <span class="badge badge-cpp">${esc(b.slot_code)}</span><br><small>${esc(b.customer_name)}</small></td><td>${fmtDT(b.start_time)}<br><small>→ ${fmtDT(b.end_time)}</small></td><td><span class="badge" style="background:var(--reserved-bg);color:var(--reserved-text)">${BOOKING_STATUS[b.status] || b.status}</span></td><td><div style="display:flex;gap:.4rem;flex-wrap:wrap"><button type="button" class="btn btn-outline btn-sm" data-bk-qr="${b.id}">${ICONS.qr}<span>Mã QR</span></button>${b.status === 'RESERVED' ? `<button type="button" class="btn btn-success btn-sm" data-bk-in="${b.id}">${ICONS.check}<span>Check-in</span></button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="5">Chưa có đặt chỗ nào.</td></tr>';
   tb.querySelectorAll('[data-bk-qr]').forEach((x) => (x.onclick = () => {
     const b = state.bookings.find((k) => k.id === Number(x.dataset.bkQr));
     openModal('Vé đặt chỗ ' + b.license_plate, qrTicket(b.booking_code, `<p>Ô <strong>${esc(b.slot_code)}</strong> • ${esc(b.customer_name)}</p>`), '');
@@ -303,12 +322,12 @@ async function submitBooking(e) {
   if (!form.checkValidity()) return form.reportValidity();
   const veh = state.vehicles.find((v) => v.id === Number($('bk-vehicle').value));
   const slot = slotById($('bk-slot').value);
-  if (!veh || !slot) return toast('⚠️ Cần chọn phương tiện và ô đỗ trống');
+  if (!veh || !slot) return toast('Cần chọn phương tiện và ô đỗ trống');
   const start = new Date($('bk-start-time').value), end = new Date($('bk-end-time').value);
-  if (!(end > start)) return toast('⚠️ Giờ kết thúc phải sau giờ bắt đầu');
+  if (!(end > start)) return toast('Giờ kết thúc phải sau giờ bắt đầu');
   try {
     const held = await sb(`parking_slots?id=eq.${slot.id}&status=eq.AVAILABLE`, { method: 'PATCH', body: { status: 'RESERVED', current_plate: veh.license_plate, updated_at: new Date().toISOString() } });
-    if (!held.length) { toast('⚠️ Ô này vừa có người khác đặt, hãy chọn ô khác'); return syncAll(); }
+    if (!held.length) { toast('Ô này vừa có người khác đặt, hãy chọn ô khác'); return syncAll(); }
     const code = `QR-BK-${todayCode()}-${rand(4)}`;
     try {
       await sb('bookings', { method: 'POST', body: { booking_code: code, customer_name: $('bk-customer-name').value.trim(), customer_phone: veh.owner_phone, license_plate: veh.license_plate, vehicle_type: veh.vehicle_type, slot_id: slot.id, slot_code: slot.slot_code, start_time: start.toISOString(), end_time: end.toISOString(), status: 'RESERVED' } });
@@ -317,23 +336,23 @@ async function submitBooking(e) {
       throw err;
     }
     await syncAll();
-    toast('🎫 Đặt chỗ thành công: ' + code);
+    toast('Đặt chỗ thành công: ' + code);
     openModal('Vé đặt chỗ ' + veh.license_plate, qrTicket(code, `<p>Ô <strong>${esc(slot.slot_code)}</strong> • ${fmtDT(start)} → ${fmtDT(end)}</p>`), '');
-  } catch (err) { toast('❌ Lỗi đặt chỗ: ' + err.message.slice(0, 120)); }
+  } catch (err) { toast('Lỗi đặt chỗ: ' + err.message.slice(0, 120)); }
 }
 
 /* ---------------- QR Check-in / Check-out (US09-12) ---------------- */
 function renderQrTab() {
   const pending = state.bookings.filter((b) => b.status === 'RESERVED');
-  $('pending-booking-chips').innerHTML = pending.length ? pending.map((b) => `<button type="button" class="chip" data-fill="${esc(b.booking_code)}">🎫 ${esc(b.booking_code)} (${esc(b.license_plate)})</button>`).join('') : '<small style="color:var(--text-muted)">Không có phiếu đặt trước nào đang chờ.</small>';
+  $('pending-booking-chips').innerHTML = pending.length ? pending.map((b) => `<button type="button" class="chip" data-fill="${esc(b.booking_code)}">${ICONS.qr}<span>${esc(b.booking_code)} (${esc(b.license_plate)})</span></button>`).join('') : '<small style="color:var(--text-muted)">Không có phiếu đặt trước nào đang chờ.</small>';
   $('pending-booking-chips').querySelectorAll('[data-fill]').forEach((c) => (c.onclick = () => ($('qr-checkin-input').value = c.dataset.fill)));
   const active = state.sessions.filter((s) => s.status === 'ACTIVE');
-  $('active-sessions-cards').innerHTML = active.length ? active.map((s) => `<div class="session-card"><div><strong>🚘 ${esc(s.license_plate)}</strong> • Ô <span class="badge badge-cpp">${esc(s.slot_code)}</span><div style="font-size:.78rem;color:var(--text-muted)">Vé: <code>${esc(s.qr_token)}</code> • Vào: ${fmtDT(s.check_in_time)}</div></div><button type="button" class="btn btn-warning btn-sm" data-out="${s.id}">🧮 Tính phí & cho xe ra</button></div>`).join('') : '<div class="session-card"><span>Không có xe nào đang đỗ.</span></div>';
+  $('active-sessions-cards').innerHTML = active.length ? active.map((s) => `<div class="session-card"><div><div style="display:flex;align-items:center;gap:.45rem">${ICONS.car}<strong>${esc(s.license_plate)}</strong> • Ô <span class="badge badge-cpp">${esc(s.slot_code)}</span></div><div style="font-size:.78rem;color:var(--text-muted);margin-top:.2rem">Vé: <code>${esc(s.qr_token)}</code> • Vào: ${fmtDT(s.check_in_time)}</div></div><button type="button" class="btn btn-warning btn-sm" data-out="${s.id}">${ICONS.card}<span>Tính phí &amp; Cho xe ra</span></button></div>`).join('') : '<div class="session-card"><span>Không có xe nào đang đỗ.</span></div>';
   $('active-sessions-cards').querySelectorAll('[data-out]').forEach((b) => (b.onclick = () => openCheckout(Number(b.dataset.out))));
 }
 
 async function checkinBooking(bk) {
-  if (!bk || bk.status !== 'RESERVED') return toast('⚠️ Phiếu đặt chỗ không hợp lệ hoặc đã dùng');
+  if (!bk || bk.status !== 'RESERVED') return toast('Phiếu đặt chỗ không hợp lệ hoặc đã dùng');
   try {
     const slot = slotById(bk.slot_id);
     const token = `QR-IN-${todayCode()}-${rand(4)}`;
@@ -341,9 +360,9 @@ async function checkinBooking(bk) {
     await sb(`bookings?id=eq.${bk.id}`, { method: 'PATCH', body: { status: 'CHECKED_IN' } });
     await sb('parking_sessions', { method: 'POST', body: { qr_token: token, booking_id: bk.id, slot_id: bk.slot_id, slot_code: bk.slot_code, license_plate: bk.license_plate, vehicle_type: bk.vehicle_type, customer_name: bk.customer_name, status: 'ACTIVE', notes: 'Check-in từ ' + bk.booking_code } });
     await syncAll();
-    toast(`✅ Xe ${bk.license_plate} đã vào ô ${slot?.slot_code}`);
+    toast(`Xe ${bk.license_plate} đã vào ô ${slot?.slot_code}`);
     openModal('Vé xe vào bãi ' + bk.license_plate, qrTicket(token, `<p>Ô <strong>${esc(bk.slot_code)}</strong>. Xuất trình mã này khi lấy xe.</p>`), '');
-  } catch (err) { toast('❌ Lỗi check-in: ' + err.message.slice(0, 120)); }
+  } catch (err) { toast('Lỗi check-in: ' + err.message.slice(0, 120)); }
 }
 
 async function submitWalkin(e) {
@@ -352,20 +371,20 @@ async function submitWalkin(e) {
   if (!form.checkValidity()) return form.reportValidity();
   const plate = $('wi-plate').value.trim().toUpperCase();
   const slot = slotById($('wi-slot').value);
-  if (!slot) return toast('⚠️ Hết chỗ trống cho loại xe này');
-  if (state.sessions.some((s) => s.status === 'ACTIVE' && s.license_plate === plate)) return toast('⚠️ Biển số này đang đỗ trong bãi');
+  if (!slot) return toast('Hết chỗ trống cho loại xe này');
+  if (state.sessions.some((s) => s.status === 'ACTIVE' && s.license_plate === plate)) return toast('Biển số này đang đỗ trong bãi');
   try {
     const held = await sb(`parking_slots?id=eq.${slot.id}&status=eq.AVAILABLE`, { method: 'PATCH', body: { status: 'OCCUPIED', current_plate: plate, updated_at: new Date().toISOString() } });
-    if (!held.length) { toast('⚠️ Ô vừa bị chiếm, hãy chọn ô khác'); return syncAll(); }
+    if (!held.length) { toast('Ô vừa bị chiếm, hãy chọn ô khác'); return syncAll(); }
     const token = `QR-IN-${todayCode()}-${rand(4)}`;
     await sb('parking_sessions', { method: 'POST', body: { qr_token: token, slot_id: slot.id, slot_code: slot.slot_code, license_plate: plate, vehicle_type: $('wi-type').value, customer_name: 'Khách vãng lai', status: 'ACTIVE', notes: 'Xe vãng lai' } });
     form.reset();
     await syncAll();
-    toast(`🚀 Xe ${plate} vào ô ${slot.slot_code}`);
+    toast(`Xe ${plate} vào ô ${slot.slot_code}`);
     openModal('Vé xe vào bãi ' + plate, qrTicket(token, `<p>Ô <strong>${esc(slot.slot_code)}</strong>. Xuất trình mã này khi lấy xe.</p>`), '');
   } catch (err) {
     await sb(`parking_slots?id=eq.${slot.id}`, { method: 'PATCH', body: { status: 'AVAILABLE', current_plate: null } }).catch(() => {});
-    toast('❌ Lỗi cấp vé: ' + err.message.slice(0, 120));
+    toast('Lỗi cấp vé: ' + err.message.slice(0, 120));
   }
 }
 
@@ -379,7 +398,7 @@ async function openCheckout(sessionId) {
   const overtime = !!(bk && now > new Date(bk.end_time));
   const f = await calcFee(ses.vehicle_type, zone?.hourly_rate || 20000, mins, overtime);
   openModal(`Check-out ${ses.license_plate}`, `<div class="qr-ticket-box"><div class="invoice-grid"><div><small>Biển số</small><br><strong>${esc(ses.license_plate)}</strong></div><div><small>Ô đỗ</small><br><strong>${esc(ses.slot_code)} (${esc(zoneLabel(zone))})</strong></div><div><small>Giờ vào</small><br><strong>${fmtDT(ses.check_in_time)}</strong></div><div><small>Giờ ra</small><br><strong>${fmtDT(now)}</strong></div><div><small>Thực tế</small><br><strong>${mins} phút → tính ${f.billableHours} giờ</strong></div><div><small>Đơn giá</small><br><strong>${fmtVND(f.hourlyRate)}/giờ</strong></div><div><small>Phí cơ bản</small><br><strong>${fmtVND(f.baseFee)}</strong></div><div><small>Phụ phí quá giờ</small><br><strong>${fmtVND(f.overtimeSurcharge)}</strong></div></div><div style="font-size:1.3rem;font-weight:800;color:var(--brand-color)">Tổng thanh toán: ${fmtVND(f.totalFee)}</div><small>${esc(f.engine)}</small><div class="field" style="width:100%"><label for="pay-method">Hình thức thanh toán</label><select id="pay-method"><option value="CASH">Tiền mặt</option><option value="QR_TRANSFER">Chuyển khoản QR</option></select></div></div>`,
-    '<button type="button" class="btn btn-success" id="m-pay">💳 Xác nhận thu phí & trả ô</button>');
+    `<button type="button" class="btn btn-success" id="m-pay">${ICONS.card}<span>Xác nhận thu phí &amp; trả ô</span></button>`);
   $('m-pay').onclick = async () => {
     const method = $('pay-method').value;
     try {
@@ -388,19 +407,19 @@ async function openCheckout(sessionId) {
       await sb(`parking_slots?id=eq.${ses.slot_id}`, { method: 'PATCH', body: { status: 'AVAILABLE', current_plate: null, updated_at: new Date().toISOString() } });
       if (bk) await sb(`bookings?id=eq.${bk.id}`, { method: 'PATCH', body: { status: 'COMPLETED' } });
       await syncAll();
-      toast(`🎉 Thu ${fmtVND(f.totalFee)} • ô ${ses.slot_code} đã trống`);
-    } catch (err) { toast('❌ Lỗi check-out: ' + err.message.slice(0, 120)); }
+      toast(`Đã thu ${fmtVND(f.totalFee)} • ô ${ses.slot_code} đã trống`);
+    } catch (err) { toast('Lỗi check-out: ' + err.message.slice(0, 120)); }
   };
 }
 
 /* ---------------- Phương tiện (US05-06) ---------------- */
 function renderVehicles() {
   const tb = $('vehicles-tbody');
-  tb.innerHTML = state.vehicles.map((v) => `<tr><th>${esc(v.license_plate)}</th><td>${typeLabel(v.vehicle_type)}</td><td>${esc(v.brand || '—')} (${esc(v.color || '—')})</td><td>${esc(v.owner_name)}</td><td><button type="button" class="btn btn-outline btn-sm" data-del="${v.id}">🗑️ Xóa</button></td></tr>`).join('') || '<tr><td colspan="5">Chưa có phương tiện.</td></tr>';
+  tb.innerHTML = state.vehicles.map((v) => `<tr><th>${esc(v.license_plate)}</th><td>${typeLabel(v.vehicle_type)}</td><td>${esc(v.brand || '—')} (${esc(v.color || '—')})</td><td>${esc(v.owner_name)}</td><td><button type="button" class="btn btn-outline btn-sm" data-del="${v.id}">${ICONS.trash}<span>Xóa</span></button></td></tr>`).join('') || '<tr><td colspan="5">Chưa có phương tiện.</td></tr>';
   tb.querySelectorAll('[data-del]').forEach((b) => (b.onclick = async () => {
     const v = state.vehicles.find((x) => x.id === Number(b.dataset.del));
     if (!confirm(`Xóa phương tiện ${v.license_plate}?`)) return;
-    try { await sb(`vehicles?id=eq.${v.id}`, { method: 'DELETE' }); await syncAll(); toast('🗑️ Đã xóa phương tiện'); } catch (err) { toast('❌ Không xóa được: ' + err.message.slice(0, 100)); }
+    try { await sb(`vehicles?id=eq.${v.id}`, { method: 'DELETE' }); await syncAll(); toast('Đã xóa phương tiện'); } catch (err) { toast('Không xóa được: ' + err.message.slice(0, 100)); }
   }));
 }
 
@@ -414,8 +433,8 @@ async function submitVehicle(e) {
     form.reset();
     $('vh-owner').value = '';
     await syncAll();
-    toast(`🚗 Đã đăng ký ${plate}`);
-  } catch (err) { toast(err.code === '23505' ? '⚠️ Biển số này đã được đăng ký' : '❌ Lỗi đăng ký xe: ' + err.message.slice(0, 100)); }
+    toast(`Đã đăng ký ${plate}`);
+  } catch (err) { toast(err.code === '23505' ? 'Biển số này đã được đăng ký' : 'Lỗi đăng ký xe: ' + err.message.slice(0, 100)); }
 }
 
 /* ---------------- Quản lý ô đỗ (US14) ---------------- */
@@ -424,8 +443,8 @@ function renderSlotsTab() {
   const tb = $('slots-tbody');
   tb.innerHTML = state.slots.map((s) => {
     const z = zoneOf(s);
-    const toggle = s.status === 'AVAILABLE' ? ['MAINTENANCE', '🛠️ Bảo trì'] : s.status === 'MAINTENANCE' ? ['AVAILABLE', '✅ Mở lại'] : null;
-    return `<tr><th>${esc(s.slot_code)}</th><td>${esc(zoneLabel(z))}</td><td>${typeLabel(s.vehicle_type)} • ${fmtVND(z?.hourly_rate)}/giờ</td><td><span class="slot-status-pill" style="background:var(--bg-elevated)">${s.status}</span></td><td>${toggle ? `<button type="button" class="btn btn-outline btn-sm" data-tg="${s.id}" data-to="${toggle[0]}" data-from="${s.status}">${toggle[1]}</button>` : '<small style="color:var(--text-muted)">Đang bận</small>'}</td></tr>`;
+    const toggle = s.status === 'AVAILABLE' ? ['MAINTENANCE', `${ICONS.wrench}<span>Bảo trì</span>`] : s.status === 'MAINTENANCE' ? ['AVAILABLE', `${ICONS.check}<span>Mở lại</span>`] : null;
+    return `<tr><th>${esc(s.slot_code)}</th><td>${esc(zoneLabel(z))}</td><td>${typeLabel(s.vehicle_type)} • ${fmtVND(z?.hourly_rate)}/giờ</td><td><span class="slot-status-pill" style="background:var(--bg-elevated);border:1px solid var(--border-color)">${s.status}</span></td><td>${toggle ? `<button type="button" class="btn btn-outline btn-sm" data-tg="${s.id}" data-to="${toggle[0]}" data-from="${s.status}">${toggle[1]}</button>` : '<small style="color:var(--text-muted)">Đang bận</small>'}</td></tr>`;
   }).join('');
   tb.querySelectorAll('[data-tg]').forEach((b) => (b.onclick = () => setSlotStatus(Number(b.dataset.tg), b.dataset.to, b.dataset.from)));
 }
@@ -433,10 +452,10 @@ function renderSlotsTab() {
 async function setSlotStatus(id, to, from) {
   try {
     const r = await sb(`parking_slots?id=eq.${id}&status=eq.${from}`, { method: 'PATCH', body: { status: to, updated_at: new Date().toISOString() } });
-    if (!r.length) toast('⚠️ Trạng thái ô đã thay đổi, đã tải lại');
-    else toast(`🔄 Ô ${r[0].slot_code} → ${to}`);
+    if (!r.length) toast('Trạng thái ô đã thay đổi, đã tải lại');
+    else toast(`Ô ${r[0].slot_code} → ${to}`);
     await syncAll();
-  } catch (err) { toast('❌ Lỗi: ' + err.message.slice(0, 100)); }
+  } catch (err) { toast('Lỗi: ' + err.message.slice(0, 100)); }
 }
 
 async function submitSlot(e) {
@@ -448,8 +467,8 @@ async function submitSlot(e) {
     await sb('parking_slots', { method: 'POST', body: { zone_id: Number($('sl-zone').value), slot_code: code, vehicle_type: $('sl-type').value, status: $('sl-status').value } });
     form.reset();
     await syncAll();
-    toast(`🅿️ Đã thêm ô ${code}`);
-  } catch (err) { toast(err.code === '23505' ? '⚠️ Mã ô đã tồn tại' : '❌ Lỗi thêm ô: ' + err.message.slice(0, 100)); }
+    toast(`Đã thêm ô ${code}`);
+  } catch (err) { toast(err.code === '23505' ? 'Mã ô đã tồn tại' : 'Lỗi thêm ô: ' + err.message.slice(0, 100)); }
 }
 
 /* ---------------- Lịch sử (US13) & Dashboard (US15) ---------------- */
@@ -458,7 +477,7 @@ function renderHistory() {
   const sf = $('history-status-filter').value;
   const list = state.sessions.filter((s) => (sf === 'ALL' || s.status === sf) && (!q || `${s.qr_token} ${s.license_plate} ${s.slot_code}`.toUpperCase().includes(q)));
   const tb = $('history-tbody');
-  tb.innerHTML = list.map((s) => `<tr><th>${esc(s.qr_token)}</th><td><strong>${esc(s.license_plate)}</strong> • Ô ${esc(s.slot_code)}</td><td>Vào: ${fmtDT(s.check_in_time)}<br><small>Ra: ${fmtDT(s.check_out_time)}</small></td><td>${s.status === 'COMPLETED' ? Number(s.duration_hours) + ' giờ' : 'Đang gửi'}</td><td><strong>${s.status === 'COMPLETED' ? fmtVND(s.fee_amount) : '—'}</strong></td><td><span class="badge badge-cpp">${s.status === 'ACTIVE' ? 'Đang đỗ' : 'Đã thanh toán'}</span></td><td>${s.status === 'ACTIVE' ? `<button type="button" class="btn btn-warning btn-sm" data-ho="${s.id}">Check-out</button>` : `<button type="button" class="btn btn-outline btn-sm" data-hq="${s.id}">🎫 Biên lai</button>`}</td></tr>`).join('') || '<tr><td colspan="7">Không có dữ liệu.</td></tr>';
+  tb.innerHTML = list.map((s) => `<tr><th>${esc(s.qr_token)}</th><td><strong>${esc(s.license_plate)}</strong> • Ô ${esc(s.slot_code)}</td><td>Vào: ${fmtDT(s.check_in_time)}<br><small>Ra: ${fmtDT(s.check_out_time)}</small></td><td>${s.status === 'COMPLETED' ? Number(s.duration_hours) + ' giờ' : 'Đang gửi'}</td><td><strong>${s.status === 'COMPLETED' ? fmtVND(s.fee_amount) : '—'}</strong></td><td><span class="badge badge-cpp">${s.status === 'ACTIVE' ? 'Đang đỗ' : 'Đã thanh toán'}</span></td><td>${s.status === 'ACTIVE' ? `<button type="button" class="btn btn-warning btn-sm" data-ho="${s.id}">Check-out</button>` : `<button type="button" class="btn btn-outline btn-sm" data-hq="${s.id}">${ICONS.receipt}<span>Biên lai</span></button>`}</td></tr>`).join('') || '<tr><td colspan="7">Không có dữ liệu.</td></tr>';
   tb.querySelectorAll('[data-ho]').forEach((b) => (b.onclick = () => openCheckout(Number(b.dataset.ho))));
   tb.querySelectorAll('[data-hq]').forEach((b) => (b.onclick = () => {
     const s = state.sessions.find((x) => x.id === Number(b.dataset.hq));
@@ -476,7 +495,7 @@ function renderDashboard() {
     return `<div class="bar-item"><div class="bar-top"><span>${esc(zoneLabel(z))} (${busy}/${zs.length} ô bận)</span><span>Doanh thu: <strong>${fmtVND(rev)}</strong> • Lấp đầy ${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
   }).join('');
   const total = state.slots.length || 1;
-  const items = [['Trống', 'AVAILABLE', '#10b981'], ['Đã đặt trước', 'RESERVED', '#f59e0b'], ['Đang có xe', 'OCCUPIED', '#6c3ce9'], ['Bảo trì', 'MAINTENANCE', '#64748b']];
+  const items = [['Trống', 'AVAILABLE', '#10b981'], ['Đã đặt trước', 'RESERVED', '#f59e0b'], ['Đang có xe', 'OCCUPIED', '#0064e0'], ['Bảo trì', 'MAINTENANCE', '#64748b']];
   $('status-breakdown-box').innerHTML = items.map(([l, k, c]) => {
     const n = state.slots.filter((s) => s.status === k).length, p = Math.round((n / total) * 100);
     return `<div class="bar-item"><div class="bar-top"><span>${l}</span><span>${n} ô (${p}%)</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${c}"></div></div></div>`;
@@ -536,13 +555,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('btn-verify-booking-qr').onclick = () => {
     const code = $('qr-checkin-input').value.trim().toUpperCase();
     const bk = state.bookings.find((b) => b.booking_code.toUpperCase() === code && b.status === 'RESERVED');
-    if (!bk) return toast('❌ Không tìm thấy phiếu đặt chỗ hợp lệ: ' + (code || '(trống)'));
+    if (!bk) return toast('Không tìm thấy phiếu đặt chỗ hợp lệ: ' + (code || '(trống)'));
     checkinBooking(bk);
   };
   $('btn-preview-checkout').onclick = () => {
     const code = $('qr-checkout-input').value.trim().toUpperCase();
     const ses = state.sessions.find((s) => s.status === 'ACTIVE' && (s.qr_token.toUpperCase() === code || s.license_plate.toUpperCase() === code));
-    if (!ses) return toast('⚠️ Không có xe đang đỗ khớp mã/biển số này');
+    if (!ses) return toast('Không có xe đang đỗ khớp mã/biển số này');
     openCheckout(ses.id);
   };
 

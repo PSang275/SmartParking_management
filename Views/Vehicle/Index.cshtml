@@ -14,7 +14,7 @@
           <label for="vh-plate">Biển số xe định danh *</label>
           <span id="vh-plate-hint" class="hint">Định dạng chuẩn Việt Nam (VD: 51K-123.45, 59X3-678.90)</span>
           <input type="text" id="vh-plate" name="license_plate" autocorrect="off" autocapitalize="off" spellcheck="false" required minlength="5" pattern="[A-Za-z0-9\-\.\s]{5,15}" placeholder="51K-999.88" aria-describedby="vh-plate-hint" aria-errormessage="vh-plate-err">
-          <div id="vh-plate-err" class="error-msg"><span aria-hidden="true">❌</span> Vui lòng nhập biển số hợp lệ (5–15 ký tự).</div>
+          <div id="vh-plate-err" class="error-msg">Vui lòng nhập biển số hợp lệ (5–15 ký tự).</div>
         </div>
 
         <div class="field-row">
@@ -43,7 +43,11 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">
-          <span aria-hidden="true">➕</span> Lưu Phương tiện
+          <svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Lưu Phương tiện</span>
         </button>
       </form>
     </div>

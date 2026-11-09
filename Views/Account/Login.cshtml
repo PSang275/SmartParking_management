@@ -3,19 +3,29 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="light" data-astryx-theme="neutral">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>Đăng nhập Hệ thống — SmartPark MVC</title>
+  <title>Đăng nhập Hệ thống — SmartPark</title>
+  <link rel="stylesheet" href="/lib/astryx/fonts.css" asp-append-version="true">
+  <link rel="stylesheet" href="/lib/astryx/astryx.css" asp-append-version="true">
+  <link rel="stylesheet" href="/lib/astryx/theme-neutral.css" asp-append-version="true">
   <link rel="stylesheet" href="/css/styles.css" asp-append-version="true">
 </head>
-<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
-  <main class="card" style="max-width:480px; width:100%;">
+<body class="astryx-root" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem;">
+  <main class="card" style="max-width:460px; width:100%;">
     <div class="card-header">
-      <h3>🔐 Đăng nhập Hệ thống Bãi xe SmartPark</h3>
-      <p>Xác thực tài khoản Quản trị viên / Nhân viên / Khách hàng trên Supabase Cloud</p>
+      <span class="topbar-eyebrow">SMARTPARK ACCESS</span>
+      <h3 style="display:flex; align-items:center; gap:0.5rem; margin-top:0.35rem;">
+        <svg class="ax-icon" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Đăng nhập Hệ thống SmartPark</span>
+      </h3>
+      <p>Dành cho Quản trị viên, Nhân viên vận hành và Khách hàng gửi xe</p>
     </div>
     <form action="/" method="get" class="modern-form">
       <div class="field">
@@ -26,7 +36,7 @@
         <label for="login-password">Mật khẩu *</label>
         <input type="password" id="login-password" name="password" autocomplete="current-password" value="••••••••" required>
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Đăng nhập vào Dashboard MVC</button>
+      <button type="submit" class="btn btn-primary btn-block">Đăng nhập vào Hệ thống</button>
     </form>
     <hr class="divider">
     <div style="display:flex; justify-content:space-between; font-size:0.875rem;">

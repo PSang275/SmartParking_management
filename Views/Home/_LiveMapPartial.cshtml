@@ -6,7 +6,7 @@
         : 65;
 }
 <main id="map-tab" class="tab-panel @(isActive ? "active" : "")" @(isActive ? "" : "hidden")>
-  <!-- Hero Search & Filter Banner (Inspired by SmartPark Purple-Gold-White Reference) -->
+  <!-- Hero Search & Filter Banner — Meta Astryx Design -->
   <section class="hero-search-banner" aria-label="Tìm kiếm chỗ đỗ xe nhanh chóng">
     <div class="hero-copy">
       <h2>TÌM CHỖ ĐỖ XE<br><span>NHANH CHÓNG</span></h2>
@@ -15,9 +15,18 @@
 
     <div class="hero-search-bar" role="group" aria-label="Bộ lọc khu vực và loại xe">
       <div class="search-input-pill">
-        <span class="search-icon-left" aria-hidden="true">🔍</span>
+        <span class="search-icon-left" aria-hidden="true">
+          <svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
         <input type="search" id="search-slot" placeholder="Nhập mã ô đỗ (VD: A-01, C-03)..." aria-label="Tìm mã ô đỗ">
-        <span class="search-arrow-badge" aria-hidden="true">›</span>
+        <span class="search-arrow-badge" aria-hidden="true">
+          <svg class="ax-icon ax-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </span>
       </div>
 
       <select id="filter-zone" aria-label="Lọc theo khu vực">
@@ -46,7 +55,7 @@
 
   <!-- Live Parking Overview & Map Layout -->
   <div class="live-parking-layout">
-    <!-- Left Column: Live Parking Ring & Zone Status Card (Matching Reference Image) -->
+    <!-- Left Column: Live Parking Ring & Zone Status Card -->
     <aside class="live-status-card" aria-label="Trạng thái bãi đỗ trực tiếp">
       <div class="live-card-top">
         <h3>Live Parking Đỗ</h3>
