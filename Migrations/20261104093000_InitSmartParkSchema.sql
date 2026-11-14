@@ -11,9 +11,9 @@ create table if not exists public.app_users (
     username text not null unique,
     password_hash text not null,
     full_name text not null,
+    gender text default 'Nam',
     phone text,
-    email text,
-    role text not null default 'CUSTOMER' check (role in ('ADMIN', 'STAFF', 'CUSTOMER')),
+    role text not null default 'CUSTOMER' check (role in ('ADMIN', 'MANAGER', 'GATE_STAFF', 'ACCOUNTANT', 'TECHNICIAN', 'CUSTOMER')),
     created_at timestamptz not null default now()
 );
 

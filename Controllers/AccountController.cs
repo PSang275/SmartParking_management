@@ -17,11 +17,4 @@ public class AccountController(AppDbContext db) : Controller
     {
         return View();
     }
-
-    [HttpGet]
-    public async Task<IActionResult> Profile()
-    {
-        var users = await db.GetUsersAsync();
-        return View(users);
-    }
 }

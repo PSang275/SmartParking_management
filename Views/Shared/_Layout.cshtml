@@ -33,13 +33,13 @@
           </div>
           <div class="brand-text">
             <h1>Smart<span>Park</span></h1>
-            <p>Bãi đỗ xe Thông minh</p>
+            <p>Quản trị &amp; Điều hành (Admin)</p>
           </div>
         </div>
 
         <div class="nav-group-label">ĐIỀU HÀNH TRỰC TIẾP</div>
         <nav class="nav-menu" aria-label="Các phân hệ">
-          <button type="button" class="nav-btn @(activeTab == "map-tab" ? "active" : "")" data-tab="map-tab" data-route="/">
+          <button type="button" class="nav-btn @(activeTab == "map-tab" ? "active" : "")" data-tab="map-tab" data-route="/Admin/Map">
             <span class="nav-icon" aria-hidden="true">
               <svg class="ax-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
@@ -195,12 +195,19 @@
             </svg>
             <span>Giao diện</span>
           </button>
-          <a href="/Account/Login" class="btn btn-outline user-top-btn" style="text-decoration: none;">
+          <a href="/" class="btn btn-outline user-top-btn" style="text-decoration: none;" title="Xem Trang chủ Công khai dành cho Khách hàng">
+            <svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Trang chủ Khách hàng</span>
+          </a>
+          <a href="/Account/Login" class="btn btn-outline user-top-btn" id="admin-role-badge-btn" style="text-decoration: none;" title="Đổi vai trò / Đăng xuất">
             <svg class="ax-icon ax-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <span>Đăng nhập</span>
+            <span id="admin-role-badge-label">Admin (admin)</span>
           </a>
         </div>
       </header>
@@ -273,5 +280,83 @@
 
   <script src="/js/qrcode.js" asp-append-version="true"></script>
   <script src="/js/app.js" asp-append-version="true"></script>
+  <script>
+    (() => {
+      const ROLE_PROFILES = {
+        ADMIN: {
+          badge: 'Admin (admin)',
+          sub: 'Quản trị viên hệ thống',
+          defaultTab: 'dashboard-tab',
+          tabs: ['map-tab', 'booking-tab', 'qr-tab', 'vehicles-tab', 'slots-tab', 'history-tab', 'dashboard-tab'],
+          showRevenueKpi: true
+        },
+        MANAGER: {
+          badge: 'Quản Lý Ca (manager)',
+          sub: 'Điều hành ca & Vé tháng',
+          defaultTab: 'map-tab',
+          tabs: ['map-tab', 'booking-tab', 'qr-tab', 'vehicles-tab', 'slots-tab', 'history-tab'],
+          showRevenueKpi: false
+        },
+        GATE_STAFF: {
+          badge: 'NV Trực Cổng (gate_staff)',
+          sub: 'Kiểm soát QR Vào / Ra cổng',
+          defaultTab: 'qr-tab',
+          tabs: ['qr-tab', 'map-tab'],
+          showRevenueKpi: false
+        },
+        ACCOUNTANT: {
+          badge: 'Kế Toán (accountant)',
+          sub: 'Đối soát Hóa đơn & Doanh thu',
+          defaultTab: 'history-tab',
+          tabs: ['history-tab', 'dashboard-tab', 'vehicles-tab'],
+          showRevenueKpi: true
+        },
+        TECHNICIAN: {
+          badge: 'Kỹ Thuật Viên (technician)',
+          sub: 'Trạm sạc EV & An toàn PCCC',
+          defaultTab: 'slots-tab',
+          tabs: ['slots-tab', 'map-tab'],
+          showRevenueKpi: false
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        let role = (params.get('role') || '').toUpperCase();
+        if (!ROLE_PROFILES[role]) {
+          try {
+            const saved = JSON.parse(localStorage.getItem('smartpark_auth_user') || 'null');
+            if (saved && ROLE_PROFILES[saved.role]) role = saved.role;
+          } catch {}
+        }
+        if (!ROLE_PROFILES[role]) role = 'ADMIN';
+
+        const profile = ROLE_PROFILES[role];
+        const badgeEl = document.getElementById('admin-role-badge-label');
+        if (badgeEl) badgeEl.textContent = profile.badge;
+
+        const brandSub = document.querySelector('.brand-text p');
+        if (brandSub) brandSub.textContent = profile.sub;
+
+        document.querySelectorAll('.nav-menu .nav-btn').forEach((btn) => {
+          const tab = btn.getAttribute('data-tab');
+          btn.style.display = profile.tabs.includes(tab) ? '' : 'none';
+        });
+
+        // Hide top revenue KPI card for roles that shouldn't see total owner revenue
+        if (!profile.showRevenueKpi) {
+          const revEl = document.getElementById('kpi-revenue');
+          const revCard = revEl ? revEl.closest('.kpi-card') : null;
+          if (revCard) revCard.style.display = 'none';
+        }
+
+        // Activate the appropriate starting tab if current active tab isn't allowed or if ?role= was passed
+        if (params.has('role')) {
+          const targetBtn = document.querySelector(`.nav-menu .nav-btn[data-tab="${profile.defaultTab}"]`);
+          setTimeout(() => targetBtn?.click(), 60);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

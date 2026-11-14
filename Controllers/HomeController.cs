@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartParking_management.Data;
-using SmartParking_management.Models;
 
 namespace SmartParking_management.Controllers;
 
@@ -10,10 +9,10 @@ public class HomeController(AppDbContext db) : Controller
     public async Task<IActionResult> Index()
     {
         var vm = await db.BuildViewModelAsync(
-            activeTab: "map-tab",
-            pageTitle: "Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực",
-            pageSubtitle: "Theo dõi vị trí đỗ xe trực tiếp, đặt chỗ trước và kiểm soát xe vào/ra bằng mã QR");
-        return View(vm);
+            activeTab: "public-landing",
+            pageTitle: "SmartPark — Đỗ xe thông minh, không lo hết chỗ",
+            pageSubtitle: "Tìm & Đặt chỗ đỗ xe thông minh trong 30 giây");
+        return View("~/Views/Home/PublicLanding.cshtml", vm);
     }
 
     [HttpGet("/api/status")]
@@ -24,13 +23,6 @@ public class HomeController(AppDbContext db) : Controller
         supabase_project = db.SupabaseProjectId,
         supabase_url = db.SupabaseUrl
     });
-
-    [HttpGet("/api/calculate-fee")]
-    public IActionResult CalculateFee([FromQuery] int rate = 20000, [FromQuery] int minutes = 60, [FromQuery] int overtime = 0)
-    {
-        var breakdown = FeeBreakdown.Calculate(rate, minutes, overtime == 1);
-        return Json(breakdown);
-    }
 
     [HttpGet("/api/slots")]
     public async Task<IActionResult> GetSlots()

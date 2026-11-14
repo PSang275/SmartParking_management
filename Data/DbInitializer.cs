@@ -37,8 +37,11 @@ public class DbInitializer
 
     public List<User> GetDefaultUsers() =>
     [
-        new() { Id = 1, Username = "PSang275", FullName = "Nguyễn Phước Sang", Email = "sang@smartpark.vn", Phone = "0901234567", Role = "ADMIN" },
-        new() { Id = 2, Username = "vovietthang11-ops", FullName = "Võ Việt Thắng", Email = "thang@smartpark.vn", Phone = "0912345678", Role = "STAFF" },
-        new() { Id = 3, Username = "Tiendat264", FullName = "Đoàn Tiến Đạt", Email = "dat@smartpark.vn", Phone = "0987654321", Role = "STAFF" }
+        new() { Id = 1, Username = "admin", PasswordHash = "123456", FullName = "Nguyễn Phước Sang (Admin)", Phone = "0901234567", Role = "ADMIN" },
+        new() { Id = 2, Username = "manager", PasswordHash = "123456", FullName = "Võ Việt Thắng (Quản lý ca)", Phone = "0912345678", Role = "MANAGER" },
+        new() { Id = 3, Username = "gate_staff", PasswordHash = "123456", FullName = "Đoàn Tiến Đạt (NV Trực cổng)", Phone = "0987654321", Role = "GATE_STAFF" },
+        new() { Id = 4, Username = "accountant", PasswordHash = "123456", FullName = "Lê Thị Thu Ngân (Kế toán)", Phone = "0904567890", Role = "ACCOUNTANT" },
+        new() { Id = 5, Username = "technician", PasswordHash = "123456", FullName = "Trần Kỹ Thuật (Trạm sạc & PCCC)", Phone = "0905678901", Role = "TECHNICIAN" },
+        new() { Id = 6, Username = "customer", PasswordHash = "123456", FullName = "Phạm Minh Khách (Khách hàng)", Phone = "0906789012", Role = "CUSTOMER" }
     ];
 }
