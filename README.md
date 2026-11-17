@@ -16,7 +16,7 @@ Hệ thống số hóa quy trình từ tra cứu sơ đồ chỗ trống thời 
 
 | Thành phần | Công nghệ |
 | :--- | :--- |
-| **Framework** | **ASP.NET Core MVC (.NET 8.0 / 9.0 / 10.0 — hỗ trợ từ .NET 10.0 trở xuống)** |
+| **Framework** | **ASP.NET Core 9.0 MVC (`net9.0`, tương thích .NET 9.0 & .NET 10.0)** |
 | **Ngôn ngữ** | **C#** (Microsoft Visual Studio 2022 / 2026) |
 | **Database** | **PostgreSQL (Supabase Cloud)** / In-Memory Seed (`DbInitializer` Local Fallback) |
 | **Data Access** | `AppDbContext` (Supabase PostgREST API & `System.Text.Json`) |
@@ -93,7 +93,7 @@ SmartParking_management/
 
 ## 💻 Yêu Cầu Hệ Thống (Prerequisites)
 
-- **.NET SDK** từ **.NET 10.0 trở xuống** (`.NET 8.0`, `.NET 9.0` hoặc `.NET 10.0`)
+- **.NET 9.0 SDK** hoặc **.NET 10.0 SDK** (dự án target `net9.0` và bật `RollForward: Major` để tự chạy trên cả .NET 9 & .NET 10)
 - **Visual Studio 2022 / 2026** hoặc **VS Code**
 - Cơ sở dữ liệu: **PostgreSQL (Supabase Cloud)** hoặc chế độ Local Fallback (`DbInitializer`)
 - Git
