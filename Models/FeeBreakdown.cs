@@ -4,6 +4,36 @@ namespace SmartParking_management.Models;
 
 public class FeeBreakdown
 {
+    [JsonPropertyName("qr_token")]
+    public string QrToken { get; set; } = string.Empty;
+
+    [JsonPropertyName("license_plate")]
+    public string LicensePlate { get; set; } = string.Empty;
+
+    [JsonPropertyName("customer_name")]
+    public string CustomerName { get; set; } = string.Empty;
+
+    [JsonPropertyName("vehicle_type")]
+    public string VehicleType { get; set; } = "CAR";
+
+    [JsonPropertyName("slot_code")]
+    public string SlotCode { get; set; } = string.Empty;
+
+    [JsonPropertyName("zone_code")]
+    public string ZoneCode { get; set; } = string.Empty;
+
+    [JsonPropertyName("zone_name")]
+    public string ZoneName { get; set; } = string.Empty;
+
+    [JsonPropertyName("check_in_time")]
+    public DateTimeOffset CheckInTime { get; set; }
+
+    [JsonPropertyName("expected_end_time")]
+    public DateTimeOffset? ExpectedEndTime { get; set; }
+
+    [JsonPropertyName("check_out_time")]
+    public DateTimeOffset CheckOutTime { get; set; }
+
     [JsonPropertyName("raw_minutes")]
     public int RawMinutes { get; set; }
 
@@ -16,31 +46,33 @@ public class FeeBreakdown
     [JsonPropertyName("base_fee")]
     public int BaseFee { get; set; }
 
+    [JsonPropertyName("overtime_minutes")]
+    public int OvertimeMinutes { get; set; }
+
+    [JsonPropertyName("overtime_hours")]
+    public double OvertimeHours { get; set; }
+
     [JsonPropertyName("overtime_surcharge")]
     public int OvertimeSurcharge { get; set; }
+
+    [JsonPropertyName("ev_kwh")]
+    public double EvKwh { get; set; }
+
+    [JsonPropertyName("ev_rate_per_kwh")]
+    public int EvRatePerKwh { get; set; } = 4500;
+
+    [JsonPropertyName("ev_charging_fee")]
+    public int EvChargingFee { get; set; }
+
+    [JsonPropertyName("idle_minutes")]
+    public int IdleMinutes { get; set; }
+
+    [JsonPropertyName("idle_fee")]
+    public int IdleFee { get; set; }
 
     [JsonPropertyName("total_fee")]
     public int TotalFee { get; set; }
 
-    [JsonPropertyName("engine")]
-    public string Engine { get; set; } = "Tính tự động theo khung 30 phút";
-
-    public static FeeBreakdown Calculate(int hourlyRate, int durationMinutes, bool isOvertime = false)
-    {
-        int clampedMinutes = Math.Max(durationMinutes, 1);
-        int halfHourBlocks = (clampedMinutes + 29) / 30;
-        double billedHours = Math.Max(1.0, halfHourBlocks * 0.5);
-        int baseFee = (int)Math.Round(billedHours * hourlyRate);
-        int surcharge = isOvertime ? (int)Math.Round(baseFee * 0.20) : 0;
-
-        return new FeeBreakdown
-        {
-            RawMinutes = clampedMinutes,
-            BilledHours = billedHours,
-            HourlyRate = hourlyRate,
-            BaseFee = baseFee,
-            OvertimeSurcharge = surcharge,
-            TotalFee = baseFee + surcharge
-        };
-    }
+    [JsonPropertyName("formula_summary")]
+    public string FormulaSummary { get; set; } = string.Empty;
 }
