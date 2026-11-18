@@ -763,8 +763,109 @@ table td { font-variant-numeric: tabular-nums; }
 /* Toast */
 .toast-stack { position: fixed; right: 16px; bottom: 16px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
 .toast {
-  max-width: 360px; padding: 12px 14px; border-radius: var(--radius);
-  background: var(--forest-950); color: #fff; font-size: 13px;
+  max-width: 380px; padding: 12px 16px; border-radius: var(--radius);
+  background: var(--forest-950); color: #fff; font-size: 13.5px; font-weight: 500;
+  border-left: 3px solid var(--emerald-600);
+  box-shadow: 0 10px 24px rgba(8, 23, 46, 0.22);
+}
+
+/* ---------- Pro UI Form & Ticket Components (ui-ux-pro-max) ---------- */
+.sp-form { display: flex; flex-direction: column; gap: 14px; }
+.sp-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sp-field { display: flex; flex-direction: column; gap: 6px; }
+.sp-label { font-size: 13px; font-weight: 600; color: var(--text); }
+.sp-input, .sp-select {
+  width: 100%; height: 44px; padding: 0 12px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+.sp-input:hover, .sp-select:hover { border-color: var(--border-strong); }
+.sp-input:focus, .sp-select:focus {
+  outline: none; border-color: var(--emerald-600);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.sp-hint { font-size: 12px; color: var(--text-3); }
+
+.sp-slot-summary {
+  padding: 12px 14px; border-radius: var(--radius);
+  background: var(--emerald-50); border: 1px solid var(--emerald-border);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.sp-slot-code { font-size: 16px; font-weight: 700; color: var(--forest-900); }
+.sp-slot-zone { font-size: 12.5px; color: var(--text-2); }
+.sp-slot-rate { font-size: 13.5px; font-weight: 700; color: var(--emerald-700); }
+
+.sp-pccc-alert {
+  padding: 11px 14px; border-radius: var(--radius);
+  background: var(--warn-bg); border: 1px solid var(--warn-border);
+  color: var(--warn-text); font-size: 13px; font-weight: 500;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+
+.qr-ticket-card {
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--bg); padding: 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+}
+.qr-canvas-box {
+  width: 184px; height: 184px; padding: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;
+}
+.qr-canvas-box svg { width: 100%; height: 100%; display: block; }
+.qr-code-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 999px;
+  background: var(--forest-900); color: #FFFFFF;
+  font-size: 13.5px; font-weight: 700; letter-spacing: 0.03em;
+}
+.qr-ticket-meta {
+  width: 100%; border-top: 1px dashed var(--border-strong);
+  padding-top: 14px; text-align: left;
+}
+
+/* ---------- Monthly Pass Registration & Renewal (US28) ---------- */
+.mp-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px; align-items: start; }
+.mp-price-banner {
+  padding: 14px 16px; border-radius: var(--radius);
+  background: var(--forest-950); color: #FFFFFF;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.mp-price-label { font-size: 12.5px; color: rgba(255, 255, 255, 0.72); }
+.mp-price-total { font-size: 20px; font-weight: 700; color: #FFFFFF; }
+.mp-discount-tag {
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(37, 99, 235, 0.35); border: 1px solid rgba(147, 197, 253, 0.45);
+  color: #DBEAFE; font-size: 12px; font-weight: 600;
+}
+.mp-list { display: flex; flex-direction: column; gap: 12px; }
+.mp-pass-item {
+  padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); display: flex; flex-direction: column; gap: 10px;
+}
+.mp-pass-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mp-pass-code { font-size: 13.5px; font-weight: 700; color: var(--forest-900); }
+.mp-badge-active {
+  padding: 2px 9px; border-radius: 999px;
+  background: var(--available-bg); border: 1px solid var(--available-border);
+  color: var(--available-text); font-size: 11.5px; font-weight: 600;
+}
+.mp-pass-details { font-size: 13px; color: var(--text-2); display: flex; flex-direction: column; gap: 3px; }
+.mp-renew-bar {
+  display: flex; align-items: center; gap: 8px; padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.mp-renew-select {
+  height: 38px; padding: 0 10px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--surface); font-size: 13px; flex: 1;
+}
+
+.booking-list { display: flex; flex-direction: column; gap: 10px; max-height: 360px; overflow-y: auto; }
+.booking-list-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg);
 }
 
 /* ---------- Responsive ---------- */
