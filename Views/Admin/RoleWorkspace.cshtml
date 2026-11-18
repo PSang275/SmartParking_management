@@ -1,0 +1,146 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@{
+    Layout = null;
+    var role = Model.CurrentRole;
+    var roleLabel = role switch
+    {
+        "MANAGER" => "Quản Lý Ca (MANAGER)",
+        "ACCOUNTANT" => "Kế Toán Đối Soát (ACCOUNTANT)",
+        "TECHNICIAN" => "Kỹ Thuật Viên Trạm Sạc & PCCC (TECHNICIAN)",
+        _ => role
+    };
+    var defaultUser = role switch
+    {
+        "MANAGER" => "Võ Việt Thắng (Quản Lý Ca)",
+        "ACCOUNTANT" => "Lê Thị Thu Ngân (Kế Toán)",
+        "TECHNICIAN" => "Trần Kỹ Thuật (Kỹ Thuật Viên)",
+        _ => "Nhân sự SmartPark"
+    };
+    var navItems = role switch
+    {
+        "MANAGER" => new[] { "Giám sát công suất 150 ô", "Danh sách xe quá giờ", "Điều phối sự cố phân khu" },
+        "ACCOUNTANT" => new[] { "Xuất hóa đơn thanh toán PDF", "Lọc đối soát lịch sử toàn bãi", "Biểu đồ doanh thu & lưu lượng", "Xuất báo cáo Excel / CSV" },
+        "TECHNICIAN" => new[] { "Giám sát 12 trụ sạc VinFast", "Khóa / Mở bảo trì ô đỗ", "Kiểm soát an toàn PCCC Hầm B1" },
+        _ => new[] { "Tổng quan ca trực" }
+    };
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@Model.PageTitle — SmartPark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin-dashboard.css" asp-append-version="true">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- SIDEBAR PHÂN NHÁNH RIÊNG THEO VAI TRÒ (US31) -->
+    <aside class="sidebar" aria-label="Điều hướng phân hệ @roleLabel">
+      <a href="/Workspace/@role.ToLowerInvariant()" class="sidebar-brand">
+        <span class="sidebar-brand-mark"><span>P</span></span>
+        <div>
+          <div class="sidebar-brand-title">SmartPark</div>
+          <div class="sidebar-brand-sub">@roleLabel</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        @for (int i = 0; i < navItems.Length; i++)
+        {
+          <button type="button" class="nav-item @(i == 0 ? "is-active" : "")">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+            <span>@navItems[i]</span>
+          </button>
+        }
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-label">Tài khoản</div>
+
+        <a href="/Account/Login" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          <span>Đổi vai trò / Đăng xuất</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-status">
+        <div class="sidebar-status-top">
+          <span class="status-dot"></span>
+          <span>Khung Layout Vai trò: @role</span>
+        </div>
+        <div class="sidebar-status-sub">Hoạt động 24/7 • Khu EV, NT, TH, VIP (150 ô)</div>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="workspace">
+      <header class="top-header-card">
+        <div>
+          <span class="header-kicker">KHÔNG GIAN LÀM VIỆC PHÂN NHÁNH THEO VAI TRÒ • ROLE: @role</span>
+          <h1>@Model.PageTitle</h1>
+          <p>@Model.PageSubtitle</p>
+        </div>
+
+        <div class="header-actions">
+          <a href="/Account/Login" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span id="ws-user-label">@defaultUser</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Quy mô toàn bãi</span>
+          </div>
+          <div class="kpi-value num">@Model.TotalSlots</div>
+          <div class="kpi-sub">4 phân khu (EV • NT • TH • VIP)</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Ô trống hiện tại</span>
+          </div>
+          <div class="kpi-value kpi-value-green num">@Model.AvailableSlots</div>
+          <div class="kpi-sub">Đồng bộ thời gian thực</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Đang đỗ &amp; Đặt trước</span>
+          </div>
+          <div class="kpi-value kpi-value-blue num">@Model.BusySlots</div>
+          <div class="kpi-sub">Trên tổng 150 ô đỗ</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Trụ sạc VinFast EV</span>
+          </div>
+          <div class="kpi-value kpi-value-blue num">12</div>
+          <div class="kpi-sub">Zone EV • 4.500đ/kWh</div>
+        </article>
+      </section>
+
+      <section class="card-panel">
+        <div class="card-panel-head">
+          <div>
+            <h2>Khung Layout &amp; Sidebar phân nhánh cho vai trò @roleLabel</h2>
+            <p>Không gian làm việc đã được khởi tạo độc lập với giao diện Quản trị viên (/Admin), Trạm trực cổng (/Gate) và Khách hàng (/).</p>
+          </div>
+          <span class="ready-pill">Role Layout Ready</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+          @foreach (var item in navItems)
+          {
+            <div style="padding:18px; border:1px solid var(--border); border-radius:12px; background:var(--surface-subtle);">
+              <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px;">@item</div>
+              <div style="font-size:12.5px; color:var(--text-3);">Khung phân hệ nghiệp vụ dành riêng cho vai trò @roleLabel trên hệ thống SmartPark.</div>
+            </div>
+          }
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

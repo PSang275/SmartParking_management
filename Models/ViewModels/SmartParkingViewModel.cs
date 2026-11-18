@@ -3,8 +3,9 @@ namespace SmartParking_management.Models.ViewModels;
 public class SmartParkingViewModel
 {
     public string ActiveTab { get; set; } = "map-tab";
+    public string CurrentRole { get; set; } = "ADMIN";
     public string PageTitle { get; set; } = "Sơ đồ Bãi xe & Kiểm tra Chỗ trống Thời gian thực";
-    public string PageSubtitle { get; set; } = "Kiến trúc ASP.NET Core MVC (C#) đồng bộ trực tiếp Supabase Cloud PostgreSQL";
+    public string PageSubtitle { get; set; } = "Kiến trúc ASP.NET Core 9.0 MVC (C#) đồng bộ trực tiếp Supabase Cloud PostgreSQL";
     public string SupabaseProjectId { get; set; } = "jgvegymigpbgqmoylljf";
     public string SupabaseUrl { get; set; } = "https://jgvegymigpbgqmoylljf.supabase.co";
 
@@ -14,6 +15,7 @@ public class SmartParkingViewModel
     public List<Booking> Bookings { get; set; } = [];
     public List<ParkingSession> Sessions { get; set; } = [];
     public List<User> Users { get; set; } = [];
+    public List<MonthlyPass> MonthlyPasses { get; set; } = [];
 
     public int TotalSlots => Slots.Count;
     public int AvailableSlots => Slots.Count(s => s.Status == "AVAILABLE");

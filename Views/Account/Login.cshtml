@@ -406,12 +406,21 @@
 
   <script>
     (() => {
+      const ROLE_TARGETS = {
+        ADMIN:      { label: 'Quản Trị Viên', target: '/Admin' },
+        MANAGER:    { label: 'Quản Lý Ca',    target: '/Workspace/manager' },
+        GATE_STAFF: { label: 'NV Trực Cổng',  target: '/Gate' },
+        ACCOUNTANT: { label: 'Kế Toán',       target: '/Workspace/accountant' },
+        TECHNICIAN: { label: 'Kỹ Thuật Viên', target: '/Workspace/technician' },
+        CUSTOMER:   { label: 'Khách Hàng',    target: '/?login=1' }
+      };
+
       const DEMO_ACCOUNTS = {
-        admin:      { username: 'admin',      password: '123456', role: 'ADMIN',      roleLabel: 'Quản Trị Viên', fullName: 'Nguyễn Phước Sang (Admin)',       target: '/?login=1' },
-        manager:    { username: 'manager',    password: '123456', role: 'MANAGER',    roleLabel: 'Quản Lý Ca',    fullName: 'Võ Việt Thắng (Quản Lý Ca)',      target: '/?login=1' },
-        gate_staff: { username: 'gate_staff', password: '123456', role: 'GATE_STAFF', roleLabel: 'NV Trực Cổng',  fullName: 'Đoàn Tiến Đạt (NV Trực Cổng)',    target: '/?login=1' },
-        accountant: { username: 'accountant', password: '123456', role: 'ACCOUNTANT', roleLabel: 'Kế Toán',       fullName: 'Lê Thị Thu Ngân (Kế Toán)',        target: '/?login=1' },
-        technician: { username: 'technician', password: '123456', role: 'TECHNICIAN', roleLabel: 'Kỹ Thuật Viên', fullName: 'Trần Kỹ Thuật (Kỹ Thuật Viên)',   target: '/?login=1' },
+        admin:      { username: 'admin',      password: '123456', role: 'ADMIN',      roleLabel: 'Quản Trị Viên', fullName: 'Nguyễn Phước Sang (Admin)',       target: '/Admin' },
+        manager:    { username: 'manager',    password: '123456', role: 'MANAGER',    roleLabel: 'Quản Lý Ca',    fullName: 'Võ Việt Thắng (Quản Lý Ca)',      target: '/Workspace/manager' },
+        gate_staff: { username: 'gate_staff', password: '123456', role: 'GATE_STAFF', roleLabel: 'NV Trực Cổng',  fullName: 'Đoàn Tiến Đạt (NV Trực Cổng)',    target: '/Gate' },
+        accountant: { username: 'accountant', password: '123456', role: 'ACCOUNTANT', roleLabel: 'Kế Toán',       fullName: 'Lê Thị Thu Ngân (Kế Toán)',        target: '/Workspace/accountant' },
+        technician: { username: 'technician', password: '123456', role: 'TECHNICIAN', roleLabel: 'Kỹ Thuật Viên', fullName: 'Trần Kỹ Thuật (Kỹ Thuật Viên)',   target: '/Workspace/technician' },
         customer:   { username: 'customer',   password: '123456', role: 'CUSTOMER',   roleLabel: 'Khách Hàng',    fullName: 'Phạm Minh Khách (Khách Hàng)',    target: '/?login=1' }
       };
 
@@ -465,8 +474,8 @@
         });
       });
 
-      // Handle Login Submit
-      document.getElementById('login-form')?.addEventListener('submit', (e) => {
+      // Handle Login Submit (Synced with Server /api/users for US32 role & lock state)
+      document.getElementById('login-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const u = userInput.value.trim().toLowerCase();
         const p = passInput.value;
@@ -477,7 +486,38 @@
           return;
         }
 
-        // 1. Check built-in 6 role demo accounts
+        // 0. Check live server users from US32 (/api/users) first
+        try {
+          const res = await fetch('/api/users');
+          if (res.ok) {
+            const serverUsers = await res.json();
+            const svUser = serverUsers.find((x) => (x.username || '').toLowerCase() === u);
+            if (svUser) {
+              if (svUser.status === 'LOCKED') {
+                alertBox.className = 'alert-box is-error';
+                alertBox.textContent = `Tài khoản "${u}" đã bị Quản trị viên tạm khóa.`;
+                return;
+              }
+              if ((svUser.password_hash || '123456') !== p) {
+                alertBox.className = 'alert-box is-error';
+                alertBox.textContent = 'Mật khẩu không chính xác. Vui lòng kiểm tra lại.';
+                return;
+              }
+              const roleInfo = ROLE_TARGETS[svUser.role] || ROLE_TARGETS.CUSTOMER;
+              localStorage.setItem('smartpark_auth_user', JSON.stringify({
+                username: svUser.username,
+                fullName: svUser.full_name,
+                phone: svUser.phone,
+                role: svUser.role,
+                roleLabel: roleInfo.label
+              }));
+              window.location.href = roleInfo.target;
+              return;
+            }
+          }
+        } catch {}
+
+        // 1. Fallback to built-in 6 role demo accounts
         if (DEMO_ACCOUNTS[u]) {
           if (p !== DEMO_ACCOUNTS[u].password) {
             alertBox.className = 'alert-box is-error';
