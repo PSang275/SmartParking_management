@@ -1,0 +1,329 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@using System.Text.Json
+@{
+    Layout = null;
+    var initialJson = JsonSerializer.Serialize(new
+    {
+        activeTab = Model.ActiveTab,
+        zones = Model.Zones,
+        slots = Model.Slots,
+        users = Model.Users,
+        sessions = Model.Sessions,
+        bookings = Model.Bookings,
+        monthlyPasses = Model.MonthlyPasses
+    });
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartPark Admin — Trung tâm Quản trị Hệ thống &amp; Phân quyền 6 Vai trò</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin-dashboard.css" asp-append-version="true">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ================= LEFT SIDEBAR (DÀNH RIÊNG CHO QUẢN TRỊ VIÊN) ================= -->
+    <aside class="sidebar" aria-label="Điều hướng Quản trị viên">
+      <a href="/Admin" class="sidebar-brand">
+        <span class="sidebar-brand-mark"><span>P</span></span>
+        <div>
+          <div class="sidebar-brand-title">SmartPark</div>
+          <div class="sidebar-brand-sub">Quản trị Hệ thống</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item is-active" data-tab-btn="map">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          <span>Sơ đồ &amp; Chỗ trống</span>
+          <span class="nav-badge num" id="nav-avail-badge">@Model.AvailableSlots</span>
+        </button>
+
+        <button type="button" class="nav-item" data-tab-btn="users">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Tài khoản &amp; 6 Vai trò</span>
+          <span class="nav-badge num" id="nav-users-badge">@Model.Users.Count</span>
+        </button>
+
+        <button type="button" class="nav-item" data-tab-btn="zones">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+          <span>4 Phân khu Bãi xe</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-label">Điều hướng vai trò</div>
+
+        <a href="/Account/Login" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          <span>Đổi vai trò / Đăng xuất</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-status">
+        <div class="sidebar-status-top">
+          <span class="status-dot"></span>
+          <span>Trực tuyến • Tự động đồng bộ</span>
+        </div>
+        <div class="sidebar-status-sub">Hoạt động 24/7 • Khu EV, NT, TH, VIP (150 ô)</div>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN WORKSPACE (ADMIN) ================= -->
+    <main class="workspace">
+      <!-- 1. TOP HEADER CARD -->
+      <header class="top-header-card">
+        <div>
+          <span class="header-kicker" id="role-kicker">QUẢN TRỊ HỆ THỐNG SMARTPARK • VAI TRÒ: QUẢN TRỊ VIÊN</span>
+          <h1 id="workspace-title">Trung tâm Giám sát Bãi xe 150 Ô</h1>
+        </div>
+
+        <div class="header-actions">
+          <a href="/Account/Login" class="btn btn-outline" id="header-user-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span id="header-user-label">Nguyễn Phước Sang (Admin)</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- 2. 4 KPI METRIC CARDS ROW -->
+      <section class="kpi-grid" aria-label="Chỉ số tổng quan bãi xe">
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Tổng số ô đỗ</span>
+            <span class="kpi-icon kpi-icon-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+            </span>
+          </div>
+          <div class="kpi-value num" id="kpi-total">150</div>
+          <div class="kpi-sub">4 phân khu (EV • NT • TH • VIP)</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Chỗ trống sẵn sàng</span>
+            <span class="kpi-icon kpi-icon-green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <div class="kpi-value kpi-value-green num" id="kpi-avail">52</div>
+          <div class="kpi-sub num" id="kpi-avail-sub">Ô tô: 17 • Xe máy: 35</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Đang đỗ / Đặt trước</span>
+            <span class="kpi-icon kpi-icon-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            </span>
+          </div>
+          <div class="kpi-value kpi-value-blue num" id="kpi-busy">98</div>
+          <div class="kpi-sub num" id="kpi-busy-sub">Đang đỗ: 87 • Đặt trước: 11</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Tài khoản &amp; Vé tháng</span>
+            <span class="kpi-icon kpi-icon-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+          </div>
+          <div class="kpi-value kpi-value-blue num" id="kpi-users-count">@Model.Users.Count</div>
+          <div class="kpi-sub num" id="kpi-users-sub">6 vai trò phân quyền • @Model.MonthlyPasses.Count vé tháng</div>
+        </article>
+      </section>
+
+      <!-- ================= TAB 1: SƠ ĐỒ GIÁM SÁT 150 Ô ĐỖ ================= -->
+      <div id="tab-panel-map" data-tab-panel="map">
+        <div class="map-split-grid">
+          <aside class="live-gauge-card">
+            <div class="live-gauge-head">
+              <h3>Tỷ lệ Chỗ trống</h3>
+              <span class="ready-pill">Trực tiếp</span>
+            </div>
+
+            <div class="gauge-hero">
+              <div class="donut-wrap">
+                <svg viewBox="0 0 36 36" aria-hidden="true">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none" stroke="#E2E8F0" stroke-width="3.6" />
+                  <path id="gauge-arc"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none" stroke="#2563EB" stroke-width="3.6" stroke-dasharray="35, 100" stroke-linecap="round" />
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-pct num" id="gauge-pct">35%</span>
+                  <span class="donut-sub">Trống</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="gauge-BigNum num" id="gauge-avail-num">52</div>
+                <div class="gauge-BigLabel">Chỗ trống sẵn sàng</div>
+                <div class="gauge-BigSub num" id="gauge-total-sub">Trên tổng 150 vị trí</div>
+              </div>
+            </div>
+
+            <div class="zone-bars-title">Trạng thái trực tiếp theo phân khu:</div>
+            <div class="zone-bar-list" id="live-zone-bars"></div>
+          </aside>
+
+          <div class="zones-column">
+            <div class="zone-filter-pills" id="quick-zone-pills">
+              <button type="button" class="zone-pill-btn is-active" data-quick-zone="ALL">Tất cả 4 Khu (150 ô)</button>
+              <button type="button" class="zone-pill-btn" data-quick-zone="1">Zone EV — Xe Điện (37 ô)</button>
+              <button type="button" class="zone-pill-btn" data-quick-zone="2">Zone NT — Ngoài Trời (65 ô)</button>
+              <button type="button" class="zone-pill-btn" data-quick-zone="3">Zone TH — Tầng Hầm B1 (40 ô)</button>
+              <button type="button" class="zone-pill-btn" data-quick-zone="4">Zone VIP — Mái Che (8 ô)</button>
+            </div>
+
+            <div id="zones-slot-container" class="zones-column"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 2: QUẢN LÝ DANH SÁCH TÀI KHOẢN & PHÂN QUYỀN (CHỈ 1 ADMIN DUY NHẤT) ================= -->
+      <div id="tab-panel-users" data-tab-panel="users" hidden>
+        <!-- Form Tạo tài khoản mới & Cấp quyền (Không có quyền ADMIN) -->
+        <section class="card-panel" style="margin-bottom: 18px;">
+          <div class="card-panel-head">
+            <div>
+              <h2>Tạo Tài khoản Người dùng &amp; Cấp quyền Vai trò</h2>
+              <p>Thêm mới tài khoản nhân sự hoặc khách hàng (Hệ thống chỉ duy nhất 01 Quản trị viên Admin)</p>
+            </div>
+          </div>
+
+          <form id="admin-create-user-form" class="form-stack" novalidate>
+            <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px;">
+              <div class="form-group">
+                <label class="form-label" for="au-username">Tên đăng nhập *</label>
+                <input type="text" id="au-username" class="input-control" placeholder="VD: staff_ca2" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="au-password">Mật khẩu khởi tạo *</label>
+                <input type="text" id="au-password" class="input-control num" value="123456" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="au-fullname">Họ và tên người dùng *</label>
+                <input type="text" id="au-fullname" class="input-control" placeholder="VD: Lê Hoàng Nam" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="au-phone">Số điện thoại *</label>
+                <input type="tel" id="au-phone" class="input-control num" placeholder="VD: 0909123456" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="au-email">Email công việc</label>
+                <input type="email" id="au-email" class="input-control" placeholder="VD: nam.gate@smartpark.vn">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="au-role">Vai trò phân quyền *</label>
+                <select id="au-role" class="select-control">
+                  <option value="MANAGER">MANAGER — Quản lý ca trực (/Workspace/manager)</option>
+                  <option value="GATE_STAFF" selected>GATE_STAFF — Nhân viên trực cổng (/Gate)</option>
+                  <option value="ACCOUNTANT">ACCOUNTANT — Kế toán đối soát (/Workspace/accountant)</option>
+                  <option value="TECHNICIAN">TECHNICIAN — Kỹ thuật viên EV &amp; PCCC (/Workspace/technician)</option>
+                  <option value="CUSTOMER">CUSTOMER — Khách hàng gửi xe (/)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end;">
+              <button type="submit" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                <span>Tạo Tài khoản &amp; Cấp quyền</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Bảng Danh sách Tài khoản Người dùng & Thay đổi Phân quyền / Khóa tài khoản (US32) -->
+        <!-- Bảng Danh sách Tài khoản Người dùng (Dữ liệu thật) -->
+        <section class="card-panel">
+          <div class="card-panel-head">
+            <div>
+              <h2>Danh sách Tài khoản Người dùng &amp; Điều chỉnh Phân quyền Trực tiếp</h2>
+              <p>Đổi vai trò (không cho phép gán ADMIN thứ 2), khóa/mở khóa hoặc xóa tài khoản trực tiếp trên bảng</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <label class="sr-only" for="user-role-filter">Lọc theo vai trò</label>
+              <select id="user-role-filter" class="select-control" style="min-width:190px;">
+                <option value="ALL">Tất cả 6 vai trò</option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="MANAGER">MANAGER</option>
+                <option value="GATE_STAFF">GATE_STAFF</option>
+                <option value="ACCOUNTANT">ACCOUNTANT</option>
+                <option value="TECHNICIAN">TECHNICIAN</option>
+                <option value="CUSTOMER">CUSTOMER</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="data-table-wrap">
+            <table class="data-table" aria-label="Bảng quản lý tài khoản người dùng">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tên đăng nhập</th>
+                  <th>Họ và tên</th>
+                  <th>Số điện thoại</th>
+                  <th>Phân quyền Vai trò (Đổi trực tiếp)</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác quản trị</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 3: DANH MỤC 4 PHÂN KHU BÃI XE (US01) ================= -->
+      <div id="tab-panel-zones" data-tab-panel="zones" hidden>
+        <section class="card-panel">
+          <div class="card-panel-head">
+            <div>
+              <h2>Danh mục 4 Phân khu Bãi xe (150 Ô đỗ &amp; 12 Trụ sạc EV)</h2>
+            </div>
+          </div>
+
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Khu</th>
+                  <th>Tên Phân Khu</th>
+                  <th>Đơn giá Giờ</th>
+                  <th>Giá Qua Đêm</th>
+                  <th>Mô tả Kỹ thuật &amp; Quy định PCCC</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach (var z in Model.Zones)
+                {
+                  <tr>
+                    <td><span class="plate-pill">@z.ZoneCode</span></td>
+                    <td><strong>@z.ZoneName</strong></td>
+                    <td class="num"><strong>@z.HourlyRate.ToString("N0") đ/giờ</strong></td>
+                    <td class="num">@z.OvernightRate.ToString("N0") đ</td>
+                    <td>@z.Description</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    window.__SMARTPARK_INITIAL__ = @Html.Raw(initialJson);
+  </script>
+  <script src="/js/admin-dashboard.js" asp-append-version="true"></script>
+</body>
+</html>

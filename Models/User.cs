@@ -25,6 +25,9 @@ public class User
     [JsonPropertyName("role")]
     public string Role { get; set; } = "CUSTOMER";
 
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "ACTIVE";
+
     [JsonPropertyName("created_at")]
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }
