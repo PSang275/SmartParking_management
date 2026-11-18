@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using SmartParking_management.Models;
 using SmartParking_management.Models.ViewModels;
@@ -24,7 +25,7 @@ public class AppDbContext
         _initializer = initializer;
 
         _httpClient.BaseAddress = new Uri($"{SupabaseUrl.TrimEnd('/')}/rest/v1/");
-        _httpClient.Timeout = TimeSpan.FromSeconds(4);
+        _httpClient.Timeout = TimeSpan.FromSeconds(3);
         if (!string.IsNullOrEmpty(AnonKey))
         {
             _httpClient.DefaultRequestHeaders.Remove("apikey");
@@ -33,70 +34,161 @@ public class AppDbContext
         }
     }
 
-    public async Task<List<T>> QueryTableAsync<T>(string relativeQuery, Func<List<T>> fallback)
+    public Task<List<ParkingZone>> GetZonesAsync() =>
+        Task.FromResult(_initializer.GetDefaultZones());
+
+    public Task<List<ParkingSlot>> GetSlotsAsync() =>
+        Task.FromResult(_initializer.GetDefaultSlots());
+
+    public Task<List<Vehicle>> GetVehiclesAsync() =>
+        Task.FromResult(_initializer.GetDefaultVehicles());
+
+    public Task<List<Booking>> GetBookingsAsync() =>
+        Task.FromResult(_initializer.GetDefaultBookings());
+
+    public Task<List<ParkingSession>> GetSessionsAsync() =>
+        Task.FromResult(_initializer.GetDefaultSessions());
+
+    public Task<List<User>> GetUsersAsync() =>
+        Task.FromResult(_initializer.GetDefaultUsers());
+
+    public Task<List<MonthlyPass>> GetMonthlyPassesAsync() =>
+        Task.FromResult(_initializer.GetDefaultMonthlyPasses());
+
+    // US07 & US08 (PSang275): Đặt chỗ đỗ xe trực tuyến theo khung giờ & Sinh mã vé QR
+    public async Task<(bool Ok, string Message, Booking? Booking)> CreateBookingAsync(
+        string slotCode,
+        string licensePlate,
+        string vehicleType,
+        string customerName,
+        string? customerPhone,
+        DateTimeOffset startTime,
+        DateTimeOffset endTime)
+    {
+        var res = _initializer.CreateBooking(slotCode, licensePlate, vehicleType, customerName, customerPhone, startTime, endTime);
+        if (res.Ok && res.Booking is not null)
+        {
+            _ = TryPostSupabaseAsync("bookings", new
+            {
+                booking_code = res.Booking.BookingCode,
+                customer_name = res.Booking.CustomerName,
+                customer_phone = res.Booking.CustomerPhone,
+                license_plate = res.Booking.LicensePlate,
+                vehicle_type = res.Booking.VehicleType,
+                slot_id = res.Booking.SlotId,
+                slot_code = res.Booking.SlotCode,
+                start_time = res.Booking.StartTime,
+                end_time = res.Booking.EndTime,
+                status = res.Booking.Status
+            });
+        }
+        return await Task.FromResult(res);
+    }
+
+    // US11 (PSang275): Check-out & tính phí tự động
+    public Task<(bool Ok, string Message, FeeBreakdown? Breakdown)> CalculateCheckoutFeeAsync(
+        string queryCodeOrPlate,
+        double? customDurationHours,
+        double? customOvertimeHours,
+        double? evKwh,
+        int? idleMinutes)
+    {
+        var res = _initializer.CalculateCheckoutFee(queryCodeOrPlate, customDurationHours, customOvertimeHours, evKwh, idleMinutes);
+        return Task.FromResult(res);
+    }
+
+    // US28 (PSang275): Đăng ký & gia hạn gói vé tháng cố định chỗ (khóa trùng ô)
+    public Task<(bool Ok, string Message, MonthlyPass? Pass)> RegisterMonthlyPassAsync(
+        string customerName,
+        string customerPhone,
+        string licensePlate,
+        string vehicleType,
+        string slotCode,
+        int months)
+    {
+        var res = _initializer.RegisterMonthlyPass(customerName, customerPhone, licensePlate, vehicleType, slotCode, months);
+        return Task.FromResult(res);
+    }
+
+    public Task<(bool Ok, string Message, MonthlyPass? Pass)> RenewMonthlyPassAsync(long passId, int addMonths)
+    {
+        var res = _initializer.RenewMonthlyPass(passId, addMonths);
+        return Task.FromResult(res);
+    }
+
+    // US32 (PSang275): Quản lý danh sách tài khoản người dùng & phân quyền 6 vai trò
+    public async Task<(bool Ok, string Message, User? User)> CreateUserAsync(
+        string username,
+        string fullName,
+        string? phone,
+        string? email,
+        string role,
+        string? password)
+    {
+        var res = _initializer.CreateUser(username, fullName, phone, email, role, password);
+        if (res.Ok && res.User is not null)
+        {
+            _ = TryPostSupabaseAsync("app_users", new
+            {
+                username = res.User.Username,
+                password_hash = res.User.PasswordHash,
+                full_name = res.User.FullName,
+                phone = res.User.Phone,
+                email = res.User.Email,
+                role = res.User.Role
+            });
+        }
+        return await Task.FromResult(res);
+    }
+
+    public Task<(bool Ok, string Message, User? User)> UpdateUserRoleAndStatusAsync(
+        long id,
+        string? fullName,
+        string? phone,
+        string? role,
+        string? status)
+    {
+        var res = _initializer.UpdateUserRoleAndStatus(id, fullName, phone, role, status);
+        return Task.FromResult(res);
+    }
+
+    public Task<(bool Ok, string Message)> DeleteUserAsync(long id)
+    {
+        var res = _initializer.DeleteUser(id);
+        return Task.FromResult(res);
+    }
+
+    private async Task TryPostSupabaseAsync(string table, object payload)
     {
         try
         {
-            using var response = await _httpClient.GetAsync(relativeQuery);
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var data = JsonSerializer.Deserialize<List<T>>(json);
-                if (data is not null && data.Count > 0)
-                {
-                    return data;
-                }
-            }
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            await _httpClient.PostAsync(table, content);
         }
         catch
         {
-            // Fallback gracefully to DbInitializer if offline
+            // Ignore remote sync error if offline
         }
-        return fallback();
     }
 
-    public Task<List<ParkingZone>> GetZonesAsync() =>
-        QueryTableAsync("parking_zones?select=*&order=id.asc", _initializer.GetDefaultZones);
-
-    public Task<List<ParkingSlot>> GetSlotsAsync() =>
-        QueryTableAsync("parking_slots?select=*&order=id.asc", _initializer.GetDefaultSlots);
-
-    public Task<List<Vehicle>> GetVehiclesAsync() =>
-        QueryTableAsync("vehicles?select=*&order=id.asc", _initializer.GetDefaultVehicles);
-
-    public Task<List<Booking>> GetBookingsAsync() =>
-        QueryTableAsync<Booking>("bookings?select=*&order=id.desc", () => []);
-
-    public Task<List<ParkingSession>> GetSessionsAsync() =>
-        QueryTableAsync<ParkingSession>("parking_sessions?select=*&order=id.desc", () => []);
-
-    public Task<List<User>> GetUsersAsync() =>
-        QueryTableAsync("app_users?select=*&order=id.asc", _initializer.GetDefaultUsers);
-
-    public async Task<SmartParkingViewModel> BuildViewModelAsync(string activeTab, string pageTitle, string pageSubtitle)
+    public async Task<SmartParkingViewModel> BuildViewModelAsync(string activeTab, string pageTitle, string pageSubtitle, string currentRole = "ADMIN")
     {
-        var zonesTask = GetZonesAsync();
-        var slotsTask = GetSlotsAsync();
-        var vehiclesTask = GetVehiclesAsync();
-        var bookingsTask = GetBookingsAsync();
-        var sessionsTask = GetSessionsAsync();
-        var usersTask = GetUsersAsync();
-
-        await Task.WhenAll(zonesTask, slotsTask, vehiclesTask, bookingsTask, sessionsTask, usersTask);
-
         return new SmartParkingViewModel
         {
             ActiveTab = activeTab,
+            CurrentRole = currentRole,
             PageTitle = pageTitle,
             PageSubtitle = pageSubtitle,
             SupabaseProjectId = SupabaseProjectId,
             SupabaseUrl = SupabaseUrl,
-            Zones = zonesTask.Result,
-            Slots = slotsTask.Result,
-            Vehicles = vehiclesTask.Result,
-            Bookings = bookingsTask.Result,
-            Sessions = sessionsTask.Result,
-            Users = usersTask.Result
+            Zones = await GetZonesAsync(),
+            Slots = await GetSlotsAsync(),
+            Vehicles = await GetVehiclesAsync(),
+            Bookings = await GetBookingsAsync(),
+            Sessions = await GetSessionsAsync(),
+            Users = await GetUsersAsync(),
+            MonthlyPasses = await GetMonthlyPassesAsync()
         };
     }
 }

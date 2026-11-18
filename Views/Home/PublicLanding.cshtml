@@ -7,26 +7,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SmartPark — bãi đỗ xe và trạm sạc VinFast 150 chỗ. Xem sơ đồ chỗ trống thời gian thực, tra cứu bảng giá và quản lý tài khoản.">
-  <title>SmartPark — Đỗ xe thông minh, không lo hết chỗ</title>
+  <meta name="description" content="SmartPark — Hệ thống quản lý bãi đỗ xe thông minh và trạm sạc VinFast 150 chỗ. Xem sơ đồ chỗ trống thời gian thực, đặt chỗ nhận vé QR và đăng ký gói vé tháng cố định chỗ.">
+  <title>SmartPark — Đỗ xe thông minh, đặt chỗ trực tuyến &amp; Vé QR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/public-landing.css" asp-append-version="true">
 </head>
 <body>
-  <a class="skip-link" href="#tim-bai-xe">Bỏ qua tới sơ đồ chỗ trống</a>
+  <a class="skip-link" href="#so-do-bai-xe">Bỏ qua tới sơ đồ 150 vị trí đỗ</a>
 
-  <!-- TOP UTILITY BAR (Phối màu xanh đậm dịu mắt như MedEase) -->
+  <!-- TOP UTILITY BAR -->
   <div class="top-utility">
     <div class="container top-utility-inner">
       <div class="top-utility-left">
         <span><i data-icon="map-pin" data-size="13"></i> Khu Đô Thị Trung Tâm, TP. Hồ Chí Minh</span>
-        <span><i data-icon="clock" data-size="13"></i> Giờ hoạt động: 24/7 (Cả Lễ &amp; Tết)</span>
+        <span><i data-icon="clock" data-size="13"></i> Vận hành 24/7 • Đồng bộ dữ liệu thời gian thực</span>
       </div>
       <div class="top-utility-right">
         <a href="tel:19006868" class="num"><i data-icon="phone" data-size="13"></i> Hotline: 1900 6868</a>
-        <a href="#ho-tro-247">Hỗ trợ &amp; Tư vấn</a>
+        <a href="#ho-tro-247">Hướng dẫn &amp; Hỗ trợ</a>
       </div>
     </div>
   </div>
@@ -43,21 +43,21 @@
       </a>
 
       <nav class="nav-links" aria-label="Điều hướng chính">
-        <a href="#tim-bai-xe">Tìm bãi xe</a>
-        <a href="#cach-thuc-hoat-dong">Cách thức hoạt động</a>
-        <a href="#bang-gia">Bảng giá</a>
+        <a href="#so-do-bai-xe">Sơ đồ 150 chỗ</a>
+        <a href="#goi-ve-thang">Gói vé tháng cố định chỗ</a>
+        <a href="#cach-thuc-hoat-dong">Quy trình đặt chỗ</a>
         <a href="#ho-tro-247">Hỗ trợ 24/7</a>
       </nav>
 
       <div class="nav-actions">
-        <a href="#tim-bai-xe" class="btn btn-emerald" data-action="find-available">
+        <button type="button" class="btn btn-emerald" id="nav-quick-book-btn">
           <i data-icon="calendar" data-size="15"></i> Đặt chỗ ngay
-        </a>
+        </button>
 
         <!-- Khi chưa đăng nhập -->
         <a href="/Account/Login" class="btn btn-outline" id="nav-guest-login">Đăng nhập / Đăng ký</a>
 
-        <!-- Khi đã đăng nhập: Nút Account + Menu Dropdown (Giống mẫu MedEase nhưng đúng nghiệp vụ Bãi xe) -->
+        <!-- Khi đã đăng nhập: Nút Account + Menu Dropdown (US17) -->
         <div class="account-menu-wrap" id="nav-user-wrap" hidden>
           <button type="button" class="account-trigger" id="account-trigger-btn" aria-expanded="false" aria-haspopup="true">
             <i data-icon="user-circle" data-size="17"></i>
@@ -72,20 +72,16 @@
             </div>
             <div class="account-dropdown-list" id="dropdown-menu-items">
               <button type="button" class="account-item" data-menu-action="my-bookings" role="menuitem">
+                <i data-icon="qr-code" data-size="16"></i>
+                <span>Lịch đặt chỗ &amp; Vé QR đã sinh</span>
+              </button>
+              <button type="button" class="account-item" data-menu-action="my-monthly-passes" role="menuitem">
                 <i data-icon="calendar" data-size="16"></i>
-                <span>Lịch đặt chỗ &amp; Vé QR của tôi</span>
-              </button>
-              <button type="button" class="account-item" data-menu-action="my-vehicles" role="menuitem">
-                <i data-icon="car" data-size="16"></i>
-                <span>Phương tiện &amp; Biển số đã lưu</span>
-              </button>
-              <button type="button" class="account-item" data-menu-action="notifications" role="menuitem">
-                <i data-icon="bell" data-size="16"></i>
-                <span>Thông báo &amp; Nhắc giờ đỗ xe</span>
+                <span>Gói vé tháng cố định chỗ</span>
               </button>
               <button type="button" class="account-item" data-menu-action="profile" role="menuitem">
                 <i data-icon="id-card" data-size="16"></i>
-                <span>Hồ sơ cá nhân</span>
+                <span>Hồ sơ tài khoản</span>
               </button>
             </div>
             <div class="account-dropdown-foot">
@@ -111,34 +107,34 @@
   </div>
 
   <main>
-    <!-- 2. HERO (Nền xanh rừng đậm dịu mắt phối trắng & xanh ngọc lục bảo) -->
+    <!-- 2. HERO (Royal Navy Blue + White + Slate Ink) -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">BÃI ĐỖ XE &amp; TRẠM SẠC VINFAST • <span class="num">150</span> CHỖ</p>
-          <h1 id="hero-title">Đỗ xe thông minh, đặt chỗ trước chỉ trong 30 giây</h1>
-          <p class="lead">Xem chỗ trống theo từng ô, đặt lịch theo biển số và nhận vé QR ngay trên điện thoại. Đến bãi chỉ cần đưa mã cho nhân viên quét.</p>
+          <p class="eyebrow">BÃI ĐỖ XE &amp; TRẠM SẠC VINFAST • <span class="num">150</span> VỊ TRÍ ĐỖ</p>
+          <h1 id="hero-title">Đặt chỗ đỗ xe trực tuyến, nhận vé QR chỉ trong 30 giây</h1>
+          <p class="lead">Theo dõi trực tiếp sơ đồ 150 ô đỗ thuộc 4 phân khu chuyên biệt, đặt giữ chỗ theo khung giờ chống trùng lịch và đăng ký gói vé tháng khóa ô cố định.</p>
 
           <dl class="hero-stats">
             <div class="hero-stat">
               <dt><i data-icon="square-parking"></i> Chỗ trống</dt>
-              <dd><span class="num" id="hero-available">52</span> <span class="unit">chỗ trống</span></dd>
+              <dd><span class="num" id="hero-available">52</span> <span class="unit">ô sẵn sàng</span></dd>
             </div>
             <div class="hero-stat">
               <dt><i data-icon="plug-zap"></i> Trạm sạc</dt>
               <dd><span class="num">12</span> <span class="unit">trụ sạc EV</span></dd>
             </div>
             <div class="hero-stat">
-              <dt><i data-icon="qr-code"></i> Vào bãi</dt>
-              <dd><span class="num">QR</span> <span class="unit">Check-in</span></dd>
+              <dt><i data-icon="qr-code"></i> Vé điện tử</dt>
+              <dd><span class="num">QR</span> <span class="unit">Định danh</span></dd>
             </div>
           </dl>
 
           <div class="hero-actions">
-            <a href="#tim-bai-xe" class="btn btn-emerald btn-lg" data-action="find-available">
-              Tìm chỗ trống ngay <i data-icon="arrow-right"></i>
+            <a href="#so-do-bai-xe" class="btn btn-emerald btn-lg">
+              Chọn ô đặt chỗ ngay <i data-icon="arrow-right"></i>
             </a>
-            <a href="#bang-gia" class="btn btn-hero-ghost btn-lg">Xem bảng giá</a>
+            <a href="#goi-ve-thang" class="btn btn-hero-ghost btn-lg">Đăng ký gói vé tháng</a>
           </div>
         </div>
 
@@ -155,25 +151,18 @@
       </div>
     </section>
 
-    <!-- 3. 01 / BẢN ĐỒ CHỖ TRỐNG -->
-    <section id="tim-bai-xe" class="section" aria-labelledby="map-title">
+    <!-- 3. 01 / SƠ ĐỒ BÃI XE 150 CHỖ THỜI GIAN THỰC (US02) & ĐẶT CHỖ TRỰC TUYẾN (US07-US08) -->
+    <section id="so-do-bai-xe" class="section" aria-labelledby="map-title">
       <div class="container">
         <div class="section-head">
           <div class="section-title">
-            <p class="section-index">01 / BẢN ĐỒ CHỖ TRỐNG THỜI GIAN THỰC</p>
-            <h2 id="map-title">Sơ đồ 150 ô đỗ theo 4 phân khu</h2>
-            <p class="section-desc">Bấm vào từng ô trên sơ đồ để xem chi tiết mã ô, khu vực, loại xe, đơn giá và trạng thái hiện tại.</p>
-          </div>
-          <div class="status-tabs" role="group" aria-label="Lọc theo trạng thái">
-            <button type="button" class="tab is-active" data-status="ALL" aria-pressed="true">Tất cả <span class="num" data-count="ALL">150</span></button>
-            <button type="button" class="tab" data-status="AVAILABLE" aria-pressed="false"><i class="dot dot-available"></i>Còn trống <span class="num" data-count="AVAILABLE">52</span></button>
-            <button type="button" class="tab" data-status="OCCUPIED" aria-pressed="false"><i class="dot dot-occupied"></i>Đang đỗ <span class="num" data-count="OCCUPIED">75</span></button>
-            <button type="button" class="tab" data-status="CHARGING" aria-pressed="false"><i class="dot dot-charging"></i>Đang sạc <span class="num" data-count="CHARGING">12</span></button>
-            <button type="button" class="tab" data-status="RESERVED" aria-pressed="false"><i class="dot dot-reserved"></i>Đã đặt trước <span class="num" data-count="RESERVED">11</span></button>
+            <p class="section-index">01 / SƠ ĐỒ BÃI XE THỜI GIAN THỰC</p>
+            <h2 id="map-title">Sơ đồ 150 vị trí đỗ theo 4 phân khu (EV, NT, TH, VIP)</h2>
+            <p class="section-desc">Bấm vào bất kỳ ô màu xanh lá (Còn trống) trên sơ đồ để đặt chỗ trực tuyến theo khung giờ dự kiến và nhận mã vé QR ngay lập tức.</p>
           </div>
         </div>
 
-        <!-- 4 thẻ phân khu -->
+        <!-- 4 thẻ tổng quan phân khu -->
         <div class="zone-grid">
           <article class="zone-card" data-zone-card="EV">
             <div class="zone-card-head">
@@ -185,14 +174,9 @@
             <ul class="zone-specs">
               <li><i data-icon="car"></i><span><span class="num">12</span> Ô tô điện <span class="code">EV-O01..O12</span></span></li>
               <li><i data-icon="bike"></i><span><span class="num">25</span> Xe máy điện <span class="code">EV-X01..X25</span></span></li>
-              <li><i data-icon="plug-zap"></i><span>Trụ sạc VinFast, vách ngăn PCCC</span></li>
+              <li><i data-icon="plug-zap"></i><span>12 trụ sạc VinFast, vách ngăn PCCC</span></li>
             </ul>
-            <div class="zone-price">
-              <span class="zone-price-label">Giá</span>
-              <span class="zone-price-value num">20.000đ/giờ + 4.500đ/kWh</span>
-            </div>
             <div class="meter" aria-hidden="true"><span data-zone-meter="EV"></span></div>
-            <button type="button" class="btn btn-outline btn-block" data-zone-pick="EV">Xem ô trống khu này</button>
           </article>
 
           <article class="zone-card" data-zone-card="NT">
@@ -205,14 +189,9 @@
             <ul class="zone-specs">
               <li><i data-icon="car"></i><span><span class="num">20</span> Ô tô xăng <span class="code">NT-O01..O20</span></span></li>
               <li><i data-icon="bike"></i><span><span class="num">45</span> Xe máy xăng <span class="code">NT-X01..X45</span></span></li>
-              <li><i data-icon="sun"></i><span>Bãi mặt đất, gần lối ra đường chính</span></li>
+              <li><i data-icon="sun"></i><span>Bãi mặt đất thoáng rộng sát lối ra chính</span></li>
             </ul>
-            <div class="zone-price">
-              <span class="zone-price-label">Giá</span>
-              <span class="zone-price-value num">Ô tô 15.000đ/giờ | Xe máy 5.000đ/4h</span>
-            </div>
             <div class="meter" aria-hidden="true"><span data-zone-meter="NT"></span></div>
-            <button type="button" class="btn btn-outline btn-block" data-zone-pick="NT">Xem ô trống khu này</button>
           </article>
 
           <article class="zone-card" data-zone-card="TH">
@@ -225,14 +204,9 @@
             <ul class="zone-specs">
               <li><i data-icon="car"></i><span><span class="num">10</span> Ô tô xăng <span class="code">TH-O01..O10</span></span></li>
               <li><i data-icon="bike"></i><span><span class="num">30</span> Xe máy xăng <span class="code">TH-X01..X30</span></span></li>
-              <li class="spec-warn"><i data-icon="flame"></i><span>Chỉ nhận xe xăng</span></li>
+              <li class="spec-warn"><i data-icon="flame"></i><span>An toàn PCCC: Chỉ nhận xe xăng</span></li>
             </ul>
-            <div class="zone-price">
-              <span class="zone-price-label">Giá</span>
-              <span class="zone-price-value num">Ô tô 20.000đ/giờ</span>
-            </div>
             <div class="meter" aria-hidden="true"><span data-zone-meter="TH"></span></div>
-            <button type="button" class="btn btn-outline btn-block" data-zone-pick="TH">Xem ô trống khu này</button>
           </article>
 
           <article class="zone-card" data-zone-card="VIP">
@@ -244,64 +218,19 @@
             <p class="zone-capacity"><span class="num">8</span> chỗ</p>
             <ul class="zone-specs">
               <li><i data-icon="car"></i><span><span class="num">8</span> Ô tô xăng <span class="code">VIP-O01..O08</span></span></li>
-              <li><i data-icon="warehouse"></i><span>Có mái che, sát cổng ra vào</span></li>
-              <li><i data-icon="calendar"></i><span>Bắt buộc đặt trước</span></li>
+              <li><i data-icon="warehouse"></i><span>Có mái che riêng sát cổng kiểm soát</span></li>
+              <li><i data-icon="calendar"></i><span>Ưu tiên đặt lịch trực tuyến</span></li>
             </ul>
-            <div class="zone-price">
-              <span class="zone-price-label">Giá</span>
-              <span class="zone-price-value num">30.000đ/giờ</span>
-            </div>
             <div class="meter" aria-hidden="true"><span data-zone-meter="VIP"></span></div>
-            <button type="button" class="btn btn-outline btn-block" data-zone-pick="VIP">Xem ô trống khu này</button>
           </article>
         </div>
 
-        <!-- Thanh công cụ lọc -->
-        <div class="toolbar" role="search" aria-label="Lọc ô đỗ">
-          <label class="field field-search">
-            <span class="sr-only">Tìm mã ô</span>
-            <i data-icon="search"></i>
-            <input type="search" id="filter-code" placeholder="Tìm mã ô (VD: EV-O03)" autocomplete="off" spellcheck="false">
-          </label>
-          <label class="field">
-            <span class="sr-only">Khu vực</span>
-            <select id="filter-zone">
-              <option value="ALL">Tất cả khu vực</option>
-              <option value="EV">Zone EV — Khu Xe Điện</option>
-              <option value="NT">Zone NT — Ngoài Trời</option>
-              <option value="TH">Zone TH — Tầng Hầm B1</option>
-              <option value="VIP">Zone VIP — Mái Che</option>
-            </select>
-          </label>
-          <label class="field">
-            <span class="sr-only">Loại xe</span>
-            <select id="filter-vehicle">
-              <option value="ALL">Tất cả loại xe</option>
-              <option value="GAS_CAR">Ô tô xăng</option>
-              <option value="GAS_BIKE">Xe máy xăng</option>
-              <option value="EV_CAR">Ô tô điện</option>
-              <option value="EV_BIKE">Xe máy điện</option>
-            </select>
-          </label>
-          <label class="switch">
-            <input type="checkbox" id="filter-available" role="switch">
-            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
-            <span>Chỉ hiện ô trống</span>
-          </label>
-        </div>
-
-        <div class="notice notice-warn" id="pccc-notice" role="status" hidden>
-          <i data-icon="flame"></i>
-          <p><strong>Tầng hầm B1 không nhận xe điện.</strong> Theo quy định PCCC, các ô tại Zone TH đã được khóa với loại xe bạn chọn. Vui lòng chọn ô tại Zone EV.</p>
-        </div>
-
         <div class="map-meta">
-          <ul class="legend" aria-label="Chú thích trạng thái">
-            <li><i class="dot dot-available"></i>Còn trống</li>
+          <ul class="legend" aria-label="Chú thích trạng thái ô đỗ">
+            <li><i class="dot dot-available"></i>Còn trống (Bấm để đặt chỗ)</li>
             <li><i class="dot dot-occupied"></i>Đang đỗ</li>
-            <li><i class="dot dot-charging"></i>Đang sạc</li>
-            <li><i class="dot dot-reserved"></i>Đã đặt trước</li>
-            <li><i data-icon="lock" data-size="13"></i>Khóa theo PCCC</li>
+            <li><i class="dot dot-charging"></i>Đang sạc EV</li>
+            <li><i class="dot dot-reserved"></i>Đã đặt trước / Cố định tháng</li>
           </ul>
           <p class="map-result" id="map-result" aria-live="polite"></p>
         </div>
@@ -311,72 +240,114 @@
       </div>
     </section>
 
-    <!-- 4. 02 / BẢNG GIÁ -->
-    <section id="bang-gia" class="section section-subtle" aria-labelledby="pricing-title">
+    <!-- 4. 02 / ĐĂNG KÝ & GIA HẠN GÓI VÉ THÁNG CỐ ĐỊNH CHỖ (US28) -->
+    <section id="goi-ve-thang" class="section section-subtle" aria-labelledby="monthly-title">
       <div class="container">
         <div class="section-head">
           <div class="section-title">
-            <p class="section-index">02 / BẢNG GIÁ &amp; GÓI VÉ THÁNG</p>
-            <h2 id="pricing-title">Gửi theo giờ hoặc giữ chỗ cố định theo tháng</h2>
-            <p class="section-desc">Giá niêm yết đã gồm VAT. Mọi quy định phụ phí được công khai minh bạch.</p>
+            <p class="section-index">02 / GÓI VÉ THÁNG CỐ ĐỊNH CHỖ</p>
+            <h2 id="monthly-title">Đăng ký &amp; Gia hạn gói vé tháng khóa riêng một vị trí đỗ</h2>
+            <p class="section-desc">Ưu đãi kỳ hạn 1 – 3 – 6 – 12 tháng (giảm đến 15%). Hệ thống tự động kiểm tra khóa trùng ô và quy định an toàn PCCC tầng hầm B1.</p>
           </div>
         </div>
 
-        <div class="pricing-grid">
+        <div class="mp-layout">
+          <!-- Form đăng ký gói vé tháng cố định chỗ -->
           <div class="panel">
             <div class="panel-head">
               <div>
-                <h3>Gửi theo giờ</h3>
-                <p>Tính theo thời gian đỗ thực tế, làm tròn lên theo block.</p>
-              </div>
-              <i data-icon="clock" data-size="20"></i>
-            </div>
-            <div class="table-wrap">
-              <table class="price-table">
-                <thead>
-                  <tr><th scope="col">Khu vực</th><th scope="col">Loại xe</th><th scope="col" class="t-right">Đơn giá</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><span class="zone-tag zone-tag-ev">EV</span></td><td>Ô tô điện</td><td class="t-right num">20.000đ/giờ <span class="sub">+ 4.500đ/kWh</span></td></tr>
-                  <tr><td><span class="zone-tag zone-tag-ev">EV</span></td><td>Xe máy điện</td><td class="t-right num">5.000đ/4h <span class="sub">+ 4.500đ/kWh</span></td></tr>
-                  <tr><td><span class="zone-tag zone-tag-nt">NT</span></td><td>Ô tô xăng</td><td class="t-right num">15.000đ/giờ</td></tr>
-                  <tr><td><span class="zone-tag zone-tag-nt">NT</span></td><td>Xe máy xăng</td><td class="t-right num">5.000đ/4h</td></tr>
-                  <tr><td><span class="zone-tag zone-tag-th">TH</span></td><td>Ô tô xăng</td><td class="t-right num">20.000đ/giờ</td></tr>
-                  <tr><td><span class="zone-tag zone-tag-th">TH</span></td><td>Xe máy xăng</td><td class="t-right num">5.000đ/4h</td></tr>
-                  <tr><td><span class="zone-tag zone-tag-vip">VIP</span></td><td>Ô tô xăng <span class="sub">Bắt buộc đặt trước</span></td><td class="t-right num">30.000đ/giờ</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <ul class="rule-list">
-              <li><i data-icon="plug-zap"></i><span><strong>Phí chiếm trụ sạc <span class="num">1.000đ/phút</span></strong> — áp dụng khi xe vẫn chiếm trụ quá 10 phút sau khi đã sạc đầy.</span></li>
-              <li><i data-icon="clock"></i><span><strong>Ân hạn 15 phút</strong> sau giờ ra đã đặt. Quá thời gian ân hạn, phần vượt tính <span class="num">1.5x</span> đơn giá.</span></li>
-            </ul>
-          </div>
-
-          <div class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Vé tháng cố định chỗ</h3>
-                <p>Giữ riêng một ô đỗ, ra vào không giới hạn bằng vé QR.</p>
+                <h3>Đăng ký gói vé tháng cố định chỗ mới</h3>
+                <p>Chọn kỳ hạn, phân khu và vị trí ô trống muốn khóa cố định theo biển số xe.</p>
               </div>
               <i data-icon="calendar" data-size="20"></i>
             </div>
-            <div class="segmented" role="group" aria-label="Chọn kỳ hạn">
+
+            <div class="segmented" role="group" aria-label="Chọn kỳ hạn vé tháng" id="mp-term-tabs">
               <button type="button" class="seg is-active" data-months="1" aria-pressed="true">1 tháng</button>
-              <button type="button" class="seg" data-months="3" aria-pressed="false">3 tháng <span class="seg-off">−5%</span></button>
-              <button type="button" class="seg" data-months="6" aria-pressed="false">6 tháng <span class="seg-off">−10%</span></button>
-              <button type="button" class="seg" data-months="12" aria-pressed="false">12 tháng <span class="seg-off">−15%</span></button>
+              <button type="button" class="seg" data-months="3" aria-pressed="false">3 tháng <span class="seg-off">-5%</span></button>
+              <button type="button" class="seg" data-months="6" aria-pressed="false">6 tháng <span class="seg-off">-10%</span></button>
+              <button type="button" class="seg" data-months="12" aria-pressed="false">12 tháng <span class="seg-off">-15%</span></button>
             </div>
-            <div class="table-wrap">
-              <table class="price-table">
-                <thead>
-                  <tr><th scope="col">Gói cố định chỗ</th><th scope="col" class="t-right">Giá/tháng</th><th scope="col" class="t-right" id="monthly-total-head">Tổng 1 tháng</th></tr>
-                </thead>
-                <tbody id="monthly-body"></tbody>
-              </table>
+
+            <form id="mp-register-form" class="sp-form" novalidate>
+              <div class="sp-field-grid">
+                <div class="sp-field">
+                  <label class="sp-label" for="mp-zone">Phân khu đăng ký *</label>
+                  <select id="mp-zone" class="sp-select">
+                    <option value="EV">Zone EV — Khu Xe Điện (37 ô)</option>
+                    <option value="NT" selected>Zone NT — Khu Ngoài Trời (65 ô)</option>
+                    <option value="TH">Zone TH — Tầng Hầm B1 (40 ô)</option>
+                    <option value="VIP">Zone VIP — Khu VIP Mái Che (8 ô)</option>
+                  </select>
+                </div>
+
+                <div class="sp-field">
+                  <label class="sp-label" for="mp-vehicle-type">Loại phương tiện *</label>
+                  <select id="mp-vehicle-type" class="sp-select">
+                    <option value="GAS_CAR" selected>Ô tô xăng</option>
+                    <option value="GAS_BIKE">Xe máy xăng</option>
+                    <option value="EV_CAR">Ô tô điện</option>
+                    <option value="EV_BIKE">Xe máy điện</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="sp-pccc-alert" id="mp-pccc-warning" role="alert" hidden>
+                <i data-icon="flame" data-size="18"></i>
+                <span><strong>Khóa an toàn PCCC:</strong> Tầng hầm B1 (Zone TH) chỉ nhận xe xăng, không nhận đăng ký vé tháng cho xe điện. Vui lòng chuyển sang Zone EV.</span>
+              </div>
+
+              <div class="sp-field-grid">
+                <div class="sp-field">
+                  <label class="sp-label" for="mp-slot-select">Chọn ô cố định còn trống (Chống trùng ô) *</label>
+                  <select id="mp-slot-select" class="sp-select num" required></select>
+                  <span class="sp-hint" id="mp-slot-hint">Chỉ các ô đang trống mới được phép khóa cố định.</span>
+                </div>
+
+                <div class="sp-field">
+                  <label class="sp-label" for="mp-plate">Biển số xe đăng ký cố định *</label>
+                  <input type="text" id="mp-plate" class="sp-input num" placeholder="VD: 51K-868.88" required autocomplete="off">
+                </div>
+              </div>
+
+              <div class="sp-field-grid">
+                <div class="sp-field">
+                  <label class="sp-label" for="mp-customer-name">Họ và tên chủ xe *</label>
+                  <input type="text" id="mp-customer-name" class="sp-input" value="Phạm Minh Khách" required>
+                </div>
+
+                <div class="sp-field">
+                  <label class="sp-label" for="mp-customer-phone">Số điện thoại liên hệ *</label>
+                  <input type="tel" id="mp-customer-phone" class="sp-input num" value="0906789012" required>
+                </div>
+              </div>
+
+              <div class="mp-price-banner">
+                <div>
+                  <div class="mp-price-label" id="mp-price-formula">Đơn giá cơ bản: 1.200.000đ/tháng × 1 tháng</div>
+                  <div class="mp-price-total num" id="mp-price-total">1.200.000đ</div>
+                </div>
+                <span class="mp-discount-tag num" id="mp-discount-badge">Ưu đãi 0%</span>
+              </div>
+
+              <button type="submit" class="btn btn-emerald btn-block" id="mp-submit-btn">
+                <i data-icon="ticket" data-size="16"></i>
+                <span>Đăng ký Vé tháng &amp; Khóa ô cố định</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Danh sách Gói vé tháng cố định chỗ CỦA RIÊNG TÀI KHOẢN ĐANG ĐĂNG NHẬP -->
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Gói vé tháng cố định chỗ của tôi</h3>
+                <p>Xem thẻ vé QR định danh và gia hạn gói vé tháng thuộc tài khoản của bạn.</p>
+              </div>
+              <i data-icon="qr-code" data-size="20"></i>
             </div>
-            <p class="fine">Vé tháng xe điện chưa gồm điện sạc (4.500đ/kWh). Phí chiếm trụ sạc vẫn áp dụng.</p>
-            <a href="/Account/Login" class="btn btn-emerald btn-block" id="monthly-cta-btn">Đăng nhập để đăng ký vé tháng</a>
+
+            <div class="mp-list" id="mp-active-list"></div>
           </div>
         </div>
       </div>
@@ -387,34 +358,34 @@
       <div class="container">
         <div class="section-head">
           <div class="section-title">
-            <p class="section-index">03 / CÁCH THỨC HOẠT ĐỘNG</p>
-            <h2 id="how-title">4 bước từ đặt chỗ đến lấy xe</h2>
+            <p class="section-index">03 / QUY TRÌNH ĐẶT CHỖ &amp; VÉ QR</p>
+            <h2 id="how-title">4 bước từ chọn ô trống đến kiểm soát cổng</h2>
           </div>
         </div>
         <ol class="steps">
           <li class="step">
             <span class="step-num num">1</span>
             <i data-icon="map-pin" data-size="20"></i>
-            <h3>Chọn ô trống</h3>
-            <p>Lọc theo khu vực và loại xe trên sơ đồ 150 ô, chọn một ô màu xanh.</p>
+            <h3>Chọn vị trí ô trống</h3>
+            <p>Quan sát sơ đồ 150 ô thuộc 4 phân khu (EV, NT, TH, VIP) và bấm vào một ô màu xanh lá.</p>
           </li>
           <li class="step">
             <span class="step-num num">2</span>
             <i data-icon="calendar" data-size="20"></i>
-            <h3>Đặt lịch theo biển số</h3>
-            <p>Nhập biển số, giờ vào và giờ ra. Tạm tính hiển thị trước khi xác nhận.</p>
+            <h3>Đặt khung giờ chống trùng lịch</h3>
+            <p>Nhập biển số xe, khung giờ vào/ra dự kiến. Hệ thống tự động kiểm tra chống trùng lịch và khóa PCCC tầng hầm B1.</p>
           </li>
           <li class="step">
             <span class="step-num num">3</span>
             <i data-icon="qr-code" data-size="20"></i>
-            <h3>Nhận vé QR</h3>
-            <p>Vé QR hiện ngay sau khi đặt. Lưu lại hoặc chụp màn hình để dùng khi vào bãi.</p>
+            <h3>Sinh mã vé QR định danh</h3>
+            <p>Mã vé QR định danh duy nhất được sinh tức thì trên trình duyệt ngay sau khi xác nhận đặt chỗ.</p>
           </li>
           <li class="step">
             <span class="step-num num">4</span>
             <i data-icon="ticket" data-size="20"></i>
-            <h3>Quét vé khi vào và ra</h3>
-            <p>Nhân viên quét vé, đối chiếu biển số. Thanh toán theo thời gian thực tế khi lấy xe.</p>
+            <h3>Quét Camera QR &amp; Tính phí tự động</h3>
+            <p>Tại cổng kiểm soát, camera quét mã QR và hệ thống tự động tính phí theo đơn giá khu, phụ phí quá giờ 1.5x và điện sạc EV.</p>
           </li>
         </ol>
       </div>
@@ -426,7 +397,7 @@
         <div>
           <p class="section-index">04 / HỖ TRỢ 24/7</p>
           <h2 id="support-title">Cần hỗ trợ khi đang ở bãi?</h2>
-          <p class="section-desc">Nhân viên trực tại cổng và qua hotline suốt 24 giờ.</p>
+          <p class="section-desc">Đội ngũ trực cổng và kỹ thuật trạm sạc hỗ trợ suốt 24 giờ.</p>
 
           <div class="panel hotline">
             <i data-icon="phone" data-size="20"></i>
@@ -439,24 +410,16 @@
 
         <div class="faq">
           <details open>
-            <summary>Đến muộn hơn giờ đã đặt thì sao? <i data-icon="chevron-down"></i></summary>
-            <p>Ô được giữ thêm 15 phút sau giờ vào. Quá 15 phút chưa check-in, lịch đặt tự hủy và ô được mở lại cho khách khác.</p>
+            <summary>Xe điện có được đặt chỗ dưới Tầng hầm B1 không? <i data-icon="chevron-down"></i></summary>
+            <p>Không. Theo quy định an toàn PCCC, Tầng hầm B1 (Zone TH) chỉ nhận phương tiện chạy xăng. Ô tô điện và xe máy điện đặt chỗ tại Zone EV có vách ngăn PCCC và 12 trụ sạc VinFast riêng.</p>
           </details>
           <details>
-            <summary>Lấy xe trễ hơn giờ ra đã đặt tính phí thế nào? <i data-icon="chevron-down"></i></summary>
-            <p>Bạn có 15 phút ân hạn. Sau đó, thời gian vượt được tính bằng 1.5 lần đơn giá của khu vực đang gửi.</p>
+            <summary>Gói vé tháng cố định chỗ có bị người khác đặt trùng không? <i data-icon="chevron-down"></i></summary>
+            <p>Không. Khi bạn đăng ký gói vé tháng (1, 3, 6 hoặc 12 tháng), vị trí ô đỗ đó được khóa cố định theo biển số xe của bạn trong suốt kỳ hạn hiệu lực.</p>
           </details>
           <details>
-            <summary>Xe điện có được gửi ở tầng hầm không? <i data-icon="chevron-down"></i></summary>
-            <p>Không. Theo quy định PCCC, Tầng hầm B1 chỉ nhận xe xăng. Ô tô điện và xe máy điện gửi tại Zone EV, có vách ngăn chống cháy và trụ sạc riêng.</p>
-          </details>
-          <details>
-            <summary>Phí chiếm trụ sạc được tính khi nào? <i data-icon="chevron-down"></i></summary>
-            <p>Khi xe đã sạc đầy nhưng vẫn chiếm trụ quá 10 phút, mỗi phút tiếp theo tính 1.000đ. Điện sạc tính riêng 4.500đ/kWh theo đồng hồ của trụ.</p>
-          </details>
-          <details>
-            <summary>Hủy đặt chỗ có mất phí không? <i data-icon="chevron-down"></i></summary>
-            <p>Không mất phí nếu hủy trước giờ vào đã đặt. Gọi hotline 1900 6868 và cung cấp mã vé để hủy.</p>
+            <summary>Lấy xe trễ hơn khung giờ đã đặt tính phí thế nào? <i data-icon="chevron-down"></i></summary>
+            <p>Hệ thống miễn phí 15 phút ân hạn đầu tiên. Phần thời gian vượt sau 15 phút ân hạn được tính phụ phí bằng 1.5 lần đơn giá của phân khu đang đỗ.</p>
           </details>
         </div>
       </div>
@@ -473,50 +436,45 @@
             <span class="brand-tagline">Đỗ xe thông minh, không lo hết chỗ</span>
           </span>
         </a>
-        <p class="footer-note">Bãi đỗ xe &amp; trạm sạc VinFast, 150 chỗ. Mở cửa 24/7.</p>
+        <p class="footer-note">Hệ thống quản lý bãi đỗ xe &amp; trạm sạc VinFast 150 chỗ. Vận hành 24/7.</p>
       </div>
       <div>
-        <h4>Dịch vụ</h4>
+        <h4>Chức năng</h4>
         <ul>
-          <li><a href="#tim-bai-xe">Sơ đồ chỗ trống</a></li>
-          <li><a href="#bang-gia">Bảng giá &amp; vé tháng</a></li>
-          <li><a href="#cach-thuc-hoat-dong">Cách thức hoạt động</a></li>
+          <li><a href="#so-do-bai-xe">Sơ đồ 150 vị trí đỗ</a></li>
+          <li><a href="#goi-ve-thang">Gói vé tháng cố định chỗ</a></li>
+          <li><a href="#cach-thuc-hoat-dong">Quy trình đặt chỗ QR</a></li>
         </ul>
       </div>
       <div>
-        <h4>Chính sách</h4>
+        <h4>Quy định an toàn</h4>
         <ul>
-          <li><a href="#ho-tro-247">Hủy đặt chỗ</a></li>
-          <li><a href="#ho-tro-247">Bảo mật thông tin biển số</a></li>
-          <li><a href="#ho-tro-247">Quy định PCCC xe điện</a></li>
+          <li><a href="#ho-tro-247">Khóa an toàn PCCC tầng hầm B1</a></li>
+          <li><a href="#ho-tro-247">Chống trùng lịch &amp; khóa trùng ô</a></li>
         </ul>
       </div>
       <div>
-        <h4>Hỗ trợ khách hàng</h4>
+        <h4>Liên hệ</h4>
         <ul>
           <li><a href="tel:19006868">Hotline: 1900 6868</a></li>
-          <li><a href="#ho-tro-247">Câu hỏi thường gặp</a></li>
+          <li><a href="/Account/Login">Cổng đăng nhập 6 vai trò</a></li>
         </ul>
       </div>
     </div>
     <div class="container footer-bottom">
       <span>© 2026 SmartPark — Nguyễn Phước Sang, Võ Việt Thắng, Đoàn Tiến Đạt.</span>
-      <span class="footer-social">
-        <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://zalo.me" target="_blank" rel="noopener">Zalo</a>
-      </span>
     </div>
   </footer>
 
-  <!-- MODAL XEM CHI TIẾT Ô ĐỖ / TÀI KHOẢN (Gọn trong phạm vi Sprint 1 của PSang275) -->
+  <!-- MODAL ĐẶT CHỖ TRỰC TUYẾN & VÉ QR (US07, US08, US28) -->
   <dialog id="info-dialog" class="dialog" aria-labelledby="info-dialog-title">
     <div class="dialog-inner">
       <header class="dialog-head">
         <div>
-          <p class="section-index" id="info-dialog-kicker">THÔNG TIN Ô ĐỖ</p>
-          <h3 id="info-dialog-title">Chi tiết ô đỗ</h3>
+          <p class="section-index" id="info-dialog-kicker">ĐẶT CHỖ TRỰC TUYẾN</p>
+          <h3 id="info-dialog-title">Chi tiết đặt chỗ</h3>
         </div>
-        <button type="button" class="icon-btn" data-close aria-label="Đóng"><i data-icon="x" data-size="18"></i></button>
+        <button type="button" class="icon-btn" data-close aria-label="Đóng hộp thoại"><i data-icon="x" data-size="18"></i></button>
       </header>
       <div class="dialog-body" id="info-dialog-body"></div>
       <footer class="dialog-foot">
@@ -527,6 +485,7 @@
 
   <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="/js/public-landing.js" asp-append-version="true"></script>
 </body>
 </html>
