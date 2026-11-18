@@ -1,0 +1,964 @@
+@model SmartParking_management.Models.ViewModels.SmartParkingViewModel
+@using System.Text.Json
+@{
+    Layout = null;
+    var gateJson = JsonSerializer.Serialize(new
+    {
+        zones = Model.Zones,
+        slots = Model.Slots,
+        bookings = Model.Bookings,
+        sessions = Model.Sessions
+    });
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trạm Kiểm Soát Cổng — Quét Camera QR &amp; Tính Phí Check-out Tự Động | SmartPark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --navy-950: #08172E;
+      --navy-900: #0D2549;
+      --navy-800: #16396D;
+      --blue-600: #2563EB;
+      --blue-700: #1D4ED8;
+      --blue-50: #EFF6FF;
+      --blue-100: #DBEAFE;
+      --blue-border: #BFDBFE;
+      --bg: #F3F6FB;
+      --surface: #FFFFFF;
+      --subtle: #E9EFF8;
+      --border: #CBD5E1;
+      --border-strong: #94A3B8;
+      --text: #0F172A;
+      --text-2: #334155;
+      --text-3: #64748B;
+      --success: #047857;
+      --success-bg: #ECFDF5;
+      --success-border: #A7F3D0;
+      --warn: #B45309;
+      --warn-bg: #FFFBEB;
+      --warn-border: #FDE68A;
+      --danger: #B91C1C;
+      --danger-bg: #FEF2F2;
+      --danger-border: #FECACA;
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .num, input[type="number"], table td { font-variant-numeric: tabular-nums; }
+    :focus-visible { outline: 2px solid var(--blue-600); outline-offset: 2px; }
+
+    /* Top Gate Terminal Bar */
+    .gate-topbar {
+      background: var(--navy-950);
+      color: #FFFFFF;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .gate-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .gate-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--blue-600);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 17px;
+    }
+    .gate-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .gate-sub {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .gate-telemetry-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    }
+
+    .gate-user-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .staff-pill {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-logout {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.16s ease;
+    }
+    .btn-logout:hover { background: rgba(255, 255, 255, 0.12); }
+
+    /* Main 2-Column Gate Console */
+    .gate-console {
+      max-width: 1380px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 28px 40px;
+      display: grid;
+      grid-template-columns: 480px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .console-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(8, 23, 46, 0.04);
+    }
+    .console-card-head {
+      background: var(--navy-900);
+      color: #FFFFFF;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .console-card-head h2 {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .role-chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #DBEAFE;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+    .console-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Camera QR Viewfinder (US21) */
+    .camera-stage {
+      background: var(--navy-950);
+      border: 1px solid var(--navy-800);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.78);
+    }
+    .camera-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .camera-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scan-reticle {
+      width: 180px;
+      height: 180px;
+      border: 2px solid rgba(59, 130, 246, 0.85);
+      border-radius: 14px;
+      box-shadow: 0 0 0 999px rgba(8, 23, 46, 0.38);
+      position: relative;
+    }
+    .camera-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+    }
+    .camera-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Form Controls (44px min touch target) */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .field-input, .field-select {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-family: var(--font);
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .field-input:focus, .field-select:focus {
+      outline: none;
+      border-color: var(--blue-600);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .btn {
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-family: var(--font);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.14s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--blue-600);
+      color: #FFFFFF;
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--blue-700); }
+    .btn-navy {
+      background: var(--navy-900);
+      color: #FFFFFF;
+    }
+    .btn-navy:hover:not(:disabled) { background: var(--navy-800); }
+    .btn-outline {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--border-strong);
+    }
+
+    .backup-input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    /* Active Vehicles List for Quick Camera / Token Test */
+    .active-session-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .session-pick-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .session-pick-btn:hover, .session-pick-btn.is-active {
+      border-color: var(--blue-600);
+      background: var(--blue-50);
+    }
+    .plate-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: var(--navy-950);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .zone-pill {
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* Right Column: Automated Checkout Fee Engine (US11) */
+    .fee-engine-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .fee-summary-banner {
+      background: var(--navy-950);
+      color: #FFFFFF;
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .fee-total-label {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.72);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .fee-total-amount {
+      font-size: 28px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+    .fee-vehicle-card {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--blue-border);
+      background: var(--blue-50);
+      border-radius: var(--radius);
+      align-items: center;
+    }
+    .qr-preview-box {
+      width: 108px;
+      height: 108px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-preview-box svg { width: 100%; height: 100%; }
+
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .breakdown-table th {
+      background: var(--subtle);
+      color: var(--text-2);
+      font-weight: 700;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .breakdown-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .breakdown-table tr.row-total td {
+      background: var(--blue-50);
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--navy-900);
+      border-top: 2px solid var(--blue-600);
+    }
+    .t-right { text-align: right; }
+
+    .status-banner {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-banner.is-info {
+      background: var(--blue-50);
+      border-color: var(--blue-border);
+      color: var(--blue-700);
+    }
+    .status-banner.is-error {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+      color: var(--danger);
+    }
+
+    @@media (max-width: 1080px) {
+      .gate-console { grid-template-columns: 1fr; }
+      .fee-engine-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- TOP GATE TERMINAL BAR -->
+  <header class="gate-topbar">
+    <div class="gate-brand">
+      <span class="gate-mark" aria-hidden="true">P</span>
+      <div>
+        <div class="gate-title">SmartPark Gate Terminal — Trạm Kiểm Soát Cổng</div>
+        <div class="gate-sub">Quét mã QR bằng Camera thiết bị &amp; Engine Tính phí Check-out tự động</div>
+      </div>
+    </div>
+
+    <div class="gate-telemetry-bar">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="scanner-status-pill">Trạng thái Camera QR: Sẵn sàng</span>
+      <span>•</span>
+      <span class="num">Xe đang đỗ trong bãi: <strong id="gate-active-count">4</strong></span>
+    </div>
+
+    <div class="gate-user-actions">
+      <span class="staff-pill">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="gate-staff-name">Đoàn Tiến Đạt (NV Trực Cổng)</span>
+      </span>
+      <a href="/Account/Login" class="btn-logout">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+        <span>Đổi vai trò / Đăng xuất</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN 2-COLUMN CONSOLE: US21 (LEFT) + US11 (RIGHT) -->
+  <main class="gate-console">
+    <!-- CỘT TRÁI: QUÉT MÃ QR BẰNG CAMERA THIẾT BỊ KÈM Ô NHẬP MÃ DỰ PHÒNG (US21) -->
+    <section class="console-card" aria-labelledby="scanner-card-title">
+      <div class="console-card-head">
+        <h2 id="scanner-card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          <span>Trình Quét Mã QR Camera &amp; Nhập Mã Dự Phòng</span>
+        </h2>
+        <span class="role-chip">Trạm Cổng</span>
+      </div>
+
+      <div class="console-card-body">
+        <!-- Khung Camera WebRTC -->
+        <div class="camera-stage" id="camera-stage">
+          <video id="qr-video" class="camera-video" playsinline muted hidden></video>
+          <canvas id="qr-canvas" hidden></canvas>
+          <div class="camera-overlay" id="camera-reticle" hidden>
+            <div class="scan-reticle"></div>
+          </div>
+          <div class="camera-placeholder" id="camera-placeholder">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/></svg>
+            <div>Bấm <strong>Bật Camera Quét QR</strong> để đọc mã vé trực tiếp qua ống kính thiết bị hoặc tải ảnh vé QR lên.</div>
+          </div>
+        </div>
+
+        <div class="camera-controls">
+          <button type="button" class="btn btn-primary" id="btn-toggle-camera">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            <span id="btn-toggle-camera-text">Bật Camera Quét QR</span>
+          </button>
+
+          <label class="btn btn-outline" for="qr-file-input">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            <span>Quét từ Ảnh Vé QR</span>
+            <input type="file" id="qr-file-input" accept="image/*" hidden>
+          </label>
+        </div>
+
+        <!-- Ô nhập mã QR dự phòng (US21) -->
+        <form id="manual-qr-form" class="field-group" novalidate>
+          <label class="field-label" for="manual-qr-input">Ô nhập mã vé QR / Biển số dự phòng (Khi camera mờ hoặc mất nét) *</label>
+          <div class="backup-input-row">
+            <input type="text" id="manual-qr-input" class="field-input num" placeholder="VD: QR-IN-261118-2001 hoặc 51K-888.99" required autocomplete="off">
+            <button type="submit" class="btn btn-navy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Đọc mã &amp; Tính phí</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Danh sách phiên xe đang đỗ để chọn quét nhanh -->
+        <div class="field-group">
+          <span class="field-label">Chọn nhanh vé QR của xe đang đỗ trong bãi để kiểm thử:</span>
+          <div class="active-session-list" id="active-session-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CỘT PHẢI: CHECK-OUT & ENGINE TÍNH PHÍ TỰ ĐỘNG (US11) -->
+    <section class="console-card" aria-labelledby="fee-card-title">
+      <div class="console-card-head">
+        <h2 id="fee-card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+          <span>Check-out &amp; Tính Phí Tự Động (Đơn giá khu • Quá giờ 1.5x • Điện sạc EV)</span>
+        </h2>
+        <span class="role-chip">Automated Fee Engine</span>
+      </div>
+
+      <div class="console-card-body">
+        <div id="fee-alert-banner" class="status-banner is-info">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span id="fee-alert-text">Quét mã QR bằng Camera hoặc chọn một xe đang đỗ bên trái để hệ thống tự động bóc tách cước phí Check-out.</span>
+        </div>
+
+        <!-- Thông tin phương tiện & Mã QR vừa quét -->
+        <div class="fee-vehicle-card" id="fee-vehicle-card">
+          <div class="qr-preview-box" id="fee-qr-preview"></div>
+          <div class="field-group">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span class="plate-badge num" id="fee-plate">51K-888.99</span>
+              <span class="zone-pill num" id="fee-slot-zone">Ô EV-O02 • ZONE-EV</span>
+              <span class="num" style="font-size:12.5px; color:var(--text-3);" id="fee-token-label">Mã vé: QR-IN-261118-2001</span>
+            </div>
+            <div style="font-size:13.5px; font-weight:600; color:var(--text);">
+              Chủ phương tiện: <span id="fee-customer">Nguyễn Phước Sang</span>
+            </div>
+            <div class="num" style="font-size:12.5px; color:var(--text-2);">
+              Giờ vào bãi: <strong id="fee-checkin-time">—</strong> • Giờ kết thúc đặt trước: <strong id="fee-expected-time">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bộ tham số thời gian & điện năng tiêu thụ (Tự động nạp từ phiên đỗ & cho phép điều chỉnh kiểm thử biên) -->
+        <form id="fee-simulator-form" class="field-group" novalidate>
+          <span class="field-label">Thông số phiên đỗ &amp; đồng hồ trụ sạc VinFast (Tự động đồng bộ hoặc tùy chỉnh kiểm thử trường hợp biên):</span>
+          <div class="fee-engine-grid">
+            <div class="field-group">
+              <label class="field-label" for="sim-duration">Tổng thời gian đỗ (Giờ)</label>
+              <input type="number" id="sim-duration" class="field-input num" step="0.5" min="0.5" max="72" value="2.5">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="sim-overtime">Phút quá giờ hẹn (&gt;15p tính 1.5x)</label>
+              <input type="number" id="sim-overtime" class="field-input num" step="5" min="0" max="600" value="45">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="sim-kwh">Điện sạc EV (kWh × 4.500đ)</label>
+              <input type="number" id="sim-kwh" class="field-input num" step="0.5" min="0" max="150" value="18.5">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="sim-idle">Phút chiếm trụ sau sạc đầy (&gt;10p)</label>
+              <input type="number" id="sim-idle" class="field-input num" step="5" min="0" max="240" value="20">
+            </div>
+          </div>
+          <div style="margin-top:6px;">
+            <button type="submit" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+              <span>Tính lại Bảng kê Cước phí Check-out Tự động</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Bảng bóc tách chi tiết từng khoản phí (US11) -->
+        <table class="breakdown-table" aria-label="Bảng kê chi tiết cước phí Check-out">
+          <thead>
+            <tr>
+              <th>Hạng mục cước phí</th>
+              <th>Quy tắc &amp; Công thức áp dụng</th>
+              <th class="t-right">Thành tiền (VNĐ)</th>
+            </tr>
+          </thead>
+          <tbody id="fee-breakdown-tbody"></tbody>
+        </table>
+
+        <!-- Tổng tiền thanh toán -->
+        <div class="fee-summary-banner">
+          <div>
+            <div class="fee-total-label">TỔNG CƯỚC PHÍ CHECK-OUT TỰ ĐỘNG</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.82); margin-top:4px;" id="fee-formula-summary">—</div>
+          </div>
+          <div class="fee-total-amount num" id="fee-total-display">0đ</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.__GATE_INITIAL__ = @Html.Raw(gateJson);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const state = window.__GATE_INITIAL__ || { zones: [], slots: [], bookings: [], sessions: [] };
+      let mediaStream = null;
+      let scanRafId = null;
+
+      const $ = (id) => document.getElementById(id);
+      const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const vnd = (n) => `${Math.round(Number(n) || 0).toLocaleString('vi-VN')}đ`;
+      const fmtTime = (iso) => iso ? new Date(iso).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+
+      function makeQrSvg(text) {
+        if (typeof window.qrcode === 'function') {
+          const qr = window.qrcode(0, 'M');
+          qr.addData(String(text || 'SMARTPARK'));
+          qr.make();
+          return qr.createSvgTag({ cellSize: 3, margin: 1 });
+        }
+        return '';
+      }
+
+      // =====================================================================
+      // US21: Camera QR Scanner (WebRTC getUserMedia + jsQR frame decoder)
+      // =====================================================================
+      async function startCameraScanner() {
+        const video = $('qr-video');
+        const placeholder = $('camera-placeholder');
+        const reticle = $('camera-reticle');
+        const btnText = $('btn-toggle-camera-text');
+        const statusPill = $('scanner-status-pill');
+
+        if (mediaStream) {
+          stopCameraScanner();
+          return;
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setAlert('Thiết bị hiện tại không hỗ trợ WebRTC Camera. Vui lòng dùng nút "Quét từ Ảnh Vé QR" hoặc nhập vào ô dự phòng.', true);
+          return;
+        }
+
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 400 } },
+            audio: false
+          });
+          video.srcObject = mediaStream;
+          await video.play();
+
+          video.hidden = false;
+          reticle.hidden = false;
+          placeholder.hidden = true;
+          btnText.textContent = 'Tắt Camera Quét QR';
+          statusPill.textContent = 'Trạng thái Camera QR: ĐANG QUÉT TRỰC TIẾP';
+
+          const canvas = $('qr-canvas');
+          const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+          const tick = () => {
+            if (!mediaStream) return;
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+              if (typeof window.jsQR === 'function') {
+                const code = window.jsQR(imgData.data, imgData.width, imgData.height, {
+                  inversionAttempts: 'dontInvert'
+                });
+                if (code && code.data) {
+                  onQrDetected(code.data.trim());
+                  return;
+                }
+              }
+            }
+            scanRafId = requestAnimationFrame(tick);
+          };
+          scanRafId = requestAnimationFrame(tick);
+        } catch (err) {
+          setAlert('Không thể mở ống kính Camera (Thiết bị không có Webcam hoặc chưa cấp quyền). Bạn có thể chọn "Quét từ Ảnh Vé QR" hoặc dùng ô nhập mã dự phòng.', true);
+        }
+      }
+
+      function stopCameraScanner() {
+        if (scanRafId) {
+          cancelAnimationFrame(scanRafId);
+          scanRafId = null;
+        }
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((t) => t.stop());
+          mediaStream = null;
+        }
+        const video = $('qr-video');
+        if (video) {
+          video.pause();
+          video.srcObject = null;
+          video.hidden = true;
+        }
+        if ($('camera-reticle')) $('camera-reticle').hidden = true;
+        if ($('camera-placeholder')) $('camera-placeholder').hidden = false;
+        if ($('btn-toggle-camera-text')) $('btn-toggle-camera-text').textContent = 'Bật Camera Quét QR';
+        if ($('scanner-status-pill')) $('scanner-status-pill').textContent = 'Trạng thái Camera QR: Sẵn sàng';
+      }
+
+      function decodeQrFromImageFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = $('qr-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            if (typeof window.jsQR === 'function') {
+              const code = window.jsQR(imgData.data, imgData.width, imgData.height);
+              if (code && code.data) {
+                onQrDetected(code.data.trim());
+                return;
+              }
+            }
+            setAlert('Không tìm thấy mã QR hợp lệ trong ảnh tải lên. Vui lòng thử ảnh khác hoặc nhập mã vào ô dự phòng.', true);
+          };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function onQrDetected(token) {
+        stopCameraScanner();
+        $('manual-qr-input').value = token;
+        setAlert(`Đã quét thành công mã QR "${token}"! Đang tính toán cước phí Check-out tự động...`, false);
+        runAutomatedFeeCalculation(token, true);
+      }
+
+      function setAlert(msg, isError) {
+        const banner = $('fee-alert-banner');
+        const text = $('fee-alert-text');
+        if (!banner || !text) return;
+        banner.className = `status-banner ${isError ? 'is-error' : 'is-info'}`;
+        text.textContent = msg;
+      }
+
+      // =====================================================================
+      // US11: Check-out & Automated Fee Engine Calculation
+      // =====================================================================
+      async function runAutomatedFeeCalculation(query, usePresetDefaults = false) {
+        const q = (query || $('manual-qr-input')?.value || '').trim();
+        if (!q) return;
+
+        // If user clicked a preset vehicle card, pre-populate realistic demo parameters
+        if (usePresetDefaults) {
+          const isEvSlot = q.includes('2001') || q.includes('51K-888.99') || q.startsWith('EV-');
+          const isOvertimeSlot = q.includes('2002') || q.includes('30H-123.45');
+          $('sim-duration').value = isOvertimeSlot ? '3.5' : '2.5';
+          $('sim-overtime').value = isOvertimeSlot ? '60' : '30';
+          $('sim-kwh').value = isEvSlot ? '18.5' : '0';
+          $('sim-idle').value = isEvSlot ? '25' : '0';
+        }
+
+        const payload = {
+          query: q,
+          durationHours: Number($('sim-duration')?.value) || 2.0,
+          overtimeHours: (Number($('sim-overtime')?.value) || 0) / 60.0,
+          evKwh: Number($('sim-kwh')?.value) || 0,
+          idleMinutes: (Number($('sim-idle')?.value) || 0)
+        };
+
+        const res = await fetch('/api/checkout-calculate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.breakdown) {
+          setAlert(data.message || 'Không tìm thấy vé QR hoặc phương tiện cần tính phí.', true);
+          return;
+        }
+
+        const b = data.breakdown;
+        setAlert(data.message, false);
+
+        $('fee-qr-preview').innerHTML = makeQrSvg(b.qr_token);
+        $('fee-plate').textContent = b.license_plate;
+        $('fee-slot-zone').textContent = `Ô ${b.slot_code} • ${b.zone_code}`;
+        $('fee-token-label').textContent = `Mã vé: ${b.qr_token}`;
+        $('fee-customer').textContent = b.customer_name;
+        $('fee-checkin-time').textContent = fmtTime(b.check_in_time);
+        $('fee-expected-time').textContent = fmtTime(b.expected_end_time);
+
+        const rows = [
+          `<tr>
+            <td><strong>1. Phí đỗ xe cơ bản theo phân khu (${esc(b.zone_code)})</strong></td>
+            <td class="num">${b.billed_hours} giờ (Làm tròn block 30p) × ${vnd(b.hourly_rate)}/giờ</td>
+            <td class="t-right num"><strong>${vnd(b.base_fee)}</strong></td>
+          </tr>`,
+          `<tr>
+            <td><strong>2. Phụ phí quá giờ đặt trước (1.5x đơn giá khu)</strong></td>
+            <td class="num">${b.overtime_minutes > 15 ? `${b.overtime_minutes} phút vượt (&gt;15p ân hạn) → ${b.overtime_hours}h × ${vnd(b.hourly_rate)} × 1.5` : 'Trong ngưỡng 15 phút ân hạn (Miễn phụ phí)'}</td>
+            <td class="t-right num"><strong>${vnd(b.overtime_surcharge)}</strong></td>
+          </tr>`,
+          `<tr>
+            <td><strong>3. Tiền điện sạc VinFast EV (4.500đ/kWh)</strong></td>
+            <td class="num">${b.ev_kwh > 0 ? `${b.ev_kwh} kWh × ${vnd(b.ev_rate_per_kwh)}/kWh` : 'Không sử dụng trụ sạc điện'}</td>
+            <td class="t-right num"><strong>${vnd(b.ev_charging_fee)}</strong></td>
+          </tr>`,
+          `<tr>
+            <td><strong>4. Phí chiếm trụ sạc sau khi đầy pin (1.000đ/phút)</strong></td>
+            <td class="num">${b.idle_minutes > 0 ? `${b.idle_minutes} phút tính phí (Đã trừ 10 phút miễn phí đầu) × 1.000đ` : 'Không phát sinh phí chiếm trụ'}</td>
+            <td class="t-right num"><strong>${vnd(b.idle_fee)}</strong></td>
+          </tr>`,
+          `<tr class="row-total">
+            <td colspan="2">TỔNG CỘNG PHÍ CHECK-OUT CẦN THU</td>
+            <td class="t-right num">${vnd(b.total_fee)}</td>
+          </tr>`
+        ];
+
+        $('fee-breakdown-tbody').innerHTML = rows.join('');
+        $('fee-total-display').textContent = vnd(b.total_fee);
+        $('fee-formula-summary').textContent = b.formula_summary;
+
+        document.querySelectorAll('.session-pick-btn').forEach((btn) => {
+          btn.classList.toggle('is-active', btn.getAttribute('data-token') === b.qr_token || btn.getAttribute('data-plate') === b.license_plate);
+        });
+      }
+
+      function renderActiveSessionsList() {
+        const activeSessions = (state.sessions || []).filter((s) => s.status === 'ACTIVE');
+        $('gate-active-count').textContent = activeSessions.length;
+
+        const listEl = $('active-session-list');
+        if (!listEl) return;
+
+        listEl.innerHTML = activeSessions.map((s) => `
+          <button type="button" class="session-pick-btn" data-token="${esc(s.qr_token)}" data-plate="${esc(s.license_plate)}">
+            <div>
+              <div style="font-weight:700; color:var(--navy-900);" class="num">${esc(s.qr_token)}</div>
+              <div style="font-size:12px; color:var(--text-2); margin-top:2px;">
+                <span class="plate-badge num">${esc(s.license_plate)}</span>
+                <span style="margin-left:6px;">${esc(s.customer_name)}</span>
+              </div>
+            </div>
+            <span class="zone-pill num">Ô ${esc(s.slot_code)}</span>
+          </button>
+        `).join('');
+
+        listEl.querySelectorAll('.session-pick-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const token = btn.getAttribute('data-token');
+            $('manual-qr-input').value = token;
+            runAutomatedFeeCalculation(token, true);
+          });
+        });
+
+        if (activeSessions[0]) {
+          $('manual-qr-input').value = activeSessions[0].qr_token;
+          runAutomatedFeeCalculation(activeSessions[0].qr_token, true);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        try {
+          const auth = JSON.parse(localStorage.getItem('smartpark_auth_user') || 'null');
+          if (auth && auth.fullName) {
+            $('gate-staff-name').textContent = auth.fullName;
+          }
+        } catch {}
+
+        renderActiveSessionsList();
+
+        $('btn-toggle-camera')?.addEventListener('click', startCameraScanner);
+        $('qr-file-input')?.addEventListener('change', (e) => {
+          const file = e.target.files?.[0];
+          if (file) decodeQrFromImageFile(file);
+        });
+
+        $('manual-qr-form')?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          runAutomatedFeeCalculation($('manual-qr-input')?.value, false);
+        });
+
+        $('fee-simulator-form')?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          runAutomatedFeeCalculation($('manual-qr-input')?.value, false);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
